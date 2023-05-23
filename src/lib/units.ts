@@ -17,8 +17,16 @@ export function getSideName(val: OptionSide) {
   return val === OptionSide.Short ? "short" : "long";
 }
 
+export function isLong(val: OptionSide) {
+  return val === OptionSide.Long;
+}
+
 export function getType(val: BN) {
   return val.toNumber() === 1 ? OptionType.Put : OptionType.Call;
+}
+
+export function isCall(val: OptionType) {
+  return val === OptionType.Call;
 }
 
 export function getTypeName(val: OptionType) {
@@ -40,10 +48,7 @@ export function shortInteger(str: string, digits: number) {
 }
 
 export function math64x61toDecimal(n: string) {
-  const long = new BN(n)
-    .mul(PRECISSION_BASE_VALUE)
-    .div(BASE_MATH_64_61)
-    .toString(10);
+  const long = new BN(n).mul(PRECISSION_BASE_VALUE).div(BASE_MATH_64_61).toString(10);
   return shortInteger(long, PRECISSION_DIGITS);
 }
 
