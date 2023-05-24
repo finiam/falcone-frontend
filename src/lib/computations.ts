@@ -57,12 +57,12 @@ export function getPremiaWithSlippage(
 
 export function getTradeCalldata(raw: BN[], size: number) {
   return [
-    toHex(raw[5]),
-    toHex(raw[2]),
-    new BN(raw[1]).toString(10),
-    toHex(raw[0]),
+    toHex(raw[5]), // option type
+    toHex(raw[2]), // strike price
+    new BN(raw[1]).toString(10), // maturity
+    toHex(raw[0]), // option side
     size,
-    toHex(raw[4]),
-    toHex(raw[3]),
+    toHex(raw[3]), // quote token addres
+    toHex(raw[4]), // base token address
   ];
 }
