@@ -68,37 +68,3 @@ export function getTradeCalldata(raw: BN[], size: number) {
     toHex(raw[OPTION_IDX.quoteToken]),
   ];
 }
-
-export function financialDataEth(
-  size: number,
-  premiaEth: number,
-  ethInUsd: number
-) {
-  const basePremiaEth = premiaEth / size;
-  const premiaUsd = premiaEth * ethInUsd;
-  const basePremiaUsd = premiaUsd / size;
-
-  return {
-    premiaEth,
-    premiaUsd,
-    basePremiaEth,
-    basePremiaUsd,
-  };
-}
-
-export function financialDataUsd(
-  size: number,
-  premiaUsd: number,
-  ethInUsd: number
-) {
-  const basePremiaUsd = premiaUsd / size;
-  const premiaEth = premiaUsd / ethInUsd;
-  const basePremiaEth = premiaEth / size;
-
-  return {
-    premiaEth,
-    premiaUsd,
-    basePremiaEth,
-    basePremiaUsd,
-  };
-}
