@@ -1,7 +1,8 @@
 import { OptionSide, OptionType } from "@/types/option";
 import BN from "bn.js";
-import { isCall, isLong, longInteger, toHex } from "./units";
+import { isCall, isLong, longInteger } from "./units";
 import { ETH_DIGITS, OPTION_IDX, USD_DIGITS } from "./constants";
+import { number } from "starknet";
 
 export function getAmountToApprove(
   type: OptionType,
@@ -59,12 +60,12 @@ export function getPremiaWithSlippage(
 
 export function getTradeCalldata(raw: BN[], size: number) {
   return [
-    toHex(raw[OPTION_IDX.optionType]),
-    toHex(raw[OPTION_IDX.strikePrice]),
+    number.toHex(raw[OPTION_IDX.optionType]),
+    number.toHex(raw[OPTION_IDX.strikePrice]),
     new BN(raw[OPTION_IDX.maturity]).toString(10),
-    toHex(raw[OPTION_IDX.optionSide]),
+    number.toHex(raw[OPTION_IDX.optionSide]),
     size,
-    toHex(raw[OPTION_IDX.baseToken]),
-    toHex(raw[OPTION_IDX.quoteToken]),
+    number.toHex(raw[OPTION_IDX.baseToken]),
+    number.toHex(raw[OPTION_IDX.quoteToken]),
   ];
 }

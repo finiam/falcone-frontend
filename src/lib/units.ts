@@ -49,7 +49,10 @@ export function shortInteger(str: string, digits: number) {
 }
 
 export function math64x61toDecimal(n: string) {
-  const long = new BN(n).mul(PRECISSION_BASE_VALUE).div(BASE_MATH_64_61).toString(10);
+  const long = new BN(n)
+    .mul(PRECISSION_BASE_VALUE)
+    .div(BASE_MATH_64_61)
+    .toString(10);
   return shortInteger(long, PRECISSION_DIGITS);
 }
 
@@ -95,7 +98,9 @@ export const longInteger = (n: number, digits: number): BN => {
     return new BN(0);
   }
   const str = n.toString(10);
-  const nonScientificNotation = str.includes("e") ? Number(str).toFixed(50) : str;
+  const nonScientificNotation = str.includes("e")
+    ? Number(str).toFixed(50)
+    : str;
   const [lead, dec] = nonScientificNotation.split(".");
 
   if (!dec) {
@@ -109,12 +114,10 @@ export const longInteger = (n: number, digits: number): BN => {
   const withLeadingZeros = lead + tail;
   const leadingZeros = withLeadingZeros.match(/^0*([0-9]+)/);
 
-  return leadingZeros && leadingZeros?.length > 1 ? new BN(leadingZeros[1]) : new BN(0);
+  return leadingZeros && leadingZeros?.length > 1
+    ? new BN(leadingZeros[1])
+    : new BN(0);
 };
-
-export function toHex(v: BN) {
-  return "0x" + v.toString(16);
-}
 
 export function convertSizeToUint256(size: number) {
   return uint256.bnToUint256(longInteger(size, ETH_DIGITS));
