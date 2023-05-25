@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { Contract, Provider } from "starknet";
-import { isBN } from "bn.js";
 import { convertSizeToUint256, isCall, math64x61toDecimal } from "@/lib/units";
 import { LiveOption, PremiaData } from "@/types/option";
 import {
@@ -11,13 +9,7 @@ import {
 import { getStruct } from "@/lib/option";
 import AmmAbi from "@/lib/abi/amm_abi.json";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
-
-const provider = new Provider({
-  sequencer: {
-    network: "goerli-alpha",
-  },
-});
-const contract = new Contract(AmmAbi, TESTNET_MAIN_CONTRACT_ADDRESS, provider);
+import { useContractRead } from "@starknet-react/core";
 
 const premiaDataEth = (premia: number, size: number, ethToUsd: number) => {
   const premiaEth = premia;
@@ -58,28 +50,30 @@ export function useGetPremia(
     isClosingString,
   ];
 
+  const { data } = useContractRead({
+    address: TESTNET_MAIN_CONTRACT_ADDRESS,
+    abi: AmmAbi,
+    functionName: "get_total_premia",
+    args: calldata,
+  });
+
   useEffect(() => {
-    contract
-      .call("get_total_premia", calldata)
-      .then((res) => {
-        if (!isBN(res?.total_premia_including_fees)) {
-          throw Error("Response did not include total_premia_including_fees");
-        }
+    if (!data) return;
 
-        const totalPremia = res.total_premia_including_fees.toString(10);
+    const totalPremia = (data as any)?.total_premia_including_fees.toString(10);
 
-        const convertedPremia = math64x61toDecimal(totalPremia);
+    if (!totalPremia) {
+      throw Error("Response did not include total_premia_including_fees");
+    }
 
-        setPremia(
-          isCall(option.optionType)
-            ? premiaDataEth(convertedPremia, size, ethToUsd)
-            : premiaDataUsd(convertedPremia, size, ethToUsd)
-        );
-      })
-      .catch((e: Error) => {
-        throw Error(e.message);
-      });
-  }, [ethToUsd, option, size, isClosing]);
+    const convertedPremia = math64x61toDecimal(totalPremia);
+
+    setPremia(
+      isCall(option.optionType)
+        ? premiaDataEth(convertedPremia, size, ethToUsd)
+        : premiaDataUsd(convertedPremia, size, ethToUsd)
+    );
+  }, [data]);
 
   return premia;
 }
