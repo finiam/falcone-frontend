@@ -8,6 +8,7 @@ import {
   getType,
   getValsFromOptionChunk,
   math64x61toDecimal,
+  toHex,
 } from "./units";
 
 function createBNChunks(raw: string[], size: number) {
@@ -50,4 +51,15 @@ export function parseLiveOptions(raw: string[]): LiveOption[] {
       premiumDecimal,
     };
   });
+}
+
+export function getStruct(raw: BN[]) {
+  return [
+    toHex(raw[OPTION_IDX.optionSide]),
+    new BN(raw[OPTION_IDX.maturity]).toString(10),
+    toHex(raw[OPTION_IDX.strikePrice]),
+    toHex(raw[OPTION_IDX.baseToken]),
+    toHex(raw[OPTION_IDX.quoteToken]),
+    toHex(raw[OPTION_IDX.optionType]),
+  ];
 }

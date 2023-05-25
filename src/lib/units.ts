@@ -8,6 +8,7 @@ import {
   PRECISSION_DIGITS,
   USD_DIGITS,
 } from "./constants";
+import { uint256 } from "starknet";
 
 export function getSide(val: BN) {
   return val.toNumber() === 1 ? OptionSide.Short : OptionSide.Long;
@@ -113,4 +114,8 @@ export const longInteger = (n: number, digits: number): BN => {
 
 export function toHex(v: BN) {
   return "0x" + v.toString(16);
+}
+
+export function convertSizeToUint256(size: number) {
+  return uint256.bnToUint256(longInteger(size, ETH_DIGITS));
 }
