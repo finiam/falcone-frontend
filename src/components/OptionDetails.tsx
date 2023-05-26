@@ -45,7 +45,11 @@ export default function OptionDetails({
     if (!premia) return;
 
     const digits = isCall(option.optionType) ? ETH_DIGITS : USD_DIGITS;
-    const currentPremia = longInteger(Number(premia), digits);
+    const currentPremia = longInteger(
+      isCall(option.optionType) ? premia.premiaEth : premia.premiaUsd,
+      digits
+    );
+    console.log(`currentPremia ` + currentPremia);
 
     let premiaWithSlippage = getPremiaWithSlippage(
       currentPremia,
@@ -74,6 +78,15 @@ export default function OptionDetails({
 
     // one hour from now
     const deadline = String(Math.round(new Date().getTime() / 1000) + 60 * 60);
+
+    console.log(`premiaWithSlippage ` + premiaWithSlippage.toString(10));
+    console.log(
+      `6461 ` +
+        intToMath64x61(
+          premiaWithSlippage.toString(10),
+          digitsByType(option.optionType)
+        )
+    );
 
     const tradeOpenArgs = {
       contractAddress: TESTNET_MAIN_CONTRACT_ADDRESS,
