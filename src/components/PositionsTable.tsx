@@ -74,8 +74,8 @@ export default function PositionsTable() {
 
       {isLoading && "Fetching..."}
 
-      {split?.live.map((option, idx) => (
-        <PositionsSection key={idx} option={option} />
+      {split?.live.map((option) => (
+        <PositionsSection key={option.id} option={option} />
       ))}
     </section>
   );

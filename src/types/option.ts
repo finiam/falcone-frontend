@@ -17,6 +17,7 @@ export type BaseOption = {
   quoteToken: string;
   baseToken: string;
   maturity: number;
+  id: string;
 };
 
 export type LiveOption = BaseOption & {

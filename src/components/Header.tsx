@@ -5,9 +5,20 @@ import Wallet from "./Wallet";
 
 export default function Header() {
   return (
-    <header className="flex justify-between">
-      <Link href="/">Carmine</Link>
-      <Wallet />
+    <header className="flex px-24 py-4 gap-8">
+      <Link href="/" className="font-bold underline">
+        Carmine
+      </Link>
+
+      <nav>
+        <Link href="/positions" className="font-bold">
+          Positions
+        </Link>
+      </nav>
+
+      <div className="ml-auto">
+        <Wallet />
+      </div>
     </header>
   );
 }

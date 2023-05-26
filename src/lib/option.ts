@@ -33,7 +33,12 @@ export function parseBaseOption(rawOption: BN[]): BaseOption {
     baseToken: number.toHex(bn.baseToken),
     quoteToken: number.toHex(bn.quoteToken),
     strikePrice: math64x61toDecimal(bn.strikePrice.toString(10)),
+    id: crypto.randomUUID(),
   };
+}
+
+function createId(option: BaseOption) {
+  return [option.optionSide, option.optionType, option.strikePrice].toString();
 }
 
 export function parseLiveOptions(raw: string[]): LiveOption[] {
