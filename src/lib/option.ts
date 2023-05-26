@@ -51,3 +51,14 @@ export function parseLiveOptions(raw: string[]): LiveOption[] {
     };
   });
 }
+
+export function getStruct(raw: BN[]) {
+  return [
+    number.toHex(raw[OPTION_IDX.optionSide]),
+    new BN(raw[OPTION_IDX.maturity]).toString(10),
+    number.toHex(raw[OPTION_IDX.strikePrice]),
+    number.toHex(raw[OPTION_IDX.baseToken]),
+    number.toHex(raw[OPTION_IDX.quoteToken]),
+    number.toHex(raw[OPTION_IDX.optionType]),
+  ];
+}

@@ -8,6 +8,7 @@ import {
   PRECISSION_DIGITS,
   USD_DIGITS,
 } from "./constants";
+import { uint256 } from "starknet";
 
 export function getSide(val: BN) {
   return val.toNumber() === 1 ? OptionSide.Short : OptionSide.Long;
@@ -17,8 +18,16 @@ export function getSideName(val: OptionSide) {
   return val === OptionSide.Short ? "short" : "long";
 }
 
+export function isLong(val: OptionSide) {
+  return val === OptionSide.Long;
+}
+
 export function getType(val: BN) {
   return val.toNumber() === 1 ? OptionType.Put : OptionType.Call;
+}
+
+export function isCall(val: OptionType) {
+  return val === OptionType.Call;
 }
 
 export function getTypeName(val: OptionType) {
@@ -54,6 +63,13 @@ export function math64x61ToInt(n: string, digits: number) {
     .toString(10);
 }
 
+export function intToMath64x61(n: string, digits: number) {
+  return new BN(n)
+    .mul(BASE_MATH_64_61)
+    .div(new BN(10).pow(new BN(digits)))
+    .toString(10);
+}
+
 export function getPremium(val: BN, optionType: OptionType) {
   const digits = optionType === OptionType.Call ? ETH_DIGITS : USD_DIGITS;
   const premiumBase = math64x61ToInt(val.toString(10), digits);
@@ -71,4 +87,38 @@ export function getValsFromOptionChunk(rawOption: BN[]) {
     quoteToken: rawOption[OPTION_IDX.quoteToken],
     strikePrice: rawOption[OPTION_IDX.strikePrice],
   };
+}
+
+export function digitsByType(type: OptionType) {
+  return isCall(type) ? ETH_DIGITS : USD_DIGITS;
+}
+
+export const longInteger = (n: number, digits: number): BN => {
+  if (!n) {
+    return new BN(0);
+  }
+  const str = n.toString(10);
+  const nonScientificNotation = str.includes("e")
+    ? Number(str).toFixed(50)
+    : str;
+  const [lead, dec] = nonScientificNotation.split(".");
+
+  if (!dec) {
+    return new BN(lead + "".padEnd(digits, "0"));
+  }
+
+  const tail = dec
+    .padEnd(digits, "0") // pad ending with 0s
+    .substring(0, digits); // if more digits than should be, cut them out
+
+  const withLeadingZeros = lead + tail;
+  const leadingZeros = withLeadingZeros.match(/^0*([0-9]+)/);
+
+  return leadingZeros && leadingZeros?.length > 1
+    ? new BN(leadingZeros[1])
+    : new BN(0);
+};
+
+export function convertSizeToUint256(size: number) {
+  return uint256.bnToUint256(longInteger(size, ETH_DIGITS));
 }

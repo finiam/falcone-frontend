@@ -24,3 +24,10 @@ export type LiveOption = BaseOption & {
   premiumDecimal: number;
   raw: BN[];
 };
+
+export type PremiaData = {
+  basePremiaEth: number;
+  premiaUsd: number;
+  basePremiaUsd: number;
+  premiaEth: number;
+};
