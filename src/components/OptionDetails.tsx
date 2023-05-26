@@ -25,6 +25,7 @@ import {
 import { ETH_DIGITS, USD_DIGITS } from "@/lib/constants";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useSlippage } from "@/lib/stores/useSlippage";
 
 export default function OptionDetails({
   option,
@@ -33,7 +34,7 @@ export default function OptionDetails({
   option: LiveOption;
   index: number;
 }) {
-  const slippage = 1;
+  const { slippage } = useSlippage();
   const [size, setSize] = useState(1);
 
   const long = isLong(option.optionSide);
@@ -58,7 +59,7 @@ export default function OptionDetails({
     const digits = isCall(option.optionType) ? ETH_DIGITS : USD_DIGITS;
     const currentPremia = longInteger(Number(premia), digits);
 
-    let premiaWithSlippage = getPremiaWithSlippage(
+    const premiaWithSlippage = getPremiaWithSlippage(
       currentPremia,
       option.optionSide,
       false,
