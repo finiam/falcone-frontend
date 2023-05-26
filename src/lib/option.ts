@@ -1,13 +1,14 @@
-import { BaseOption, LiveOption } from "@/types/option";
+import { BaseOption, LiveOption, OptionWithPosition } from "@/types/option";
 import BN from "bn.js";
-import { number } from "starknet";
-import { OPTION_IDX } from "./constants";
+import { number, uint256 } from "starknet";
+import { ETH_DIGITS, OPTION_IDX } from "./constants";
 import {
   getPremium,
   getSide,
   getType,
   getValsFromOptionChunk,
   math64x61toDecimal,
+  shortInteger,
 } from "./units";
 
 function createBNChunks(raw: string[], size: number) {
@@ -50,6 +51,32 @@ export function parseLiveOptions(raw: string[]): LiveOption[] {
       premiumDecimal,
     };
   });
+}
+
+export function parseOptionsWithPositions(raw: string[]): OptionWithPosition[] {
+  return (
+    createBNChunks(raw, 9)
+      .map((chunk) => {
+        const base = parseBaseOption(chunk);
+
+        const positionSize = shortInteger(
+          chunk[OPTION_IDX.positionSize].toString(),
+          ETH_DIGITS
+        );
+        const positionValue = math64x61toDecimal(
+          chunk[OPTION_IDX.positionValue].toString(10)
+        );
+
+        return {
+          raw: chunk,
+          ...base,
+          positionSize,
+          positionValue,
+        };
+      })
+      // remove position with size 0 (BE rounding error)
+      .filter((opt) => !!opt.positionSize)
+  );
 }
 
 export function getStruct(raw: BN[]) {

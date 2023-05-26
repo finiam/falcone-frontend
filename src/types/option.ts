@@ -31,3 +31,9 @@ export type PremiaData = {
   basePremiaUsd: number;
   premiaEth: number;
 };
+
+export type OptionWithPosition = BaseOption & {
+  positionSize: number;
+  positionValue: number;
+  raw: BN[];
+};

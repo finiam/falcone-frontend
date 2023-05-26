@@ -13,4 +13,6 @@ export const OPTION_IDX = {
   quoteToken: 4,
   optionType: 5,
   premium: 6,
+  positionSize: 6,
+  positionValue: 8,
 };
