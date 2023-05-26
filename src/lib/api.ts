@@ -1,4 +1,3 @@
-import { Contract } from "starknet";
 import { parseLiveOptions } from "./option";
 
 const BASE_URL = "https://api.carmine-dev.eu/api/v1/testnet";
