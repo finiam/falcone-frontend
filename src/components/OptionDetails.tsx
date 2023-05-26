@@ -38,7 +38,11 @@ export default function OptionDetails({
   const long = isLong(option.optionSide);
   const call = isCall(option.optionType);
   const { isConnected, account } = useAccount();
-  const premia = useGetPremia(option, size, false);
+  const { premia, isLoading: loadingPremia } = useGetPremia(
+    option,
+    size,
+    false
+  );
 
   const handleTrade = async () => {
     if (!account) return;
@@ -111,8 +115,7 @@ export default function OptionDetails({
         <button
           type="button"
           className="bg-slate-700 px-1 py-2 w-fit"
-          onClick={handleTrade}
-          disabled={!isConnected || !premia}
+          disabled={!isConnected || loadingPremia}
         >
           {isConnected
             ? `${long ? "Buy" : "Sell"} for ${(call

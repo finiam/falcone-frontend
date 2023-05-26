@@ -50,7 +50,7 @@ export function useGetPremia(
     isClosingString,
   ];
 
-  const { data } = useContractRead({
+  const { data, isLoading } = useContractRead({
     address: TESTNET_MAIN_CONTRACT_ADDRESS,
     abi: AmmAbi,
     functionName: "get_total_premia",
@@ -75,5 +75,5 @@ export function useGetPremia(
     );
   }, [data]);
 
-  return premia;
+  return { premia, isLoading };
 }
