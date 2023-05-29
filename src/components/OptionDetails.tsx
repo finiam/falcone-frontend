@@ -45,7 +45,10 @@ export default function OptionDetails({
     if (!premia) return;
 
     const digits = isCall(option.optionType) ? ETH_DIGITS : USD_DIGITS;
-    const currentPremia = longInteger(Number(premia), digits);
+    const currentPremia = longInteger(
+      isCall(option.optionType) ? premia.premiaEth : premia.premiaUsd,
+      digits
+    );
 
     let premiaWithSlippage = getPremiaWithSlippage(
       currentPremia,

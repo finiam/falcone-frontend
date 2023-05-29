@@ -18,7 +18,10 @@ export default function OptionsList() {
   return (
     <div className="w-full">
       {selectedOption && (
-        <OptionDetails option={selectedOption.data} index={selectedOption.index} />
+        <OptionDetails
+          option={selectedOption.data}
+          index={selectedOption.index}
+        />
       )}
 
       <h2 className="text-xl font-bold">Options</h2>
@@ -35,15 +38,18 @@ export default function OptionsList() {
         {data &&
           data.map((option, idx) => (
             <div
-              key={idx}
+              key={option.id}
               onClick={() => setSelectedOption({ index: idx, data: option })}
               className="flex gap-8 cursor-pointer"
             >
               <div className="w-1/4">
-                {getTypeName(option.optionType)} / {getSideName(option.optionSide)}
+                {getTypeName(option.optionType)} /{" "}
+                {getSideName(option.optionSide)}
               </div>
               <div className="w-1/4">{option.strikePrice}</div>
-              <div className="w-1/4">{new Date(option.maturity).toLocaleDateString()}</div>
+              <div className="w-1/4">
+                {new Date(option.maturity).toLocaleDateString()}
+              </div>
               <div className="w-1/4">{option.premiumDecimal.toFixed(4)}</div>
             </div>
           ))}
