@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import OptionDetails from "./OptionDetails";
 import { LiveOption } from "@/types/option";
+import SlippageInput from "./SlippageInput";
 
 export default function OptionsList() {
   const [selectedOption, setSelectedOption] = useState<{
@@ -23,6 +24,9 @@ export default function OptionsList() {
           index={selectedOption.index}
         />
       )}
+      <div className="flex justify-end">
+        <SlippageInput />
+      </div>
 
       <h2 className="text-xl font-bold">Options</h2>
 

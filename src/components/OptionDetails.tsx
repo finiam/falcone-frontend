@@ -24,6 +24,8 @@ import {
 } from "@/lib/computations";
 import { ETH_DIGITS, USD_DIGITS } from "@/lib/constants";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useSlippage } from "@/lib/stores/useSlippage";
 
 export default function OptionDetails({
   option,
@@ -32,15 +34,25 @@ export default function OptionDetails({
   option: LiveOption;
   index: number;
 }) {
-  const size = 1;
-  const slippage = 1;
+  const { slippage } = useSlippage();
+  const [size, setSize] = useState(1);
 
   const long = isLong(option.optionSide);
   const call = isCall(option.optionType);
   const { isConnected, account } = useAccount();
-  const premia = useGetPremia(option, size, false);
+  const { premia, isLoading: loadingPremia } = useGetPremia(
+    option,
+    size,
+    false
+  );
 
-  const handleTrade = async () => {
+  useEffect(() => {
+    setSize(1);
+  }, [option]);
+
+  const handleTrade = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+
     if (!account) return;
     if (!premia) return;
 
@@ -50,7 +62,7 @@ export default function OptionDetails({
       digits
     );
 
-    let premiaWithSlippage = getPremiaWithSlippage(
+    const premiaWithSlippage = getPremiaWithSlippage(
       currentPremia,
       option.optionSide,
       false,
@@ -98,6 +110,11 @@ export default function OptionDetails({
       });
   };
 
+  const handleInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    if (!ev.target.value || Number(ev.target.value) > 0)
+      setSize(Number(ev.target.value));
+  };
+
   return (
     <div className="w-full mb-24">
       <h2 className="text-xl font-bold">Option {index}</h2>
@@ -106,16 +123,24 @@ export default function OptionDetails({
         {option.strikePrice} expiring on{" "}
         {new Date(option.maturity).toLocaleDateString()}
       </h3>
-      <div className="flex flex-col gap-2">
+      <form onSubmit={handleTrade} className="flex flex-col gap-2">
+        <div className="flex gap-2 items-center">
+          <span>size</span>
+          <input
+            value={size || ""}
+            onChange={handleInputChange}
+            className="bg-slate-800 py-1 px-2 w-12"
+            required
+          />
+        </div>
         <p>
           Premium: {(call ? premia?.premiaEth : premia?.premiaUsd)?.toFixed(5)}
         </p>
 
         <button
-          type="button"
+          type="submit"
           className="bg-slate-700 px-1 py-2 w-fit"
-          onClick={handleTrade}
-          disabled={!isConnected || !premia}
+          disabled={!isConnected || loadingPremia}
         >
           {isConnected
             ? `${long ? "Buy" : "Sell"} for ${(call
@@ -124,7 +149,7 @@ export default function OptionDetails({
               )?.toFixed(5)}`
             : "Connect to buy options"}
         </button>
-      </div>
+      </form>
     </div>
   );
 }
