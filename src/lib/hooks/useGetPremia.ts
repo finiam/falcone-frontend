@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { convertSizeToUint256, isCall, math64x61toDecimal } from "@/lib/units";
-import { LiveOption, PremiaData } from "@/types/option";
+import { LiveOption, OptionWithPosition, PremiaData } from "@/types/option";
 import {
   TESTNET_LPTOKEN_CONTRACT_ADDRESS,
   TESTNET_LPTOKEN_CONTRACT_ADDRESS_PUT,
@@ -17,7 +17,7 @@ const premiaDataEth = (premia: number, size: number, ethToUsd: number) => {
   const basePremiaEth = premia / size;
   const basePremiaUsd = premiaUsd / size;
 
-  return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth };
+  return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth, raw: premia };
 };
 
 const premiaDataUsd = (premia: number, size: number, ethToUsd: number) => {
@@ -30,7 +30,7 @@ const premiaDataUsd = (premia: number, size: number, ethToUsd: number) => {
 };
 
 export function useGetPremia(
-  option: LiveOption,
+  option: LiveOption | OptionWithPosition,
   size: number,
   isClosing: boolean
 ) {

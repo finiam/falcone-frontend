@@ -49,6 +49,8 @@ export function getPremiaWithSlippage(
   const fullInBasisPoints = 10000;
   // slippage is in percentage, with 2 decimal precission
   const slippageInBasisPoints = Math.round(slippage * 100);
+
+  console.log(`slippageInBasisPoints ${slippageInBasisPoints}`);
   const numerator =
     fullInBasisPoints +
     (isLong(side) !== isClosing
@@ -58,7 +60,7 @@ export function getPremiaWithSlippage(
   return premia.mul(new BN(numerator)).div(new BN(fullInBasisPoints));
 }
 
-export function getTradeCalldata(raw: BN[], size: number) {
+export function getTradeCalldata(raw: BN[], size: number | string) {
   return [
     number.toHex(raw[OPTION_IDX.optionType]),
     number.toHex(raw[OPTION_IDX.strikePrice]),
