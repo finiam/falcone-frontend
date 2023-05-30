@@ -1,43 +1,33 @@
 import { useEffect, useState } from "react";
-import { convertSizeToUint256, isCall, math64x61toDecimal } from "@/lib/units";
+import {
+  convertSizeToUint256,
+  longInteger,
+  math64x61toDecimal,
+} from "@/lib/units";
 import { LiveOption, OptionWithPosition, PremiaData } from "@/types/option";
 import {
   TESTNET_LPTOKEN_CONTRACT_ADDRESS,
   TESTNET_LPTOKEN_CONTRACT_ADDRESS_PUT,
   TESTNET_MAIN_CONTRACT_ADDRESS,
 } from "@/lib/addresses";
-import { getStruct } from "@/lib/option";
 import AmmAbi from "@/lib/abi/amm_abi.json";
-import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import { useContractRead } from "@starknet-react/core";
+import { getPremiaWithSlippage, getStruct } from "../computations";
+import { useSlippage } from "../stores/useSlippage";
 
-const premiaDataEth = (premia: number, size: number, ethToUsd: number) => {
-  const premiaEth = premia;
-  const premiaUsd = premia * ethToUsd;
-  const basePremiaEth = premia / size;
-  const basePremiaUsd = premiaUsd / size;
-
-  return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth };
-};
-
-const premiaDataUsd = (premia: number, size: number, ethToUsd: number) => {
-  const premiaEth = premia / ethToUsd;
-  const premiaUsd = premia;
-  const basePremiaEth = premiaEth / size;
-  const basePremiaUsd = premia / size;
-
-  return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth };
-};
-
-export function useGetPremia(
-  option: LiveOption | OptionWithPosition,
-  size: number,
-  isClosing: boolean
-) {
-  const ethToUsd = useEthToUsd();
+export function useGetPremia({
+  option,
+  size,
+  isClosing,
+}: {
+  option: LiveOption | OptionWithPosition;
+  size: number;
+  isClosing: boolean;
+}) {
   const [premia, setPremia] = useState<PremiaData>();
+  const { slippage } = useSlippage();
 
-  const lpAddress = isCall(option.optionType)
+  const lpAddress = option.isCall
     ? TESTNET_LPTOKEN_CONTRACT_ADDRESS
     : TESTNET_LPTOKEN_CONTRACT_ADDRESS_PUT;
   const convertedSize = convertSizeToUint256(size);
@@ -67,12 +57,18 @@ export function useGetPremia(
     }
 
     const convertedPremia = math64x61toDecimal(totalPremia);
+    const withSlippage = getPremiaWithSlippage({
+      premia: longInteger(convertedPremia, option.digits),
+      side: option.optionSide,
+      isClosing,
+      slippage,
+    });
 
-    setPremia(
-      isCall(option.optionType)
-        ? premiaDataEth(convertedPremia, size, ethToUsd)
-        : premiaDataUsd(convertedPremia, size, ethToUsd)
-    );
+    setPremia({
+      base: convertedPremia / size,
+      total: convertedPremia,
+      withSlippage,
+    });
   }, [data]);
 
   return { premia, isLoading };

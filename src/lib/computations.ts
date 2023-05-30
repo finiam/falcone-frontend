@@ -1,16 +1,22 @@
-import { OptionSide, OptionType, OptionWithPosition } from "@/types/option";
+import { OptionSide, OptionType, RawOption } from "@/types/option";
 import BN from "bn.js";
 import { isCall, isLong, longInteger } from "./units";
-import { ETH_DIGITS, OPTION_IDX, USD_DIGITS } from "./constants";
+import { ETH_DIGITS, USD_DIGITS } from "./constants";
 import { number } from "starknet";
 
-export function getAmountToApprove(
-  type: OptionType,
-  side: OptionSide,
-  size: number,
-  premiaWithSlippage: BN,
-  strike?: number
-) {
+export function getAmountToApprove({
+  type,
+  side,
+  size,
+  premiaWithSlippage,
+  strike,
+}: {
+  type: OptionType;
+  side: OptionSide;
+  size: number;
+  premiaWithSlippage: BN;
+  strike?: number;
+}) {
   if (isLong(side)) {
     // long call / long put - premia with slippage
     return premiaWithSlippage;
@@ -40,12 +46,17 @@ export function getAmountToApprove(
   return base.sub(premiaWithSlippage);
 }
 
-export function getPremiaWithSlippage(
-  premia: BN,
-  side: OptionSide,
-  isClosing: boolean,
-  slippage: number
-) {
+export function getPremiaWithSlippage({
+  premia,
+  side,
+  isClosing,
+  slippage,
+}: {
+  premia: BN;
+  side: OptionSide;
+  isClosing: boolean;
+  slippage: number;
+}) {
   const fullInBasisPoints = 10000;
   // slippage is in percentage, with 2 decimal precission
   const slippageInBasisPoints = Math.round(slippage * 100);
@@ -59,14 +70,27 @@ export function getPremiaWithSlippage(
   return premia.mul(new BN(numerator)).div(new BN(fullInBasisPoints));
 }
 
-export function getTradeCalldata(raw: BN[], size: number | string) {
+export function getStruct(raw: RawOption) {
   return [
-    number.toHex(raw[OPTION_IDX.optionType]),
-    number.toHex(raw[OPTION_IDX.strikePrice]),
-    new BN(raw[OPTION_IDX.maturity]).toString(10),
-    number.toHex(raw[OPTION_IDX.optionSide]),
-    size,
-    number.toHex(raw[OPTION_IDX.baseToken]),
-    number.toHex(raw[OPTION_IDX.quoteToken]),
+    number.toHex(raw.optionSide),
+    new BN(raw.maturity).toString(10),
+    number.toHex(raw.strikePrice),
+    number.toHex(raw.baseToken),
+    number.toHex(raw.quoteToken),
+    number.toHex(raw.optionType),
+  ];
+}
+
+export function getTradeCalldata(raw: RawOption, size: number) {
+  const parsedSize = longInteger(size, ETH_DIGITS).toString();
+
+  return [
+    number.toHex(raw.optionType),
+    number.toHex(raw.strikePrice),
+    new BN(raw.maturity).toString(10),
+    number.toHex(raw.optionSide),
+    parsedSize,
+    number.toHex(raw.baseToken),
+    number.toHex(raw.quoteToken),
   ];
 }

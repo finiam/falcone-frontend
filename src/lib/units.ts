@@ -1,8 +1,7 @@
-import { BaseOption, OptionSide, OptionType } from "@/types/option";
+import { OptionSide, OptionType } from "@/types/option";
 import BN from "bn.js";
 import {
   BASE_MATH_64_61,
-  OPTION_IDX,
   ETH_DIGITS,
   PRECISSION_BASE_VALUE,
   PRECISSION_DIGITS,
@@ -76,17 +75,6 @@ export function getPremium(val: BN, optionType: OptionType) {
   const premiumDecimal = shortInteger(premiumBase, digits);
 
   return { premiumBase, premiumDecimal };
-}
-
-export function getValsFromOptionChunk(rawOption: BN[]) {
-  return {
-    optionSide: rawOption[OPTION_IDX.optionSide],
-    optionType: rawOption[OPTION_IDX.optionType],
-    maturity: rawOption[OPTION_IDX.maturity],
-    baseToken: rawOption[OPTION_IDX.baseToken],
-    quoteToken: rawOption[OPTION_IDX.quoteToken],
-    strikePrice: rawOption[OPTION_IDX.strikePrice],
-  };
 }
 
 export function digitsByType(type: OptionType) {

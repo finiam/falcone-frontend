@@ -4,12 +4,11 @@ import { useAccount, useContractRead } from "@starknet-react/core";
 import AmmAbi from "@/lib/abi/amm_abi.json";
 import { TESTNET_MAIN_CONTRACT_ADDRESS } from "@/lib/addresses";
 import { parseOptionsWithPositions } from "@/lib/option";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { OptionWithPosition } from "@/types/option";
-import { getSideName, getTypeName, isCall, longInteger } from "@/lib/units";
+import { getSideName, getTypeName, isCall } from "@/lib/units";
 import ClosePosition from "./ClosePosition";
 import { getTradeCalldata } from "@/lib/computations";
-import { ETH_DIGITS } from "@/lib/constants";
 
 type SplitPositons = {
   live: OptionWithPosition[];
@@ -87,10 +86,7 @@ export default function PositionsTable() {
     const args = {
       contractAddress: TESTNET_MAIN_CONTRACT_ADDRESS,
       entrypoint: "trade_settle",
-      calldata: getTradeCalldata(
-        option.raw,
-        longInteger(option.positionSize, ETH_DIGITS).toString()
-      ),
+      calldata: getTradeCalldata(option.raw, option.positionSize),
     };
 
     account?.execute([args], [AmmAbi]);

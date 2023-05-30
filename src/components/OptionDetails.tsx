@@ -8,21 +8,13 @@ import {
   getSideName,
   getTypeName,
   intToMath64x61,
-  isCall,
-  isLong,
-  longInteger,
 } from "@/lib/units";
 import { LiveOption } from "@/types/option";
 import { useAccount } from "@starknet-react/core";
 import BN from "bn.js";
 import AmmAbi from "@/lib/abi/amm_abi.json";
 import LpAbi from "@/lib/abi/lptoken_abi.json";
-import {
-  getAmountToApprove,
-  getPremiaWithSlippage,
-  getTradeCalldata,
-} from "@/lib/computations";
-import { ETH_DIGITS, USD_DIGITS } from "@/lib/constants";
+import { getAmountToApprove, getTradeCalldata } from "@/lib/computations";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSlippage } from "@/lib/stores/useSlippage";
@@ -36,15 +28,12 @@ export default function OptionDetails({
 }) {
   const { slippage } = useSlippage();
   const [size, setSize] = useState(1);
-
-  const long = isLong(option.optionSide);
-  const call = isCall(option.optionType);
   const { isConnected, account } = useAccount();
-  const { premia, isLoading: loadingPremia } = useGetPremia(
+  const { premia, isLoading: loadingPremia } = useGetPremia({
     option,
     size,
-    false
-  );
+    isClosing: false,
+  });
 
   useEffect(() => {
     setSize(1);
@@ -53,32 +42,20 @@ export default function OptionDetails({
   const handleTrade = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (!account) return;
-    if (!premia) return;
+    if (!account || !premia) return;
 
-    const digits = isCall(option.optionType) ? ETH_DIGITS : USD_DIGITS;
-    const currentPremia = longInteger(
-      isCall(option.optionType) ? premia.premiaEth : premia.premiaUsd,
-      digits
-    );
-
-    const premiaWithSlippage = getPremiaWithSlippage(
-      currentPremia,
-      option.optionSide,
-      false,
-      slippage
-    );
-
-    const approveAmount = getAmountToApprove(
-      option.optionType,
-      option.optionSide,
+    const approveAmount = getAmountToApprove({
+      type: option.optionType,
+      side: option.optionSide,
       size,
-      premiaWithSlippage,
-      parseInt(option.strikePrice.toString(), 10)
-    );
+      premiaWithSlippage: premia.withSlippage,
+      strike: parseInt(option.strikePrice.toString(), 10),
+    });
 
     const approveArgs = {
-      contractAddress: call ? TESTNET_ETH_ADDRESS : TESTNET_USD_ADDRESS,
+      contractAddress: option.isCall
+        ? TESTNET_ETH_ADDRESS
+        : TESTNET_USD_ADDRESS,
       entrypoint: "approve",
       calldata: [
         TESTNET_MAIN_CONTRACT_ADDRESS,
@@ -95,10 +72,7 @@ export default function OptionDetails({
       entrypoint: "trade_open",
       calldata: [
         ...getTradeCalldata(option.raw, size),
-        intToMath64x61(
-          premiaWithSlippage.toString(10),
-          digitsByType(option.optionType)
-        ),
+        intToMath64x61(premia.withSlippage.toString(10), option.digits),
         deadline,
       ],
     };
@@ -134,7 +108,7 @@ export default function OptionDetails({
           />
         </div>
         <p>
-          Premium: {(call ? premia?.premiaEth : premia?.premiaUsd)?.toFixed(5)}
+          Premium: {(option.isCall ? premia?.total : premia?.total)?.toFixed(5)}
         </p>
 
         <button
@@ -143,10 +117,9 @@ export default function OptionDetails({
           disabled={!isConnected || loadingPremia}
         >
           {isConnected
-            ? `${long ? "Buy" : "Sell"} for ${(call
-                ? premia?.premiaEth
-                : premia?.premiaUsd
-              )?.toFixed(5)}`
+            ? `${option.isLong ? "Buy" : "Sell"} for ${premia?.total?.toFixed(
+                5
+              )}`
             : "Connect to buy options"}
         </button>
       </form>
