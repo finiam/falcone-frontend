@@ -20,12 +20,14 @@ type SplitPositons = {
 function PositionsSection({
   option,
   select,
+  action,
 }: {
   option: OptionWithPosition;
   select: (val: OptionWithPosition) => void;
+  action: string;
 }) {
   return (
-    <div className="flex gap-8">
+    <div className="flex gap-8 mb-8">
       <div className="w-1/4">
         {getSideName(option.optionSide)} {getTypeName(option.optionType)},
         strike {option.strikePrice}
@@ -39,7 +41,7 @@ function PositionsSection({
         {option.positionValue.toFixed(4)}
       </div>
       <button type="button" onClick={() => select(option)}>
-        Close
+        {action}
       </button>
     </div>
   );
@@ -71,13 +73,11 @@ export default function PositionsTable() {
     options.forEach((option) => {
       if (new Date(option.maturity).getTime() > Date.now()) {
         res.live.push(option);
-      }
-
-      if (option.positionValue) {
+      } else if (option.positionValue) {
         res.expiredInMoney.push(option);
+      } else {
+        res.expiredOutMoney.push(option);
       }
-
-      res.expiredOutMoney.push(option);
     });
 
     return res;
@@ -100,17 +100,41 @@ export default function PositionsTable() {
     <section className="flex flex-col gap-2 w-full mt-8">
       {selected && <ClosePosition option={selected} />}
 
-      <h2 className="font-bold">Live options</h2>
-
       {isLoading && "Fetching..."}
 
+      <h2 className="font-bold">Live options</h2>
       {split?.live.map((option) => (
         <PositionsSection
           key={option.id}
           option={option}
           select={setSelected}
+          action="Close"
         />
       ))}
+
+      <h2 className="font-bold">Expired in money</h2>
+      {split?.expiredInMoney.length === 0
+        ? "None"
+        : split?.expiredInMoney.map((option) => (
+            <PositionsSection
+              key={option.id}
+              option={option}
+              select={settleOption}
+              action="Settle"
+            />
+          ))}
+
+      <h2 className="font-bold">Expired out of money</h2>
+      {split?.expiredOutMoney.length === 0
+        ? "None"
+        : split?.expiredOutMoney.map((option) => (
+            <PositionsSection
+              key={option.id}
+              option={option}
+              select={settleOption}
+              action="Settle"
+            />
+          ))}
     </section>
   );
 }

@@ -53,8 +53,6 @@ export default function OptionDetails({
   const handleTrade = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    console.log(`premiaWithSlippage: ${premia}`)
-
     if (!account) return;
     if (!premia) return;
 
@@ -70,8 +68,6 @@ export default function OptionDetails({
       false,
       slippage
     );
-
-    console.log(`premiaWithSlippage: ${premiaWithSlippage}`)
 
     const approveAmount = getAmountToApprove(
       option.optionType,

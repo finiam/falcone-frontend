@@ -17,7 +17,7 @@ const premiaDataEth = (premia: number, size: number, ethToUsd: number) => {
   const basePremiaEth = premia / size;
   const basePremiaUsd = premiaUsd / size;
 
-  return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth, raw: premia };
+  return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth };
 };
 
 const premiaDataUsd = (premia: number, size: number, ethToUsd: number) => {
