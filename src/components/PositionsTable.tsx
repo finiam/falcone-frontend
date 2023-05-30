@@ -6,8 +6,10 @@ import { TESTNET_MAIN_CONTRACT_ADDRESS } from "@/lib/addresses";
 import { parseOptionsWithPositions } from "@/lib/option";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { OptionWithPosition } from "@/types/option";
-import { getSideName, getTypeName, isCall } from "@/lib/units";
-import PositionDetail from "./PositionDetail";
+import { getSideName, getTypeName, isCall, longInteger } from "@/lib/units";
+import ClosePosition from "./ClosePosition";
+import { getTradeCalldata } from "@/lib/computations";
+import { ETH_DIGITS } from "@/lib/constants";
 
 type SplitPositons = {
   live: OptionWithPosition[];
@@ -46,7 +48,7 @@ function PositionsSection({
 export default function PositionsTable() {
   const [selected, setSelected] = useState<OptionWithPosition | undefined>();
 
-  const { address } = useAccount();
+  const { address, account } = useAccount();
   const { data, isLoading } = useContractRead({
     address: TESTNET_MAIN_CONTRACT_ADDRESS,
     abi: AmmAbi,
@@ -54,10 +56,6 @@ export default function PositionsTable() {
     args: [address],
     watch: false,
   });
-
-  useEffect(() => {
-    console.log(`address change`);
-  }, [address]);
 
   const split = useMemo<SplitPositons | null>(() => {
     if (!data) return null;
@@ -85,13 +83,26 @@ export default function PositionsTable() {
     return res;
   }, [data]);
 
+  async function settleOption(option: OptionWithPosition) {
+    const args = {
+      contractAddress: TESTNET_MAIN_CONTRACT_ADDRESS,
+      entrypoint: "trade_settle",
+      calldata: getTradeCalldata(
+        option.raw,
+        longInteger(option.positionSize, ETH_DIGITS).toString()
+      ),
+    };
+
+    account?.execute([args], [AmmAbi]);
+  }
+
   return (
     <section className="flex flex-col gap-2 w-full mt-8">
+      {selected && <ClosePosition option={selected} />}
+
       <h2 className="font-bold">Live options</h2>
 
       {isLoading && "Fetching..."}
-
-      {selected && <PositionDetail option={selected} type={"live"} />}
 
       {split?.live.map((option) => (
         <PositionsSection

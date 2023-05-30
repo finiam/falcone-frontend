@@ -1,4 +1,4 @@
-import { OptionSide, OptionType } from "@/types/option";
+import { OptionSide, OptionType, OptionWithPosition } from "@/types/option";
 import BN from "bn.js";
 import { isCall, isLong, longInteger } from "./units";
 import { ETH_DIGITS, OPTION_IDX, USD_DIGITS } from "./constants";
@@ -50,7 +50,6 @@ export function getPremiaWithSlippage(
   // slippage is in percentage, with 2 decimal precission
   const slippageInBasisPoints = Math.round(slippage * 100);
 
-  console.log(`slippageInBasisPoints ${slippageInBasisPoints}`);
   const numerator =
     fullInBasisPoints +
     (isLong(side) !== isClosing
