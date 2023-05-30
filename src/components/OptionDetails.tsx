@@ -8,21 +8,13 @@ import {
   getSideName,
   getTypeName,
   intToMath64x61,
-  isCall,
-  isLong,
-  longInteger,
 } from "@/lib/units";
 import { LiveOption } from "@/types/option";
 import { useAccount } from "@starknet-react/core";
 import BN from "bn.js";
 import AmmAbi from "@/lib/abi/amm_abi.json";
 import LpAbi from "@/lib/abi/lptoken_abi.json";
-import {
-  getAmountToApprove,
-  getPremiaWithSlippage,
-  getTradeCalldata,
-} from "@/lib/computations";
-import { ETH_DIGITS, USD_DIGITS } from "@/lib/constants";
+import { getAmountToApprove, getTradeCalldata } from "@/lib/computations";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSlippage } from "@/lib/stores/useSlippage";
@@ -50,25 +42,13 @@ export default function OptionDetails({
   const handleTrade = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (!account || !premia) return;    
-
-    const currentPremia = longInteger(
-      option.isCall ? premia.premiaEth : premia.premiaUsd,
-      option.digits
-    );
-
-    const premiaWithSlippage = getPremiaWithSlippage({
-      premia: currentPremia,
-      side: option.optionSide,
-      isClosing: false,
-      slippage,
-    });
+    if (!account || !premia) return;
 
     const approveAmount = getAmountToApprove({
       type: option.optionType,
       side: option.optionSide,
       size,
-      premiaWithSlippage,
+      premiaWithSlippage: premia.withSlippage,
       strike: parseInt(option.strikePrice.toString(), 10),
     });
 
@@ -92,7 +72,7 @@ export default function OptionDetails({
       entrypoint: "trade_open",
       calldata: [
         ...getTradeCalldata(option.raw, size),
-        intToMath64x61(premiaWithSlippage.toString(10), option.digits),
+        intToMath64x61(premia.withSlippage.toString(10), option.digits),
         deadline,
       ],
     };
@@ -128,8 +108,7 @@ export default function OptionDetails({
           />
         </div>
         <p>
-          Premium:{" "}
-          {(option.isCall ? premia?.premiaEth : premia?.premiaUsd)?.toFixed(5)}
+          Premium: {(option.isCall ? premia?.total : premia?.total)?.toFixed(5)}
         </p>
 
         <button
@@ -138,10 +117,9 @@ export default function OptionDetails({
           disabled={!isConnected || loadingPremia}
         >
           {isConnected
-            ? `${option.isLong ? "Buy" : "Sell"} for ${(option.isCall
-                ? premia?.premiaEth
-                : premia?.premiaUsd
-              )?.toFixed(5)}`
+            ? `${option.isLong ? "Buy" : "Sell"} for ${premia?.total?.toFixed(
+                5
+              )}`
             : "Connect to buy options"}
         </button>
       </form>

@@ -1,10 +1,10 @@
 import { TESTNET_MAIN_CONTRACT_ADDRESS } from "@/lib/addresses";
 import AmmAbi from "@/lib/abi/amm_abi.json";
-import { getPremiaWithSlippage, getTradeCalldata } from "@/lib/computations";
-import { ETH_DIGITS, USD_DIGITS } from "@/lib/constants";
+import { getTradeCalldata } from "@/lib/computations";
+import { ETH_DIGITS } from "@/lib/constants";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
 import { useSlippage } from "@/lib/stores/useSlippage";
-import { isCall, isLong, longInteger, shortInteger } from "@/lib/units";
+import { longInteger, shortInteger } from "@/lib/units";
 import { OptionWithPosition } from "@/types/option";
 import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
@@ -48,33 +48,25 @@ export default function ClosePosition({
   const { slippage } = useSlippage();
   const [size, setSize] = useState(option.positionSize);
 
-  const { premia, isLoading: loadingPremia } = useGetPremia(option, size, true);
+  const { premia, isLoading: loadingPremia } = useGetPremia({
+    option,
+    size,
+    isClosing: true,
+  });
   const ethInUsd = useEthToUsd();
 
   if (!premia) {
     return <p>loading...</p>;
   }
 
-  const digits = isCall(option.optionType) ? ETH_DIGITS : USD_DIGITS;
-  const currentPremia = longInteger(
-    isCall(option.optionType) ? premia.premiaEth : premia.premiaUsd,
-    digits
-  );
-  const premiaWithSlippage = getPremiaWithSlippage({
-    premia: currentPremia,
-    side: option.optionSide,
-    isClosing: true,
-    slippage,
-  });
-
   const displayPremia = premiaToDisplayValue({
-    premia: premia?.premiaEth || 0,
+    premia: premia.total,
     ethInUsd,
     option,
   });
 
   const displayPremiaWithSlippage = premiaToDisplayValue({
-    premia: shortInteger(premiaWithSlippage.toString(10), ETH_DIGITS),
+    premia: shortInteger(premia.withSlippage.toString(10), ETH_DIGITS),
     ethInUsd,
     option,
   });
@@ -90,7 +82,7 @@ export default function ClosePosition({
       entrypoint: "trade_close",
       calldata: [
         ...getTradeCalldata(option.raw, size),
-        premiaWithSlippage.toString(10),
+        premia.withSlippage.toString(10),
         deadline,
       ],
     };

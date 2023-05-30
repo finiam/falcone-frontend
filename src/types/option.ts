@@ -41,10 +41,9 @@ export type LiveOption = BaseOption & {
 };
 
 export type PremiaData = {
-  basePremiaEth: number;
-  premiaUsd: number;
-  basePremiaUsd: number;
-  premiaEth: number;
+  base: number;
+  total: number;
+  withSlippage: BN;
 };
 
 export type OptionWithPosition = BaseOption & {
