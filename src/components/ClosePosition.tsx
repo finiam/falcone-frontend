@@ -10,28 +10,29 @@ import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 
-function premiaToDisplayValue(
-  premia: number,
-  ethInUsd: number,
-  option: OptionWithPosition
-) {
-  const call = isCall(option.optionType);
-  const long = isLong(option.optionSide);
-
+function premiaToDisplayValue({
+  premia,
+  ethInUsd,
+  option,
+}: {
+  premia: number;
+  ethInUsd: number;
+  option: OptionWithPosition;
+}) {
   // Long Call
-  if (call && long) {
+  if (option.isCall && option.isLong) {
     return `$${(premia * ethInUsd).toFixed(2)}`;
   }
   // Long Put
-  if (!call && long) {
+  if (!option.isCall && option.isLong) {
     return `$${premia.toFixed(2)}`;
   }
   // Short Call
-  if (call && !long) {
+  if (option.isCall && !option.isLong) {
     return `$${((option.positionSize - premia) * ethInUsd).toFixed(2)}`;
   }
   // Short Put
-  if (!call && !long) {
+  if (!option.isCall && !option.isLong) {
     return `$${(option.positionSize * ethInUsd - premia).toFixed(2)}`;
   }
   // unreachable
@@ -59,24 +60,24 @@ export default function ClosePosition({
     isCall(option.optionType) ? premia.premiaEth : premia.premiaUsd,
     digits
   );
-  const premiaWithSlippage = getPremiaWithSlippage(
-    currentPremia,
-    option.optionSide,
-    true,
-    slippage
-  );
+  const premiaWithSlippage = getPremiaWithSlippage({
+    premia: currentPremia,
+    side: option.optionSide,
+    isClosing: true,
+    slippage,
+  });
 
-  const displayPremia = premiaToDisplayValue(
-    premia?.premiaEth || 0,
+  const displayPremia = premiaToDisplayValue({
+    premia: premia?.premiaEth || 0,
     ethInUsd,
-    option
-  );
+    option,
+  });
 
-  const displayPremiaWithSlippage = premiaToDisplayValue(
-    shortInteger(premiaWithSlippage.toString(10), ETH_DIGITS),
+  const displayPremiaWithSlippage = premiaToDisplayValue({
+    premia: shortInteger(premiaWithSlippage.toString(10), ETH_DIGITS),
     ethInUsd,
-    option
-  );
+    option,
+  });
 
   async function execute() {
     if (!account || !premia) return;
@@ -88,10 +89,7 @@ export default function ClosePosition({
       contractAddress: TESTNET_MAIN_CONTRACT_ADDRESS,
       entrypoint: "trade_close",
       calldata: [
-        ...getTradeCalldata(
-          option.raw,
-          longInteger(size, ETH_DIGITS).toString()
-        ),
+        ...getTradeCalldata(option.raw, size),
         premiaWithSlippage.toString(10),
         deadline,
       ],

@@ -78,7 +78,7 @@ export function getPremium(val: BN, optionType: OptionType) {
   return { premiumBase, premiumDecimal };
 }
 
-export function getValsFromOptionChunk(rawOption: BN[]) {
+/* export function getValsFromOptionChunk(rawOption: BN[]) {
   return {
     optionSide: rawOption[OPTION_IDX.optionSide],
     optionType: rawOption[OPTION_IDX.optionType],
@@ -87,7 +87,7 @@ export function getValsFromOptionChunk(rawOption: BN[]) {
     quoteToken: rawOption[OPTION_IDX.quoteToken],
     strikePrice: rawOption[OPTION_IDX.strikePrice],
   };
-}
+} */
 
 export function digitsByType(type: OptionType) {
   return isCall(type) ? ETH_DIGITS : USD_DIGITS;

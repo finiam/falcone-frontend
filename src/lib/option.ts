@@ -1,12 +1,19 @@
-import { BaseOption, LiveOption, OptionWithPosition } from "@/types/option";
+import {
+  BaseOption,
+  LiveOption,
+  OptionWithPosition,
+  RawOption,
+} from "@/types/option";
 import BN from "bn.js";
-import { number, uint256 } from "starknet";
-import { ETH_DIGITS, OPTION_IDX } from "./constants";
+import { number } from "starknet";
+import { ETH_DIGITS, OPTION_IDX, USD_DIGITS } from "./constants";
 import {
   getPremium,
   getSide,
   getType,
-  getValsFromOptionChunk,
+  isCall,
+  isLong,
+  longInteger,
   math64x61toDecimal,
   shortInteger,
 } from "./units";
@@ -23,34 +30,49 @@ function createBNChunks(raw: string[], size: number) {
   return out;
 }
 
-export function parseBaseOption(rawOption: BN[]): BaseOption {
-  const bn = getValsFromOptionChunk(rawOption);
-
+function parseRawOption(raw: BN[]) {
   return {
-    optionSide: getSide(bn.optionSide),
-    optionType: getType(bn.optionType),
-    maturity: Number(bn.maturity.toString()) * 1000,
-    baseToken: number.toHex(bn.baseToken),
-    quoteToken: number.toHex(bn.quoteToken),
-    strikePrice: math64x61toDecimal(bn.strikePrice.toString(10)),
-    id: crypto.randomUUID(),
+    optionSide: raw[OPTION_IDX.optionSide],
+    optionType: raw[OPTION_IDX.optionType],
+    maturity: raw[OPTION_IDX.maturity],
+    baseToken: raw[OPTION_IDX.baseToken],
+    quoteToken: raw[OPTION_IDX.quoteToken],
+    strikePrice: raw[OPTION_IDX.strikePrice],
   };
 }
 
-function createId(option: BaseOption) {
-  return [option.optionSide, option.optionType, option.strikePrice].toString();
+function parseBaseOption(rawOption: RawOption): BaseOption {
+  const data = {
+    id: crypto.randomUUID(),
+    optionSide: getSide(rawOption.optionSide),
+    optionType: getType(rawOption.optionType),
+    maturity: Number(rawOption.maturity.toString()) * 1000,
+    baseToken: number.toHex(rawOption.baseToken),
+    quoteToken: number.toHex(rawOption.quoteToken),
+    strikePrice: math64x61toDecimal(rawOption.strikePrice.toString(10)),
+  };
+
+  return {
+    ...data,
+    digits: isCall(data.optionType) ? ETH_DIGITS : USD_DIGITS,
+    isLong: isLong(data.optionSide),
+    isShort: !isLong(data.optionSide),
+    isCall: isCall(data.optionType),
+    isPut: !isCall(data.optionType),
+    raw: rawOption,
+  };
 }
 
 export function parseLiveOptions(raw: string[]): LiveOption[] {
   return createBNChunks(raw, 7).map((chunk) => {
-    const base = parseBaseOption(chunk);
+    const rawData = parseRawOption(chunk);
+    const base = parseBaseOption(rawData);
     const { premiumBase, premiumDecimal } = getPremium(
       chunk[OPTION_IDX.premium],
       base.optionType
     );
 
     return {
-      raw: chunk,
       ...base,
       premiumBase,
       premiumDecimal,
@@ -62,7 +84,8 @@ export function parseOptionsWithPositions(raw: string[]): OptionWithPosition[] {
   return (
     createBNChunks(raw, 9)
       .map((chunk) => {
-        const base = parseBaseOption(chunk);
+        const rawData = parseRawOption(chunk);
+        const base = parseBaseOption(rawData);
 
         const positionSize = shortInteger(
           chunk[OPTION_IDX.positionSize].toString(),
@@ -73,7 +96,6 @@ export function parseOptionsWithPositions(raw: string[]): OptionWithPosition[] {
         );
 
         return {
-          raw: chunk,
           ...base,
           positionSize,
           positionValue,
@@ -84,13 +106,3 @@ export function parseOptionsWithPositions(raw: string[]): OptionWithPosition[] {
   );
 }
 
-export function getStruct(raw: BN[]) {
-  return [
-    number.toHex(raw[OPTION_IDX.optionSide]),
-    new BN(raw[OPTION_IDX.maturity]).toString(10),
-    number.toHex(raw[OPTION_IDX.strikePrice]),
-    number.toHex(raw[OPTION_IDX.baseToken]),
-    number.toHex(raw[OPTION_IDX.quoteToken]),
-    number.toHex(raw[OPTION_IDX.optionType]),
-  ];
-}

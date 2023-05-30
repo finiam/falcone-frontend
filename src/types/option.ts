@@ -10,20 +10,34 @@ export enum OptionType {
   "Put" = 1,
 }
 
+export type RawOption = {
+  optionSide: BN;
+  optionType: BN;
+  strikePrice: BN;
+  quoteToken: BN;
+  baseToken: BN;
+  maturity: BN;
+};
+
 export type BaseOption = {
+  id: string;
   optionSide: OptionSide;
   optionType: OptionType;
   strikePrice: number;
   quoteToken: string;
   baseToken: string;
   maturity: number;
-  id: string;
+  isCall: boolean;
+  isPut: boolean;
+  isLong: boolean;
+  isShort: boolean;
+  digits: number;
+  raw: RawOption;
 };
 
 export type LiveOption = BaseOption & {
   premiumBase: string;
   premiumDecimal: number;
-  raw: BN[];
 };
 
 export type PremiaData = {
@@ -36,5 +50,4 @@ export type PremiaData = {
 export type OptionWithPosition = BaseOption & {
   positionSize: number;
   positionValue: number;
-  raw: BN[];
 };

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { convertSizeToUint256, isCall, math64x61toDecimal } from "@/lib/units";
+import { convertSizeToUint256, math64x61toDecimal } from "@/lib/units";
 import { LiveOption, OptionWithPosition, PremiaData } from "@/types/option";
 import {
   TESTNET_LPTOKEN_CONTRACT_ADDRESS,
   TESTNET_LPTOKEN_CONTRACT_ADDRESS_PUT,
   TESTNET_MAIN_CONTRACT_ADDRESS,
 } from "@/lib/addresses";
-import { getStruct } from "@/lib/option";
 import AmmAbi from "@/lib/abi/amm_abi.json";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import { useContractRead } from "@starknet-react/core";
+import { getStruct } from "../computations";
 
 const premiaDataEth = (premia: number, size: number, ethToUsd: number) => {
   const premiaEth = premia;
@@ -29,15 +29,19 @@ const premiaDataUsd = (premia: number, size: number, ethToUsd: number) => {
   return { basePremiaEth, premiaUsd, basePremiaUsd, premiaEth };
 };
 
-export function useGetPremia(
-  option: LiveOption | OptionWithPosition,
-  size: number,
-  isClosing: boolean
-) {
+export function useGetPremia({
+  option,
+  size,
+  isClosing,
+}: {
+  option: LiveOption | OptionWithPosition;
+  size: number;
+  isClosing: boolean;
+}) {
   const ethToUsd = useEthToUsd();
   const [premia, setPremia] = useState<PremiaData>();
 
-  const lpAddress = isCall(option.optionType)
+  const lpAddress = option.isCall
     ? TESTNET_LPTOKEN_CONTRACT_ADDRESS
     : TESTNET_LPTOKEN_CONTRACT_ADDRESS_PUT;
   const convertedSize = convertSizeToUint256(size);
@@ -69,7 +73,7 @@ export function useGetPremia(
     const convertedPremia = math64x61toDecimal(totalPremia);
 
     setPremia(
-      isCall(option.optionType)
+      option.isCall
         ? premiaDataEth(convertedPremia, size, ethToUsd)
         : premiaDataUsd(convertedPremia, size, ethToUsd)
     );
