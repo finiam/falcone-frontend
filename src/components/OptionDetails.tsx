@@ -3,12 +3,7 @@ import {
   TESTNET_MAIN_CONTRACT_ADDRESS,
   TESTNET_USD_ADDRESS,
 } from "@/lib/addresses";
-import {
-  digitsByType,
-  getSideName,
-  getTypeName,
-  intToMath64x61,
-} from "@/lib/units";
+import { getSideName, getTypeName, intToMath64x61 } from "@/lib/units";
 import { LiveOption } from "@/types/option";
 import { useAccount } from "@starknet-react/core";
 import BN from "bn.js";
@@ -17,7 +12,6 @@ import LpAbi from "@/lib/abi/lptoken_abi.json";
 import { getAmountToApprove, getTradeCalldata } from "@/lib/computations";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useSlippage } from "@/lib/stores/useSlippage";
 
 export default function OptionDetails({
   option,
@@ -26,7 +20,6 @@ export default function OptionDetails({
   option: LiveOption;
   index: number;
 }) {
-  const { slippage } = useSlippage();
   const [size, setSize] = useState(1);
   const { isConnected, account } = useAccount();
   const { premia, isLoading: loadingPremia } = useGetPremia({

@@ -58,7 +58,7 @@ export function getPremiaWithSlippage({
   slippage: number;
 }) {
   const fullInBasisPoints = 10000;
-  // slippage is in percentage, with 2 decimal precission
+  // slippage is in percentage, with 2 decimal precision
   const slippageInBasisPoints = Math.round(slippage * 100);
 
   const numerator =
