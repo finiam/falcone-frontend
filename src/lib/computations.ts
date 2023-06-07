@@ -75,8 +75,8 @@ export function getStruct(raw: RawOption) {
     number.toHex(raw.optionSide),
     new BN(raw.maturity).toString(10),
     number.toHex(raw.strikePrice),
-    number.toHex(raw.baseToken),
     number.toHex(raw.quoteToken),
+    number.toHex(raw.baseToken),
     number.toHex(raw.optionType),
   ];
 }
@@ -90,7 +90,7 @@ export function getTradeCalldata(raw: RawOption, size: number) {
     new BN(raw.maturity).toString(10),
     number.toHex(raw.optionSide),
     parsedSize,
-    number.toHex(raw.baseToken),
     number.toHex(raw.quoteToken),
+    number.toHex(raw.baseToken),
   ];
 }
