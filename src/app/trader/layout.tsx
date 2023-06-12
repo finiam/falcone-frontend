@@ -1,5 +1,7 @@
-import "./globals.css";
+import { StarknetProvider } from "@/lib/starknetProvider";
 import { Inter } from "next/font/google";
+import Header from "@/components/Header";
+import { QueryProvider } from "@/lib/queryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,8 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <QueryProvider>
+      <StarknetProvider>
+        <Header />
+        {children}
+      </StarknetProvider>
+    </QueryProvider>
   );
 }
