@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@/styles/globals.css";
 import { Inter, Yeseva_One } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
