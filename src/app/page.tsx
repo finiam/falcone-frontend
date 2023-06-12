@@ -1,12 +1,7 @@
-import OptionsList from "@/components/OptionsList";
-import { getRawAvailableOptions } from "@/lib/api";
-
-export default async function Home() {
-  const { data } = await getRawAvailableOptions();
-
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <OptionsList data={data} />
+    <main>
+      <h1>Falcone</h1>
     </main>
   );
 }
