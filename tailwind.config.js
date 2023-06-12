@@ -6,17 +6,17 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      blue: "#242838",
-      "light-blue": "#e6ebee",
-      black: "#2c2810",
-      orange: "#ec7b44",
-      red: "#cd0101",
-      "light-red": "#fff2f2",
-      green: "#128a01",
-      "light-green": "#edffea",
-    },
     extend: {
+      colors: {
+        blue: "#242838",
+        "light-blue": "#e6ebee",
+        black: "#2c2810",
+        orange: "#ec7b44",
+        red: "#cd0101",
+        "light-red": "#fff2f2",
+        green: "#128a01",
+        "light-green": "#edffea",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
