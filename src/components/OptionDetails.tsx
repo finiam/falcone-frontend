@@ -20,16 +20,17 @@ export default function OptionDetails({
   option: LiveOption;
   index: number;
 }) {
-  const [size, setSize] = useState(1);
+  const [size, setSize] = useState("1");
+  const parsedSize = parseFloat(size);
   const { isConnected, account } = useAccount();
   const { premia, isLoading: loadingPremia } = useGetPremia({
     option,
-    size,
+    size: parsedSize,
     isClosing: false,
   });
 
   useEffect(() => {
-    setSize(1);
+    setSize("1");
   }, [option]);
 
   const handleTrade = async (ev: FormEvent<HTMLFormElement>) => {
@@ -40,7 +41,7 @@ export default function OptionDetails({
     const approveAmount = getAmountToApprove({
       type: option.optionType,
       side: option.optionSide,
-      size,
+      size: parsedSize,
       premiaWithSlippage: premia.withSlippage,
       strike: parseInt(option.strikePrice.toString(), 10),
     });
@@ -64,7 +65,7 @@ export default function OptionDetails({
       contractAddress: TESTNET_MAIN_CONTRACT_ADDRESS,
       entrypoint: "trade_open",
       calldata: [
-        ...getTradeCalldata(option.raw, size),
+        ...getTradeCalldata(option.raw, parsedSize),
         intToMath64x61(premia.withSlippage.toString(10), option.digits),
         deadline,
       ],
@@ -78,8 +79,8 @@ export default function OptionDetails({
   };
 
   const handleInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    if (!ev.target.value || Number(ev.target.value) > 0)
-      setSize(Number(ev.target.value));
+    if (!ev.target.value || ev.target.value.match(/^\d*\.?\d*$/))
+      setSize(ev.target.value);
   };
 
   return (
@@ -96,7 +97,7 @@ export default function OptionDetails({
           <input
             value={size || ""}
             onChange={handleInputChange}
-            className="bg-slate-800 py-1 px-2 w-12"
+            className="bg-slate-800 py-1 px-2 w-16"
             required
           />
         </div>
