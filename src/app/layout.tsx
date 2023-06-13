@@ -1,7 +1,13 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
+import "@/styles/globals.css";
+import { Inter, Yeseva_One } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+const yeseva_one = Yeseva_One({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-yeseva-one",
+});
 
 export const metadata = {
   title: "Carmine",
@@ -15,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.variable} ${yeseva_one.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }

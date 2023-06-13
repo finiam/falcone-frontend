@@ -6,12 +6,12 @@ import Wallet from "./Wallet";
 export default function Header() {
   return (
     <header className="flex px-24 py-4 gap-8">
-      <Link href="/" className="font-bold underline">
+      <Link href="/trader" className="font-bold underline">
         Carmine
       </Link>
 
       <nav>
-        <Link href="/positions" className="font-bold">
+        <Link href="/trader/positions" className="font-bold">
           Positions
         </Link>
       </nav>
