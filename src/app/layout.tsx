@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${yeseva_one.variable}`}>
+      <body className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}>
         {children}
       </body>
     </html>

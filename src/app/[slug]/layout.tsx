@@ -1,17 +1,14 @@
-import ConceptsNav from "@/components/ConceptsNav";
 import { getAllPaths } from "@/content/getData";
+import ConceptsLayout from "@/modules/Concepts/ConceptsLayout";
+import ConceptsSidebar from "@/modules/Concepts/ConceptsSidebar";
 import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const paths = getAllPaths();
 
   return (
-    <div className="flex gap-8">
-      <section>
-        <ConceptsNav paths={paths} />
-      </section>
-
-      <main>{children}</main>
-    </div>
+    <ConceptsLayout sidebar={<ConceptsSidebar paths={paths} />}>
+      <article className="concepts-article">{children}</article>
+    </ConceptsLayout>
   );
 }
