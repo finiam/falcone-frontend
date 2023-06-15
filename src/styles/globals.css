@@ -22,4 +22,7 @@
   .concepts-article h4 {
     @apply text-20 font-600 leading-24 uppercase mb-3;
   }
+  .concepts-box p {
+    @apply text-20 leading-32 mb-0;
+  }
 }
