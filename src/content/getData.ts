@@ -43,8 +43,6 @@ export function getAllPaths() {
         const filePath = getDirPath(item);
         const file = readFileSync(filePath, "utf-8");
 
-        console.log(item)
-
         const { data, content } = matter(file);
         const route = item.replace(/.mdx$|\d/g, "").trim();
 

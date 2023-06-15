@@ -2,6 +2,9 @@ import { getAllPaths, getFile, sluggify } from "@/content/getData";
 import ConceptsBoxWrapper, {
   ConceptsBox,
 } from "@/modules/Concepts/ConceptsBox";
+import ConceptsExampleWrapper, {
+  ConceptsExample,
+} from "@/modules/Concepts/ConceptsExample";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -21,6 +24,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
         ),
         ConceptsBoxWrapper: ConceptsBoxWrapper,
         ConceptsBox: ConceptsBox,
+        ConceptsExampleWrapper: ConceptsExampleWrapper,
+        ConceptsExample: ConceptsExample,
       }}
     />
   );

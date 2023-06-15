@@ -7,12 +7,17 @@
     @apply text-24 leading-40 mb-8;
   }
 
-  .concepts-article h2 {
+  .concepts-article h2,
+  .concepts-article h6 {
     @apply text-20 font-500 leading-24 uppercase opacity-50 mb-3 mt-16;
   }
 
   .concepts-article h2:first-of-type {
     margin-top: 0;
+  }
+
+  .concepts-article ul {
+    @apply mb-8 pl-10 list-disc;
   }
 
   .concepts-article h3 {
@@ -22,7 +27,12 @@
   .concepts-article h4 {
     @apply text-20 font-600 leading-24 uppercase mb-3;
   }
+
   .concepts-box p {
     @apply text-20 leading-32 mb-0;
+  }
+
+  .concepts-example p {
+    @apply text-16 leading-32;
   }
 }
