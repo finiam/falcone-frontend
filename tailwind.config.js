@@ -3,11 +3,13 @@ module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/modules/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
+        offwhite: "#EFF2F3",
         blue: "#242838",
         "light-blue": "#e6ebee",
         black: "#2c2810",
@@ -24,8 +26,33 @@ module.exports = {
       },
     },
     fontFamily: {
-      body: ["var(--font-inter)"],
-      title: ["var(--font-yeseva-one)"],
+      inter: ["var(--font-inter)"],
+      yeseva: ["var(--font-yeseva-one)"],
+    },
+    fontSize: {
+      12: "12px",
+      16: "16px",
+      20: "20px",
+      24: "24px",
+      32: "32px",
+      48: "48px",
+      64: "64px",
+      80: "80px",
+      112: "112px",
+    },
+    fontWeight: {
+      400: 400,
+      500: 500,
+      600: 600,
+    },
+    lineHeight: {
+      1: 1,
+      24: "24.2px",
+      32: "32px",
+      40: "40px",
+      55: "55px",
+      80: "80px",
+      100: "100px",
     },
   },
   plugins: [],
