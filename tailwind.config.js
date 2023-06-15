@@ -19,11 +19,15 @@ module.exports = {
         green: "#128a01",
         "light-green": "#edffea",
         "light-gray": "#bfc9ce",
+        "dark-gray": "#1d232c",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      borderRadius: {
+        sm: "4px",
       },
     },
     fontFamily: {

@@ -1,5 +1,7 @@
 import AssessmentButton from "./Button";
 import Image from "next/image";
+import InTheMoneyLabel from "@/components/InTheMoneyLabel";
+import OutOfTheMoneyLabel from "@/components/OutOfTheMoneyLabel";
 import { AnswerOptions } from "./AssessmentLayout";
 
 export default function AssessmentOptions({
@@ -9,34 +11,12 @@ export default function AssessmentOptions({
 }) {
   return (
     <div className="flex gap-5 items-center">
-      <AssessmentButton
-        handleClick={() => selectAnswer(AnswerOptions.In)}
-        className="text-green"
-        icon={
-          <Image
-            src="/in_the_money.png"
-            alt="In the money symbol"
-            width={56}
-            height={56}
-          />
-        }
-      >
-        {AnswerOptions.In}
+      <AssessmentButton handleClick={() => selectAnswer(AnswerOptions.In)}>
+        <InTheMoneyLabel />
       </AssessmentButton>
       <span className="text-32 uppercase">or</span>
-      <AssessmentButton
-        handleClick={() => selectAnswer(AnswerOptions.Out)}
-        className="text-red"
-        icon={
-          <Image
-            src="/out_of_the_money.png"
-            alt="Out of the money symbol"
-            width={56}
-            height={56}
-          />
-        }
-      >
-        {AnswerOptions.Out}
+      <AssessmentButton handleClick={() => selectAnswer(AnswerOptions.Out)}>
+        <OutOfTheMoneyLabel />
       </AssessmentButton>
     </div>
   );
