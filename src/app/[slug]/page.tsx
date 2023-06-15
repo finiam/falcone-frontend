@@ -1,4 +1,7 @@
 import { getAllPaths, getFile, sluggify } from "@/content/getData";
+import ConceptsBoxWrapper, {
+  ConceptsBox,
+} from "@/modules/Concepts/ConceptsBox";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -16,6 +19,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
         h2: (data) => (
           <h2 id={sluggify(data.children?.toString())}>{data.children}</h2>
         ),
+        ConceptsBoxWrapper: ConceptsBoxWrapper,
+        ConceptsBox: ConceptsBox,
       }}
     />
   );
