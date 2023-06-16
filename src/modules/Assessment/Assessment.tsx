@@ -1,14 +1,13 @@
 "use client";
 
-import AssessmentButton from "./Button";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import InTheMoneyLabel from "@/components/InTheMoneyLabel";
 import OutOfTheMoneyLabel from "@/components/OutOfTheMoneyLabel";
 import { AnswerOptions, AssessmentType } from "@/data/assessments";
-import { useEffect, useState } from "react";
-import AssessmentFeedback from "./AssessmentFeedback";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import AssessmentContext from "./AssessmentContext";
+import AssessmentFeedback from "./AssessmentFeedback";
+import AssessmentButton from "./Button";
 
 export type AnswerStatus = "unanswered" | "correct" | "incorrect";
 

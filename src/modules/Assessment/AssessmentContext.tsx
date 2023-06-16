@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AssessmentType } from "@/data/assessments";
-import { isCall, isLong } from "@/lib/units";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
-import { useEffect, useMemo, useState } from "react";
+import { isCall, isLong } from "@/lib/units";
 
 export default function AssessmentContext({
   assessment,

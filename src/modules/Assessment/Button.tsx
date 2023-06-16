@@ -1,5 +1,5 @@
-import { AnswerOptions } from "@/data/assessments";
 import { ReactNode } from "react";
+import { AnswerOptions } from "@/data/assessments";
 
 export default function AssessmentButton({
   children,

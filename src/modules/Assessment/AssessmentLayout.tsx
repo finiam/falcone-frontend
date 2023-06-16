@@ -1,13 +1,8 @@
 "use client";
 
-import { ReactNode, useState } from "react";
-import AssessmentButton from "./Button";
+import { useState } from "react";
+import assessmentData, { AnswerOptions } from "@/data/assessments";
 import Assessment from "./Assessment";
-import AssessmentFeedback from "./AssessmentFeedback";
-import assessmentData, {
-  AnswerOptions,
-  AssessmentType,
-} from "@/data/assessments";
 
 export type Answer = { option?: AnswerOptions; description: string };
 

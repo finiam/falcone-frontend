@@ -1,9 +1,8 @@
-import InTheMoneyLabel from "@/components/InTheMoneyLabel";
-import { Answer } from "./AssessmentLayout";
-import OutOfTheMoneyLabel from "@/components/OutOfTheMoneyLabel";
 import Image from "next/image";
-import { AnswerStatus } from "./Assessment";
+import InTheMoneyLabel from "@/components/InTheMoneyLabel";
+import OutOfTheMoneyLabel from "@/components/OutOfTheMoneyLabel";
 import { AnswerOptions } from "@/data/assessments";
+import { AnswerStatus } from "./Assessment";
 
 export default function AssessmentFeedback({
   answerStatus,
