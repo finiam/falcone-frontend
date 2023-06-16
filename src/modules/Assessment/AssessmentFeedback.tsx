@@ -1,19 +1,23 @@
 import InTheMoneyLabel from "@/components/InTheMoneyLabel";
-import { Answer, AnswerStatus } from "./AssessmentLayout";
+import { Answer } from "./AssessmentLayout";
 import OutOfTheMoneyLabel from "@/components/OutOfTheMoneyLabel";
 import Image from "next/image";
+import { AnswerStatus } from "./Assessment";
+import { AnswerOptions } from "@/data/assessments";
 
 export default function AssessmentFeedback({
   answerStatus,
-  answer,
+  feedback,
+  position,
 }: {
   answerStatus: AnswerStatus;
-  answer: Answer;
+  feedback: string;
+  position: AnswerOptions;
 }) {
   if (answerStatus === "unanswered") return null;
 
   return (
-    <div className="max-w-full w-[981px] h-40 grid grid-cols-[107px,_1fr,_1fr] gap-x-10 border border-light-gray rounded-sm bg-white overflow-hidden">
+    <div className="max-w-full w-[981px] h-40 grid grid-cols-[107px,_max-content,_1fr] gap-x-10 border border-light-gray rounded-sm bg-white overflow-hidden">
       <div
         className={`h-full w-full text-white flex items-center justify-center ${
           answerStatus === "correct" ? "bg-green" : "bg-red"
@@ -26,14 +30,14 @@ export default function AssessmentFeedback({
           height={35}
         />
       </div>
-      {answerStatus === "correct" ? (
+      {position === AnswerOptions.In ? (
         <InTheMoneyLabel />
       ) : (
         <OutOfTheMoneyLabel />
       )}
       <div className="flex items-center justify-center">
-        <span className="text-20 text-dark-gray leading-24 p-4">
-          {answer.description}
+        <span className="text-20 text-dark-gray leading-24 py-4 px-8">
+          {feedback}
         </span>
       </div>
     </div>

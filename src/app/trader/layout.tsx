@@ -16,11 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <QueryProvider>
-      <StarknetProvider>
-        <Header />
-        {children}
-      </StarknetProvider>
-    </QueryProvider>
+    // <QueryProvider>
+    <StarknetProvider>
+      <Header />
+      {children}
+    </StarknetProvider>
+    // </QueryProvider>
   );
 }

@@ -1,3 +1,4 @@
+import { QueryProvider } from "@/lib/queryProvider";
 import "@/styles/globals.css";
 import { Inter, Yeseva_One } from "next/font/google";
 
@@ -21,9 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}>
-        {children}
-      </body>
+      <QueryProvider>
+        <body
+          className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}
+        >
+          {children}
+        </body>
+      </QueryProvider>
     </html>
   );
 }
