@@ -15,7 +15,7 @@ export default function InTheMoneyLabel({
     >
       <div className={iconCss}>
         <Image
-          src="/in_the_money.png"
+          src="/in_the_money.svg"
           alt="In the money symbol"
           width={56}
           height={56}

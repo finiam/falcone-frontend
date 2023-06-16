@@ -15,7 +15,7 @@ export default function OutOfTheMoneyLabel({
     >
       <div className={iconCss}>
         <Image
-          src="/out_of_the_money.png"
+          src="/out_of_the_money.svg"
           alt="Out the money symbol"
           width={56}
           height={56}
