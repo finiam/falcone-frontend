@@ -15,13 +15,19 @@ export type AnswerStatus = "unanswered" | "correct" | "incorrect";
 export default function Assessment({
   assessment,
   setCorrect,
+  goToNext,
 }: {
   assessment: AssessmentType;
   setCorrect: (id: string) => void;
+  goToNext: () => void;
 }) {
   // TODO: read status from local state
   const [answerStatus, setAnswerStatus] = useState<AnswerStatus>("unanswered");
   const ethInUsd = useEthToUsd();
+
+  useEffect(() => {
+    setAnswerStatus("unanswered");
+  }, [assessment.id]);
 
   const selectAnswer = (value: AnswerOptions) => {
     if (value === assessment.position) {
@@ -45,11 +51,17 @@ export default function Assessment({
       </p>
       {answerStatus === "unanswered" ? (
         <div className="flex gap-5 items-center">
-          <AssessmentButton handleClick={() => selectAnswer(AnswerOptions.In)}>
+          <AssessmentButton
+            handleClick={() => selectAnswer(AnswerOptions.In)}
+            type={AnswerOptions.In}
+          >
             <InTheMoneyLabel />
           </AssessmentButton>
           <span className="text-32 uppercase">or</span>
-          <AssessmentButton handleClick={() => selectAnswer(AnswerOptions.Out)}>
+          <AssessmentButton
+            handleClick={() => selectAnswer(AnswerOptions.Out)}
+            type={AnswerOptions.Out}
+          >
             <OutOfTheMoneyLabel />
           </AssessmentButton>
         </div>
@@ -61,11 +73,17 @@ export default function Assessment({
             feedback={assessment.answerDescription}
           />
           {answerStatus === "correct" ? (
-            <button className="mt-12 py-3 px-2 border border-light-gray rounded-sm">
+            <button
+              onClick={() => console.log("options")}
+              className="mt-12 py-3 px-2 border border-light-gray rounded-sm"
+            >
               see available options
             </button>
           ) : (
-            <button className="mt-12 py-3 px-2 border border-light-gray rounded-sm">
+            <button
+              onClick={goToNext}
+              className="mt-12 py-3 px-2 border border-light-gray rounded-sm"
+            >
               try again
             </button>
           )}

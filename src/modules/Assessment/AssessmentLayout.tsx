@@ -18,16 +18,21 @@ export default function AssessmentLayout({
 }) {
   const assessments =
     type === "buying" ? assessmentData.buying : assessmentData.selling;
-  const [currentAssessment, setCurrentAssessment] = useState<AssessmentType>(
-    assessments?.[0] || []
-  );
-
-  console.log(assessmentData);
-  console.log(assessments);
+  const [currentAssessmentId, setCurrentAssessmentId] = useState<number>(0);
 
   const setCorrect = (id: string) => {
-    // TODO: update localStorage
+    // TODO:  update localStorage
   };
 
-  return <Assessment assessment={currentAssessment} setCorrect={setCorrect} />;
+  const goToNextAssessment = () => {
+    setCurrentAssessmentId((prevId) => (prevId + 1) % assessments.length);
+  };
+
+  return (
+    <Assessment
+      assessment={assessments[currentAssessmentId]}
+      setCorrect={setCorrect}
+      goToNext={goToNextAssessment}
+    />
+  );
 }
