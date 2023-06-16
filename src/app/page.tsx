@@ -1,13 +1,12 @@
-import { getAllPaths, getFile } from "@/content/getData";
+import { getAllPaths, getFileForRoute } from "@/content/getData";
 import ConceptsLayout from "@/modules/Concepts/ConceptsLayout";
 import Greeting from "@/modules/Concepts/Greeting";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
-import logo from "/falcone_logo.png";
 import ConceptsTable from "@/modules/Concepts/ConceptsTable";
 
 export default async function HomePage() {
-  const data = await getFile("intro");
+  const data = await getFileForRoute("intro");
   const paths = getAllPaths();
 
   if (!data) {
@@ -18,7 +17,7 @@ export default async function HomePage() {
     <>
       <ConceptsLayout
         sidebar={
-          <figure className="pt-20 w-fit mx-auto">
+          <figure className="pt-24 w-fit mx-auto">
             <Image
               src={"/falcone_logo.png"}
               alt="Falcone logo"

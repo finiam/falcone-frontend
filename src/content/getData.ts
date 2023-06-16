@@ -2,6 +2,10 @@ import { readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
 import path from "path";
 
+export function sluggify(str = "") {
+  return str.replaceAll(/\s/g, "-").toLowerCase();
+}
+
 function getSectionsFromContent(content: string) {
   const h2Match = /\n#{2} ([\s\S]*?)\n/gm;
 
@@ -19,16 +23,41 @@ function getDirPath(filePath = "") {
   return path.join(process.cwd(), `src/content/${filePath}`);
 }
 
-export async function getFile(slug: string) {
-  const dir = readdirSync(getDirPath());
-  const match = dir.find((item) => item.includes(` ${slug}.mdx`));
-  const filePath = getDirPath(match);
+function getRouteFromFileName(name?: string) {
+  if (!name) return null;
+
+  const route = name.replace(/.mdx$|\d/g, "").trim();
+
+  return route === "intro" ? "/" : route;
+}
+
+export function getFileData(fileName?: string) {
+  if (!fileName) return null;
+
+  const filePath = getDirPath(fileName);
+  const file = readFileSync(filePath, "utf8");
+
+  return { ...matter(file), route: getRouteFromFileName(fileName) };
+}
+
+export async function getFileForRoute(slug: string) {
+  const dir = readdirSync(getDirPath()).filter(
+    (file) => path.extname(file).toLowerCase() === ".mdx"
+  );
+  const matchIdx = dir.findIndex((item) => item.includes(` ${slug}.mdx`));
+  const routeFile = getFileData(dir[matchIdx]);
+
+  if (!routeFile) {
+    return null;
+  }
 
   try {
-    const file = readFileSync(filePath, "utf8");
+    const previous = getFileData(dir?.[matchIdx - 1]);
+    const next = getFileData(dir?.[matchIdx + 1]);
 
-    return matter(file);
-  } catch {
+    return { ...routeFile, previous, next };
+  } catch (err) {
+    console.log(err);
     return null;
   }
 }
@@ -44,7 +73,7 @@ export function getAllPaths() {
         const file = readFileSync(filePath, "utf-8");
 
         const { data, content } = matter(file);
-        const route = item.replace(/.mdx$|\d/g, "").trim();
+        const route = getRouteFromFileName(item);
 
         return {
           data,
@@ -57,8 +86,4 @@ export function getAllPaths() {
 
     return [];
   }
-}
-
-export function sluggify(str = "") {
-  return str.replaceAll(/\s/g, "-").toLowerCase();
 }
