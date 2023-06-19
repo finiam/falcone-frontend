@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AssessmentType } from "@/data/assessments";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import { isCall, isLong } from "@/lib/units";
+import { displayPriceWithCurrency } from "@/lib/helpers";
 
 export default function AssessmentContext({
   assessment,
@@ -38,7 +39,7 @@ export default function AssessmentContext({
       .
       <br />
       <br />
-      There is a Long Call with{" "}
+      There is a {side} {type} with{" "}
       <span className="font-500">
         strike price ${Math.floor(ethInUsd) + assessment.strikePriceOffset}{" "}
         expiring on{" "}
@@ -52,7 +53,11 @@ export default function AssessmentContext({
       Carmine.
       <br />
       <br />
-      The premium for the call option is ${assessment.premium}.
+      The premium for the {type} option is{" "}
+      {displayPriceWithCurrency(
+        assessment.premium.value,
+        assessment.premium.currency
+      )}
     </p>
   );
 }
