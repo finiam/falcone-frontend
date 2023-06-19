@@ -9,10 +9,10 @@ export default function ConceptsTable({
   const pathsWithoutIntro = paths.slice(1);
 
   return (
-    <section className="bg-light-blue p-5 flex flex-col gap-8">
+    <section className="bg-light-blue p-5 pb-6 flex flex-col gap-8">
       <h2 className="text-48 font-yeseva text-blue">Fundamentals</h2>
       <div className="flex justify-between flex-wrap">
-        <ul className="flex w-full gap-20">
+        <ul className="flex w-full gap-28">
           {pathsWithoutIntro.map((path) => (
             <li key={path.route}>
               <Link

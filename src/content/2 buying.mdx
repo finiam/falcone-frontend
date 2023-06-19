@@ -3,7 +3,9 @@ title: Buying
 ---
 
 ## Intro
+
 ### Buying (Long)
+
 There are some important concepts for you to consider when buying options:
 
 #### Limited Risk
@@ -12,14 +14,76 @@ When you buy options, your risk is limited to the premium paid. This means you c
 
 #### Time Sensitivity
 
-Options have expiration dates, and *their value diminishes as time passes*. If the underlying asset doesn't move in the anticipated direction within the specified timeframe, the option may expire worthless.
+Options have expiration dates, and _their value diminishes as time passes_. If the underlying asset doesn't move in the anticipated direction within the specified timeframe, the option may expire worthless.
 
 ## Calls
+
 ### Buying a Call (Long Call)
 
 Calls are typically used when you anticipate an asset will appreciate, allowing you to profit from the price difference. A good mental model to understand it is that of placing a bet that the price of the asset will rise. By purchasing a call option, you can potentially profit from the upward movement of the asset's price, without actually owning the asset itself.
 
+<ConceptsBoxWrapper>
+  <ConceptsBox title="Profit" color="green">
+    If the price of Ethereum exceeds the strike price, you can exercise the call
+    option and buy Ethereum at the strike price. You may then immediately sell
+    it in the free market at the higher market price. Your profit would be the
+    difference between the market price and the strike price, minus the premium
+    paid for the call option.
+  </ConceptsBox>
+  <ConceptsBox title="Loss" color="red">
+    If the price of Ethereum does not rise above the strike price before the
+    option's expiration, the call option may expire worthless, resulting in a
+    loss limited to the premium paid for the option.
+  </ConceptsBox>
+</ConceptsBoxWrapper>
+
+###### Example
+
+You believe that the price of Ethereum, currently trading at $2,800, will increase in the near future, so you go Long on a Call.
+
+You decide to buy a call option on Ethereum with a strike price of $3,000 and an expiration date of one month. The premium for the call option is $100.
+
+<ConceptsExampleWrapper>
+    <ConceptsExample 
+        type="In-the-money" 
+        header="Price of ethereum goes up to $3500" >
+        You can exercise the Call option and buy the stock at the lower strike price, potentially making a profit.
+
+        - Current Price: $3500
+        - Strike Price: $3,000
+        - Premium paid: $100
+
+        **Total Profit: $400 ($3,500 - $3,000 - $100)**
+    </ConceptsExample>
+    <ConceptsExample
+        type="Out-of-the-money"
+        header="Price of ethereum stays below $3000">
+        You have no interest in exercising the Call option, since you can buy the asset at a lower price in the open market.
+        Premium paid: $100
+
+        **Total Loss: $100**
+
+</ConceptsExample>
+
+</ConceptsExampleWrapper>
+
 ## Puts
+
 ### Buying a Put
 
 Puts are valuable when you expect the price of the asset to decline. A good intuition to understand it is that of a bet that the price of the asset will fall. By acquiring a put option, you can protect yourself from potential losses or even potentially profit from the downward movement of the asset's price, serving as a form of insurance or a speculative tool.
+
+<ConceptsBoxWrapper>
+  <ConceptsBox title="Profit" color="green">
+    If the market price of Ethereum is below the strike price, you can exercise
+    the put option. By exercising the option, you can buy Ethereum in the market
+    at the lower price and sell it at the higher strike price. The profit is
+    calculated as the difference between the strike price and the market price,
+    minus the premium paid for the put option.
+  </ConceptsBox>
+  <ConceptsBox title="Loss" color="red">
+    If the price of Ethereum remains above the strike price, the put option may
+    expire worthless, resulting in a loss limited to the premium paid for the
+    option.
+  </ConceptsBox>
+</ConceptsBoxWrapper>
