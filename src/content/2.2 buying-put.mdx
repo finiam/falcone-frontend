@@ -1,0 +1,53 @@
+---
+title: Puts
+section: Buying
+---
+
+## Puts
+
+### Buying a Put
+
+Puts are valuable when you expect the price of the asset to decline. A good intuition to understand it is that of a bet that the price of the asset will fall. By acquiring a put option, you can protect yourself from potential losses or even potentially profit from the downward movement of the asset's price, serving as a form of insurance or a speculative tool.
+
+<ConceptsBoxWrapper>
+  <ConceptsBox title="Profit" color="green">
+    If the market price of Ethereum is below the strike price, you can exercise
+    the put option. By exercising the option, you can buy Ethereum in the market
+    at the lower price and sell it at the higher strike price. The profit is
+    calculated as the difference between the strike price and the market price,
+    minus the premium paid for the put option.
+  </ConceptsBox>
+  <ConceptsBox title="Loss" color="red">
+    If the price of Ethereum remains above the strike price, the put option may
+    expire worthless, resulting in a loss limited to the premium paid for the
+    option.
+  </ConceptsBox>
+</ConceptsBoxWrapper>
+
+###### Example
+
+You believe that the price of Ethereum, currently trading at $2,800, will decline in the near future, so you go Long on a Put.
+
+You decide to buy a put option on Ethereum with a strike price of $2,700 and an expiration date of one month. The premium for the put option is $150.
+
+<ConceptsExampleWrapper>
+    <ConceptsExample 
+        type="In-the-money" 
+        header="Price of Ethereum goes to $2,500" >
+        - Strike Price of Put Option: $2,700
+        - Premium paid: $150 
+        - Profit per Ethereum:  = $500
+
+        **Total Profit: $2,700 - $2,500 - $150 = $350**
+    </ConceptsExample>
+    <ConceptsExample
+        type="Out-of-the-money"
+        header="Price of Ethereum keeps steady">
+        Price of Ethereum keeps steady during the month and remains above the strike price of $2,700 until the option's expiration.
+
+        - Premium paid: $150
+
+        **Total Loss: $150**
+
+  </ConceptsExample>
+</ConceptsExampleWrapper>

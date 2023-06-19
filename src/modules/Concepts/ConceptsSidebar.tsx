@@ -25,28 +25,26 @@ export default function ConceptsSidebar({
 
       <nav>
         <ul className="flex flex-col gap-8 list-decimal marker:text-orange marker:text-16 marker:font-600 marker:mr-4 list-inside">
-          {paths.map((path, idx) => (
-            <li key={path.route} className="text-12">
+          {paths.map((group, idx) => (
+            <li key={group.section} className="text-12">
               <Link
-                href={`/${path.route}`}
+                href={`/${group.paths?.[0].route}`}
                 className="pl-3 font-600 uppercase text-blue hover:text-orange hover:opacity-100"
               >
-                {path.data?.title}
+                {group.section}
               </Link>
-              {path.sections && (
-                <ul className="pl-8 flex flex-col gap-3 mt-5">
-                  {path.sections?.map((section) => (
-                    <li key={`${path}${section.slug}`}>
-                      <Link
-                        href={`/${path.route}#${section.slug}`}
-                        className="font-500 uppercase text-blue opacity-60 hover:text-orange hover:opacity-100"
-                      >
-                        {section.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="pl-8 flex flex-col gap-3 mt-5">
+                {group.paths.map((path) => (
+                  <li key={path.route}>
+                    <Link
+                      href={path.route as string}
+                      className="font-500 uppercase text-blue opacity-60 hover:text-orange hover:opacity-100"
+                    >
+                      {path.data.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
