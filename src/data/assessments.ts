@@ -10,7 +10,7 @@ export type AssessmentType = {
   optionSide: OptionSide;
   optionType: OptionType;
   strikePriceOffset: number;
-  premium: number;
+  premium: { value: number; currency: "USD" | "ETH" };
   closingPriceOffset: number;
   position: AnswerOptions;
   answerDescription: string;
@@ -23,7 +23,7 @@ const data: { buying: AssessmentType[]; selling: AssessmentType[] } = {
       optionSide: OptionSide.Long,
       optionType: OptionType.Call,
       strikePriceOffset: 150,
-      premium: 0.0073,
+      premium: { value: 0.0073, currency: "ETH" },
       closingPriceOffset: 250,
       position: AnswerOptions.In,
       answerDescription:
@@ -34,7 +34,7 @@ const data: { buying: AssessmentType[]; selling: AssessmentType[] } = {
       optionSide: OptionSide.Long,
       optionType: OptionType.Call,
       strikePriceOffset: 150,
-      premium: 0.0068,
+      premium: { value: 0.0068, currency: "ETH" },
       closingPriceOffset: -50,
       position: AnswerOptions.Out,
       answerDescription: "",
@@ -46,7 +46,7 @@ const data: { buying: AssessmentType[]; selling: AssessmentType[] } = {
       optionSide: OptionSide.Short,
       optionType: OptionType.Call,
       strikePriceOffset: 150,
-      premium: 0.0073,
+      premium: { value: 0.0073, currency: "ETH" },
       closingPriceOffset: 250,
       position: AnswerOptions.In,
       answerDescription: "",
@@ -56,7 +56,7 @@ const data: { buying: AssessmentType[]; selling: AssessmentType[] } = {
       optionSide: OptionSide.Short,
       optionType: OptionType.Put,
       strikePriceOffset: 100,
-      premium: 0.0055,
+      premium: { value: 5.012, currency: "USD" },
       closingPriceOffset: 150,
       position: AnswerOptions.Out,
       answerDescription: "",
