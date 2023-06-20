@@ -1,3 +1,4 @@
+import ScenarioGraph from "@/components/ScenarioGraph";
 import { getAllPaths, getFileForRoute, sluggify } from "@/content/getData";
 import ConceptsBoxWrapper, {
   ConceptsBox,
