@@ -6,10 +6,16 @@ import ConceptsExampleWrapper, {
   ConceptsExample,
 } from "@/modules/Concepts/ConceptsExample";
 import FooterNav from "@/modules/Concepts/FooterNav";
+import PageAssessment from "@/modules/DynamicAssessment/PageAssessment";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const data = await getFileForRoute(params.slug);
+
+  const option = {
+    side: params.slug === "buying" ? "long" : "short",
+    type: "call",
+  };
 
   if (!data) {
     return <p>Page not found</p>;
@@ -28,6 +34,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsBox: ConceptsBox,
           ConceptsExampleWrapper: ConceptsExampleWrapper,
           ConceptsExample: ConceptsExample,
+        }}
+      />
+      <PageAssessment
+        option={{
+          side: params.slug === "buying" ? "long" : "short",
+          type: "call",
         }}
       />
       <FooterNav previousRoute={data.previous} nextRoute={data.next} />
