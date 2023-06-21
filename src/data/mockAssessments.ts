@@ -6,9 +6,9 @@ export type SelectQuestion = {
 
 export type QuestionArgs = {
   ethPrice: number;
-  strikeOffset?: number;
+  strikePriceOffset?: number;
   profit?: number;
-  closingOffset: number;
+  closingPriceOffset: number;
   premium: number;
 };
 
@@ -20,9 +20,9 @@ export type InputQuestion = {
   premium: number;
   question: ({
     ethPrice,
-    strikeOffset,
+    strikePriceOffset,
     profit,
-    closingOffset,
+    closingPriceOffset,
     premium,
   }: QuestionArgs) => string;
 };
@@ -91,14 +91,14 @@ export const data: AssessmentData = {
           premium: 100,
           question: ({
             ethPrice,
-            strikeOffset,
-            closingOffset,
+            strikePriceOffset,
+            closingPriceOffset,
             premium,
           }: QuestionArgs) =>
-            `You believe that the price of ETH, currently trading at ${ethPrice}, will increase in the near future so you buy a call option with a strike price of ${
-              ethPrice + Number(strikeOffset)
-            } for a premium of ${premium}. At the expiration date ETH is valued at ${
-              ethPrice + closingOffset
+            `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option with a strike price of $${
+              ethPrice + Number(strikePriceOffset)
+            } for a premium of $${premium}. At the expiration date ETH is valued at $${
+              ethPrice + closingPriceOffset
             } so you decide to exercise your option, what is your profit?`,
         },
         {
@@ -109,12 +109,12 @@ export const data: AssessmentData = {
           question: ({
             ethPrice,
             profit,
-            closingOffset,
+            closingPriceOffset,
             premium,
           }: QuestionArgs) =>
-            `You believe that the price of ETH, currently trading at ${ethPrice}, will increase in the near future so you buy a call option for a premium of ${premium}. At the expiration date ETH is valued at ${
-              ethPrice + closingOffset
-            } so you decide to exercise your option with a profit of ${profit}. What was strike price?`,
+            `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option for a premium of $${premium}. At the expiration date ETH is valued at $${
+              ethPrice + closingPriceOffset
+            } so you decide to exercise your option with a profit of $${profit}. What was strike price?`,
         },
       ],
     },
@@ -169,14 +169,14 @@ export const data: AssessmentData = {
           premium: 100,
           question: ({
             ethPrice,
-            strikeOffset,
-            closingOffset,
+            strikePriceOffset,
+            closingPriceOffset,
             premium,
           }: QuestionArgs) =>
-            `You believe that the price of ETH, currently trading at ${ethPrice}, will increase in the near future so you buy a call option with a strike price of ${
-              ethPrice + Number(strikeOffset)
-            } for a premium of ${premium}. At the expiration date ETH is valued at ${
-              ethPrice + closingOffset
+            `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option with a strike price of $${
+              ethPrice + Number(strikePriceOffset)
+            } for a premium of $${premium}. At the expiration date ETH is valued at $${
+              ethPrice + closingPriceOffset
             } so you decide to exercise your option, what is your profit?`,
         },
         {
@@ -186,14 +186,14 @@ export const data: AssessmentData = {
           premium: 100,
           question: ({
             ethPrice,
-            strikeOffset,
-            closingOffset,
+            strikePriceOffset,
+            closingPriceOffset,
             premium,
           }: QuestionArgs) =>
-            `You believe that the price of ETH, currently trading at ${ethPrice}, will increase in the near future so you buy a call option with a strike price of ${
-              ethPrice + Number(strikeOffset)
-            } for a premium of ${premium}. At the expiration date ETH is valued at ${
-              ethPrice + closingOffset
+            `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option with a strike price of $${
+              ethPrice + Number(strikePriceOffset)
+            } for a premium of $${premium}. At the expiration date ETH is valued at $${
+              ethPrice + closingPriceOffset
             } so you decide to exercise your option, what is your profit?`,
         },
       ],

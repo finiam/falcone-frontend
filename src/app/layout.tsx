@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { Inter, Yeseva_One } from "next/font/google";
+import { QueryProvider } from "@/lib/queryProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -21,9 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}>
-        {children}
-      </body>
+      <QueryProvider>
+        <body
+          className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}
+        >
+          {children}
+        </body>
+      </QueryProvider>
     </html>
   );
 }
