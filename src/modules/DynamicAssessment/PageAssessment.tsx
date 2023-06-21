@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   UserInputQuestion,
   UserSelectQuestion,
@@ -24,9 +24,14 @@ export default function PageAssessment({
     getQuestions(option.side, option.type)
   );
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
+  const [render, setRender] = useState(false);
   const [score, setScore] = useState(0);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
+
+  useEffect(() => {
+    setRender(true);
+  }, []);
 
   const reset = () => {
     setScore(0);
@@ -75,6 +80,8 @@ export default function PageAssessment({
       setCurrentQuestionIdx((prevIdx) => (prevIdx + 1) % questions.length);
     }
   };
+
+  if (!render) return null;
 
   return isComplete ? (
     <>
