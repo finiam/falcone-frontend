@@ -14,21 +14,21 @@ export default function ConceptsTable({
       <div className="flex justify-between flex-wrap">
         <ul className="flex w-full gap-28">
           {pathsWithoutIntro.map((path) => (
-            <li key={path.route}>
+            <li key={path.section}>
               <Link
-                href={`/${path.route}`}
+                href={`/${path.paths?.[0].route}`}
                 className="block text-24 font-500 text-blue mb-5"
               >
-                {path.data?.title}
+                {path.section}
               </Link>
               <ul className="flex flex-col gap-6">
-                {path.sections?.map((section) => (
-                  <li key={`${path}${section.slug}`}>
+                {path.paths?.map((item) => (
+                  <li key={`${item.route}`}>
                     <Link
-                      href={`/${path.route}#${section.slug}`}
+                      href={`/${item.route}`}
                       className="text-16 font-500 text-blue uppercase underline opacity-60 hover:text-orange hover:opacity-100"
                     >
-                      {section.title}
+                      {item.data.title}
                     </Link>
                   </li>
                 ))}
