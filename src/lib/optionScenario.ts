@@ -17,7 +17,7 @@ type OptionScenario = {
   regenLine: () => void;
 };
 
-const ETH_RANGE_VARIANCE = 200;
+const ETH_RANGE_VARIANCE = 300;
 const STOP_SIZE = 10;
 
 function genEthPriceStops(ethPrice: number) {
@@ -40,20 +40,47 @@ function genResultForPoint(
   optSize: number,
   ethToUsd: number
 ) {
-  const fixedCost = option.premiumDecimal * ethToUsd * optSize;
+  if (option.isCall && option.isLong) {
+    const fixedCost = option.premiumDecimal * ethToUsd * optSize;
 
-  if (point < option.strikePrice) {
+    if (point < option.strikePrice) {
+      return fixedCost * -1;
+    }
+
+    return point - option.strikePrice - fixedCost;
+  }
+
+  if (option.isCall && option.isShort) {
+    const maxProfit = option.premiumDecimal * ethToUsd * optSize;
+
+    if (point < option.strikePrice) {
+      return maxProfit;
+    }
+
+    return option.strikePrice - point + maxProfit;
+  }
+
+  if (option.isPut && option.isLong) {
+    const fixedCost = option.premiumDecimal * optSize;
+
+    if (point < option.strikePrice) {
+      return option.strikePrice - point - fixedCost;
+    }
+
     return fixedCost * -1;
   }
 
-  return point - option.strikePrice - fixedCost;
-}
+  if (option.isPut && option.isShort) {
+    const maxProfit = option.premiumDecimal * optSize;
 
-function genEthRange(strikePrice: number) {
-  const ethFloor = Math.max(0, strikePrice - ETH_RANGE_VARIANCE);
-  const ethCeil = strikePrice + ETH_RANGE_VARIANCE;
+    if (point < option.strikePrice) {
+      return (option.strikePrice - point) * -1 + maxProfit;
+    }
 
-  return { ethFloor, ethCeil };
+    return maxProfit;
+  }
+
+  return 0;
 }
 
 const useOptionScenario = create<OptionScenario>((set, get) => ({
@@ -66,16 +93,15 @@ const useOptionScenario = create<OptionScenario>((set, get) => ({
   ethToUsd: 0,
 
   init(option, ethToUsd) {
-    const { ethFloor, ethCeil } = genEthRange(option.strikePrice);
-    const stops = genEthPriceStops(ethToUsd);
+    const stops = genEthPriceStops(option.strikePrice);
 
     set(() => ({
       option,
-      ethFloor,
-      ethCeil,
       optSize: 1,
       stops,
       ethToUsd,
+      ethFloor: stops[0],
+      ethCeil: stops[stops.length - 1],
     }));
 
     get().regenLine();
@@ -108,14 +134,13 @@ const useOptionScenario = create<OptionScenario>((set, get) => ({
     }));
 
     if (val > ethCeil || val < ethFloor) {
-      const { ethFloor, ethCeil } = genEthRange(val);
       const stops = genEthPriceStops(ethToUsd);
 
       set((store) => ({
         ...store,
         stops,
-        ethFloor,
-        ethCeil,
+        ethFloor: stops[0],
+        ethCeil: stops[stops.length - 1],
       }));
     }
 

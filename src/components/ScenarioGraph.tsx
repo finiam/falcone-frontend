@@ -75,13 +75,21 @@ export const options = (ethPrice: number): any => ({
   },
 });
 
-const baseOption = 1;
+/* 
+long call
+short call
+long put
+short call
+*/
+
+const baseOption = 9;
 
 export default function ScenarioGraph() {
   const { data } = useQuery<LiveOption[]>("live-options", async () => {
     const data = await fetch("/api/options");
     return data.json();
   });
+  console.log(data)
   const ethToUsd = useEthToUsd();
   const scenario = useOptionScenario();
 
