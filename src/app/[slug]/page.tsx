@@ -6,20 +6,26 @@ import ConceptsExampleWrapper, {
   ConceptsExample,
 } from "@/modules/Concepts/ConceptsExample";
 import FooterNav from "@/modules/Concepts/FooterNav";
-import PageAssessment from "@/modules/DynamicAssessment/PageAssessment";
+import PageAssessment, {
+  OptionArg,
+} from "@/modules/DynamicAssessment/PageAssessment";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const data = await getFileForRoute(params.slug);
 
-  const option = {
-    side: params.slug === "buying" ? "long" : "short",
-    type: "call",
-  };
-
   if (!data) {
     return <p>Page not found</p>;
   }
+
+  const displayAssessment = [
+    "buying-call",
+    "buying-put",
+    "selling-call",
+    "selling-put",
+  ].includes(params.slug);
+
+  const [side, type] = displayAssessment ? params.slug.split("-") : [];
 
   return (
     <>
@@ -36,12 +42,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsExample: ConceptsExample,
         }}
       />
-      <PageAssessment
-        option={{
-          side: params.slug === "buying" ? "long" : "short",
-          type: "call",
-        }}
-      />
+      {displayAssessment && (
+        <PageAssessment
+          option={
+            {
+              side: side === "buying" ? "long" : "short",
+              type,
+            } as OptionArg
+          }
+        />
+      )}
       <FooterNav previousRoute={data.previous} nextRoute={data.next} />
     </>
   );
