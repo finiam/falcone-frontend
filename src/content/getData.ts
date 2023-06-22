@@ -2,6 +2,13 @@ import { readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
 import path from "path";
 
+type Path = {
+  data: {
+    [key: string]: any;
+  };
+  route: string | null;
+};
+
 export function sluggify(str = "") {
   return str.replaceAll(/\s/g, "-").toLowerCase();
 }
@@ -26,7 +33,7 @@ function getDirPath(filePath = "") {
 function getRouteFromFileName(name?: string) {
   if (!name) return null;
 
-  const route = name.replace(/.mdx$|\d/g, "").trim();
+  const route = name.replace(/.mdx$|\d|\./g, "").trim();
 
   return route === "intro" ? "/" : route;
 }
@@ -78,9 +85,30 @@ export function getAllPaths() {
         return {
           data,
           route: route === "intro" ? "/" : route,
-          sections: getSectionsFromContent(content),
         };
-      });
+      })
+      .reduce(
+        (prev, current) => {
+          const sectionMatch = prev.findIndex(
+            (item) => item.section === current.data.section
+          );
+
+          if (sectionMatch === -1) {
+            prev.push({
+              section: current.data.section,
+              paths: [current],
+            });
+          } else {
+            prev[sectionMatch].paths.push(current);
+          }
+
+          return prev;
+        },
+        [] as {
+          section: string;
+          paths: Path[];
+        }[]
+      );
   } catch (err) {
     console.log(err);
 

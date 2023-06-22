@@ -38,7 +38,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
 export async function generateStaticParams() {
   const paths = getAllPaths();
 
-  return paths.map((item) => ({
-    slug: item.route,
-  }));
+  return paths
+    .map((group) =>
+      group.paths.map((item) => ({
+        slug: item.route,
+      }))
+    )
+    .flat();
 }
