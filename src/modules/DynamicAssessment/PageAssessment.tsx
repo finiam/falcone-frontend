@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   UserInputQuestion,
   UserSelectQuestion,
@@ -10,12 +10,15 @@ import {
 } from "./utils";
 import SelectQuestion from "./SelectQuestion";
 import InputQuestion from "./InputQuestion";
-import { InputQuestion as InputQuestionType } from "@/data/mockAssessments";
+import { InputQuestion as InputQuestionType } from "@/data/assessmentData";
+import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
+
+export type OptionArg = { side: "long" | "short"; type: "call" | "put" };
 
 export default function PageAssessment({
   option = { side: "long", type: "call" },
 }: {
-  option?: { side: "long" | "short"; type: "call" | "put" };
+  option: OptionArg;
 }) {
   // TODO: get status from localStorage
   const [isComplete, setIsComplete] = useState(false);
@@ -27,6 +30,12 @@ export default function PageAssessment({
   const [score, setScore] = useState(0);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
+  const ethToUsd = useEthToUsd();
+
+  const ethInUsd = useMemo(
+    () => (ethToUsd ? Math.round(ethToUsd) : 0),
+    [ethToUsd]
+  );
 
   useEffect(() => {
     setRender(true);
@@ -48,7 +57,9 @@ export default function PageAssessment({
     } else {
       isCorrect =
         getInputQuestionAnswer(
-          questions[currentQuestionIdx].data as InputQuestionType
+          option,
+          questions[currentQuestionIdx].data as InputQuestionType,
+          ethInUsd
         ).toString() === answer;
     }
 
@@ -112,6 +123,7 @@ export default function PageAssessment({
           <InputQuestion
             question={questions[currentQuestionIdx] as UserInputQuestion}
             saveAnswer={saveAnswer}
+            ethInUsd={ethInUsd}
           />
         )}
         <button

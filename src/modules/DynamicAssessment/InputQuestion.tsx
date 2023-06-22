@@ -7,12 +7,13 @@ import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 export default function InputQuestion({
   question,
   saveAnswer,
+  ethInUsd,
 }: {
   question: UserInputQuestion;
   saveAnswer: (answer: string) => void;
+  ethInUsd: number;
 }) {
   const [input, setInput] = useState<string>();
-  const ethPrice = useEthToUsd();
 
   const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -26,7 +27,7 @@ export default function InputQuestion({
     <>
       <p className="mb-0">
         {question.data.question({
-          ethPrice,
+          ethPrice: ethInUsd,
           ...question.data,
         })}
       </p>
