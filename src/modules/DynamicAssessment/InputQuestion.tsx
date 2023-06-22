@@ -23,21 +23,30 @@ export default function InputQuestion({
     setInput(ev.target.value);
 
   return (
-    <div>
-      <p>
+    <>
+      <p className="mb-0">
         {question.data.question({
           ethPrice,
           ...question.data,
         })}
       </p>
-      <form onSubmit={handleSubmit}>
-        <input onChange={handleChange} type="number" step="0.001" />
+      <form className="w-fit mx-auto flex gap-8" onSubmit={handleSubmit}>
+        <input
+          disabled={question.correct}
+          className="rounded-md border border-light-gray px-4 disabled:bg-white"
+          onChange={handleChange}
+          type="number"
+          step="0.001"
+        />
         <button type="submit" disabled={!input || question.correct}>
           Submit
         </button>
       </form>
-      {question.status === "answered" &&
-        (question.correct ? <>GOOD JOB</> : <>TRY AGAIN</>)}
-    </div>
+      {question.status === "answered" && (
+        <p className="w-fit mx-auto text-20">
+          {question.correct ? "Good Job!" : "Try Again"}
+        </p>
+      )}
+    </>
   );
 }

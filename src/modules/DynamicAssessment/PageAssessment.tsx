@@ -19,7 +19,6 @@ export default function PageAssessment({
 }) {
   // TODO: get status from localStorage
   const [isComplete, setIsComplete] = useState(false);
-  // TODO: create store to save selected questions and status, pick new questions
   const [questions, setQuestions] = useState(
     getQuestions(option.side, option.type)
   );
@@ -84,37 +83,46 @@ export default function PageAssessment({
   if (!render) return null;
 
   return isComplete ? (
-    <>
-      <div>
-        <span>
-          {score}/{questions.length}
-        </span>
-      </div>
+    <div className="assessment flex flex-col gap-4 items-center mt-12 mb-8 text-center">
+      <p className="flex flex-col gap-2">
+        <span className="text-20">Your score</span>
+        {score}/{questions.length}
+        <span>{allCorrect ? "🥳" : "😔📚"}</span>
+      </p>
       {allCorrect ? (
-        <button onClick={reset}>Display options</button>
+        <button type="button" onClick={() => console.log("display options")}>
+          Display options
+        </button>
       ) : (
-        <button onClick={reset}>try again</button>
+        <button type="button" onClick={reset}>
+          Try Again
+        </button>
       )}
-    </>
-  ) : (
-    <div className="flex flex-col gap-8">
-      {questions[currentQuestionIdx].type === "select" ? (
-        <SelectQuestion
-          question={questions[currentQuestionIdx] as UserSelectQuestion}
-          saveAnswer={saveAnswer}
-        />
-      ) : (
-        <InputQuestion
-          question={questions[currentQuestionIdx] as UserInputQuestion}
-          saveAnswer={saveAnswer}
-        />
-      )}
-      <button
-        onClick={nextStep}
-        disabled={questions[currentQuestionIdx].status === "unanswered"}
-      >
-        {isLast ? "SEE SCORE" : "NEXT"}
-      </button>
     </div>
+  ) : (
+    <>
+      <h2>Assessment</h2>
+      <div className="flex flex-col gap-8 assessment">
+        {questions[currentQuestionIdx].type === "select" ? (
+          <SelectQuestion
+            question={questions[currentQuestionIdx] as UserSelectQuestion}
+            saveAnswer={saveAnswer}
+          />
+        ) : (
+          <InputQuestion
+            question={questions[currentQuestionIdx] as UserInputQuestion}
+            saveAnswer={saveAnswer}
+          />
+        )}
+        <button
+          type="button"
+          className="disabled:text-light-gray"
+          onClick={nextStep}
+          disabled={questions[currentQuestionIdx].status === "unanswered"}
+        >
+          {isLast ? "SEE SCORE" : "NEXT"}
+        </button>
+      </div>
+    </>
   );
 }
