@@ -35,15 +35,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsBox: ConceptsBox,
           ConceptsExampleWrapper: ConceptsExampleWrapper,
           ConceptsExample: ConceptsExample,
-          ScenarioGraph: ScenarioGraph,
+          PageAssessment: PageAssessment,
         }}
       />
-      <PageAssessment
+      {/* <PageAssessment
         option={{
           side: params.slug.includes("buying") ? "long" : "short",
           type: "call",
         }}
-      />
+      /> */}
       <FooterNav previousRoute={data.previous} nextRoute={data.next} />
     </>
   );

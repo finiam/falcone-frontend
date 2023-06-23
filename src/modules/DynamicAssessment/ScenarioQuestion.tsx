@@ -48,7 +48,7 @@ export default function ScenarioQuestion({
         className="flex justify-between px-4 py-2 rounded-md border enabled:shadow-sm disabled:bg-offwhite bg-white border-light-gray"
       >
         <label className="text-16 flex gap-2 items-center">
-          At least
+          At {option.isPut ? "least" : "most"}
           <input
             type="number"
             name="answer"
