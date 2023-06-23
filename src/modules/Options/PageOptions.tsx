@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import PageAssessment from "../DynamicAssessment/PageAssessment";
-import { parseLiveOptions } from "@/lib/option";
+import { filterOptions, parseLiveOptions } from "@/lib/option";
 import OptionsList from "@/components/OptionsList";
 import { OptionArg } from "@/types/option";
 
@@ -16,8 +16,7 @@ export default function PageOptions({
   // TODO: get status from local storage
   const [assessmentComplete, setAssessmentComplete] = useState(false);
 
-  //TODO: filter data
-  const data = parseLiveOptions(rawData);
+  const data = filterOptions(parseLiveOptions(rawData), option);
 
   const markAssessmentAsComplete = () => {
     // TODO: update local storage
