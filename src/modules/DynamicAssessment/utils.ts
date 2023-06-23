@@ -24,7 +24,7 @@ export const getQuestions = (
 ): (UserInputQuestion | UserSelectQuestion)[] => {
   const [side, type] = [
     isLong(optionSide) ? "long" : "short",
-    isCall(optionType) ? "call" : "call",
+    isCall(optionType) ? "call" : "put",
   ];
 
   const selectTypeQuestions = _.sampleSize(
