@@ -5,6 +5,7 @@ import PageAssessment from "../DynamicAssessment/PageAssessment";
 import { filterOptions, parseLiveOptions } from "@/lib/option";
 import OptionsList from "@/components/OptionsList";
 import { OptionArg } from "@/types/option";
+import SlippageInput from "@/components/SlippageInput";
 
 export default function PageOptions({
   option,
@@ -35,11 +36,16 @@ export default function PageOptions({
   }
 
   return (
-    <>
-      <h2>Available options</h2>
+    <div className="w-full ">
+      <div className="flex justify-between mt-16 mb-8">
+        <h2>Available options</h2>
+        <div className="mr-16">
+          <SlippageInput />
+        </div>
+      </div>
       <div>
         <OptionsList data={data} />
       </div>
-    </>
+    </div>
   );
 }

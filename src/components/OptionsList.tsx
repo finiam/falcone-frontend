@@ -24,26 +24,16 @@ export default function OptionsList({ data, rawData }: OptionsListProps) {
     if (!data && rawData) setOptions(parseLiveOptions(rawData));
   }, [data]);
 
+  const hideDetails = () => setSelectedOption(null);
+
   return (
     <div className="w-full">
-      {selectedOption && (
-        <OptionDetails
-          option={selectedOption.data}
-          index={selectedOption.index}
-        />
-      )}
-      <div className="flex justify-end">
-        <SlippageInput />
-      </div>
-
-      <h2 className="text-xl font-bold">Options</h2>
-
-      <section className="flex flex-col gap-2 w-full">
-        <div className="flex gap-8">
-          <p className="w-1/4 font-bold">Type</p>
-          <p className="w-1/4 font-bold">Strike price</p>
-          <p className="w-1/4 font-bold">Maturity</p>
-          <p className="w-1/4 font-bold">Premium</p>
+      <section className="flex flex-col gap-2 w-5/6 mx-auto">
+        <div className="flex gap-8 font-600">
+          <span className="w-1/4">Type</span>
+          <span className="w-1/4">Strike price</span>
+          <span className="w-1/4">Maturity</span>
+          <span className="w-1/4">Premium</span>
         </div>
         {options ? (
           options.length > 0 ? (
@@ -51,17 +41,32 @@ export default function OptionsList({ data, rawData }: OptionsListProps) {
               <div
                 key={option.id}
                 onClick={() => setSelectedOption({ index: idx, data: option })}
-                className="flex gap-8 cursor-pointer"
+                className="flex flex-col py-4 gap-4 cursor-pointer border-b border-light-gray last-of-type:border-none"
               >
-                <div className="w-1/4">
-                  {getTypeName(option.optionType)} /{" "}
-                  {getSideName(option.optionSide)}
+                <div className="flex gap-8">
+                  <div className="w-1/4 capitalize">
+                    {getSideName(option.optionSide)}{" "}
+                    {getTypeName(option.optionType)}
+                  </div>
+                  <div className="w-1/4">${option.strikePrice}</div>
+                  <div className="w-1/4">
+                    {new Date(option.maturity).toLocaleDateString("en-UK", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit",
+                    })}
+                  </div>
+                  <div className="w-1/4">
+                    {option.premiumDecimal.toFixed(4)}
+                  </div>
                 </div>
-                <div className="w-1/4">{option.strikePrice}</div>
-                <div className="w-1/4">
-                  {new Date(option.maturity).toLocaleDateString()}
-                </div>
-                <div className="w-1/4">{option.premiumDecimal.toFixed(4)}</div>
+                {idx === selectedOption?.index && (
+                  <OptionDetails
+                    hideDetails={hideDetails}
+                    option={selectedOption.data}
+                    index={selectedOption.index}
+                  />
+                )}
               </div>
             ))
           ) : (

@@ -132,7 +132,7 @@ export default function PageAssessment({
         )}
         <button
           type="button"
-          className="disabled:text-light-gray"
+          className="mx-auto disabled:text-light-gray"
           onClick={nextStep}
           disabled={questions[currentQuestionIdx].status === "unanswered"}
         >

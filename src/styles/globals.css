@@ -36,8 +36,8 @@
     @apply text-16 leading-32;
   }
 
-  .assessment button {
-    @apply enabled:cursor-pointer mx-auto px-4 py-2 rounded-md border enabled:shadow-sm disabled:bg-offwhite bg-white border-light-gray hover:enabled:bg-light-blue;
+  button {
+    @apply enabled:cursor-pointer w-fit px-4 py-2 rounded-md border enabled:shadow-sm disabled:bg-offwhite bg-white border-light-gray hover:enabled:bg-light-blue;
   }
 
   .assessment button[data-incorrect="true"] {
