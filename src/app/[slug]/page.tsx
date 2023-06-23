@@ -35,6 +35,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsBox: ConceptsBox,
           ConceptsExampleWrapper: ConceptsExampleWrapper,
           ConceptsExample: ConceptsExample,
+          ScenarioGraph: ScenarioGraph,
         }}
       />
       <PageAssessment

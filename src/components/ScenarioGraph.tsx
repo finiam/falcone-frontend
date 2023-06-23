@@ -16,6 +16,7 @@ import { Line } from "react-chartjs-2";
 import { LiveOption } from "@/types/option";
 import { useOptionScenario } from "@/lib/optionScenario";
 import { ChangeEvent, useEffect } from "react";
+import SliderInput from "./SliderInput";
 
 ChartJS.register(
   CategoryScale,
@@ -51,8 +52,12 @@ export const options = (ethPrice: number): any => ({
       },
       grid: {
         color: (value: any) => {
-          return value.tick.value === 0 ? "blue" : "#eee";
+          return value.tick.value === 0 ? "#666" : "#eee";
         },
+      },
+      border: {
+        dash: [4, 4],
+        dashOffset: 4,
       },
     },
     x: {
@@ -75,26 +80,37 @@ export const options = (ethPrice: number): any => ({
   },
 });
 
-/* 
-long call
-short call
-long put
-short call
-*/
+type OptionType = "long call" | "short call" | "long put" | "short put";
+const optionIdxByType = {
+  "long call": 0,
+  "short call": 3,
+  "long put": 6,
+  "short put": 9,
+};
 
 const baseOption = 9;
 
-export default function ScenarioGraph() {
+export default function ScenarioGraph({
+  optionType,
+}: {
+  optionType: OptionType;
+}) {
   const { data } = useQuery<LiveOption[]>("live-options", async () => {
     const data = await fetch("/api/options");
     return data.json();
   });
-  console.log(data)
+
+  /* console.log(data); */
+
   const ethToUsd = useEthToUsd();
   const scenario = useOptionScenario();
 
   useEffect(() => {
-    if (data) scenario.init(data[baseOption], Math.round(ethToUsd));
+    if (data) {
+      const option = data[optionIdxByType[optionType]];
+      console.log(option);
+      scenario.init(option, Math.round(ethToUsd));
+    }
   }, [data]);
 
   const cdata = {
@@ -102,14 +118,12 @@ export default function ScenarioGraph() {
     datasets: [
       {
         data: scenario.line,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "#ec7b44",
+        backgroundColor: "#ec7b44",
         label: "Total profit",
       },
     ],
   };
-
-  console.log(ethToUsd);
 
   function handleEdit(event: ChangeEvent<HTMLInputElement>) {
     const { name, valueAsNumber } = event.currentTarget;
@@ -137,9 +151,16 @@ export default function ScenarioGraph() {
 
   return (
     <div className="mt-16">
-      <p>Assessment</p>
+      <h2 className="mb-20">Assessment</h2>
       <Line options={options(scenario.ethToUsd)} data={cdata} />
       <hr />
+      <div className="my-20">
+        <SliderInput
+          name="test"
+          min={scenario.ethFloor}
+          max={scenario.ethCeil}
+        />
+      </div>
       <div>
         <label>
           Strike price

@@ -43,10 +43,26 @@
   .assessment button[data-incorrect="true"] {
     @apply bg-light-red border-red;
   }
-  
+
   .assessment button[data-correct="true"] {
     @apply bg-light-green border-green;
   }
-    
-  
+
+  .range-slider_input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .range-slider_input::-moz-range-thumb {
+    width: 14vmin;
+    height: 14vmin;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0;
+  }
 }
