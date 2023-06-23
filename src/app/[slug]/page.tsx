@@ -1,4 +1,5 @@
 import { getAllPaths, getFileForRoute, sluggify } from "@/content/getData";
+import { getRawAvailableOptions } from "@/lib/api";
 import ConceptsBoxWrapper, {
   ConceptsBox,
 } from "@/modules/Concepts/ConceptsBox";
@@ -6,26 +7,26 @@ import ConceptsExampleWrapper, {
   ConceptsExample,
 } from "@/modules/Concepts/ConceptsExample";
 import FooterNav from "@/modules/Concepts/FooterNav";
-import PageAssessment, {
-  OptionArg,
-} from "@/modules/DynamicAssessment/PageAssessment";
+import PageOptions from "@/modules/Options/PageOptions";
+import { OptionArg, OptionSide, OptionType } from "@/types/option";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const data = await getFileForRoute(params.slug);
+  const { data: rawOptionsData } = await getRawAvailableOptions();
 
   if (!data) {
     return <p>Page not found</p>;
   }
 
-  const displayAssessment = [
+  const displayOptions = [
     "buying-call",
     "buying-put",
     "selling-call",
     "selling-put",
   ].includes(params.slug);
 
-  const [side, type] = displayAssessment ? params.slug.split("-") : [];
+  const [side, type] = displayOptions ? params.slug.split("-") : [];
 
   return (
     <>
@@ -42,12 +43,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsExample: ConceptsExample,
         }}
       />
-      {displayAssessment && (
-        <PageAssessment
+      {displayOptions && (
+        <PageOptions
+          rawData={rawOptionsData}
           option={
             {
-              side: side === "buying" ? "long" : "short",
-              type,
+              side: side === "buying" ? OptionSide.Long : OptionSide.Short,
+              type: type === "call" ? OptionType.Call : OptionType.Put,
             } as OptionArg
           }
         />

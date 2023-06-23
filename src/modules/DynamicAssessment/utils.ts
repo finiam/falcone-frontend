@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { InputQuestion, SelectQuestion, data } from "@/data/assessmentData";
-import { OptionArg } from "./PageAssessment";
+import { OptionArg, OptionSide, OptionType } from "@/types/option";
+import { isCall, isLong } from "@/lib/units";
 
 const N_SELECT_TYPE_QUESTIONS = 2;
 const N_INPUT_TYPE_QUESTIONS = 1;
@@ -18,9 +19,14 @@ export type UserSelectQuestion = UserQuestion<SelectQuestion>;
 export type UserInputQuestion = UserQuestion<InputQuestion>;
 
 export const getQuestions = (
-  side: string,
-  type: string
+  optionSide: OptionSide,
+  optionType: OptionType
 ): (UserInputQuestion | UserSelectQuestion)[] => {
+  const [side, type] = [
+    isLong(optionSide) ? "long" : "short",
+    isCall(optionType) ? "call" : "call",
+  ];
+
   const selectTypeQuestions = _.sampleSize(
     data[side][type].selectType,
     N_SELECT_TYPE_QUESTIONS
@@ -67,23 +73,23 @@ export const getInputQuestionAnswer = (
   }: InputQuestion,
   ethInUsd: number
 ): number => {
-  if (option.side === "long") {
+  if (isLong(option.side)) {
     if (inputType === "loss") return premium;
 
-    if (option.type === "call") {
+    if (isCall(option.type)) {
       if (inputType === "profit") {
         return closingPriceOffset - (strikePriceOffset || 0) - premium;
       } else if (inputType === "strike") {
         return closingPriceOffset + ethInUsd - (profit || 0) - premium;
       }
-    } else if (option.type === "put") {
+    } else {
       if (inputType === "profit") {
         return (strikePriceOffset || 0) - closingPriceOffset - premium;
       } else if (inputType === "strike") {
         return (profit || 0) + closingPriceOffset + ethInUsd + premium;
       }
     }
-  } else if (option.side === "short") {
+  } else {
     if (inputType === "profit") return premium;
     // TODO: calculate answer for other question types
   }

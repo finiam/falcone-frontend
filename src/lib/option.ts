@@ -106,3 +106,4 @@ export function parseOptionsWithPositions(raw: string[]): OptionWithPosition[] {
   );
 }
 
+export function filterOptions() {}

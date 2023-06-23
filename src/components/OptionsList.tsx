@@ -7,8 +7,13 @@ import { LiveOption } from "@/types/option";
 import SlippageInput from "./SlippageInput";
 import { parseLiveOptions } from "@/lib/option";
 
-export default function OptionsList({ data }: { data: string[] }) {
-  const [options, setOptions] = useState<LiveOption[]>();
+type OptionsListProps = {
+  data?: LiveOption[];
+  rawData?: string[];
+};
+
+export default function OptionsList({ data, rawData }: OptionsListProps) {
+  const [options, setOptions] = useState<LiveOption[] | undefined>(data);
   const [selectedOption, setSelectedOption] = useState<{
     index: number;
     data: LiveOption;
@@ -16,7 +21,7 @@ export default function OptionsList({ data }: { data: string[] }) {
 
   // useMemo causes hydration errors
   useEffect(() => {
-    if (data) setOptions(parseLiveOptions(data));
+    if (!data && rawData) setOptions(parseLiveOptions(rawData));
   }, [data]);
 
   return (
