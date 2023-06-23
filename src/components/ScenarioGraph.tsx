@@ -17,6 +17,10 @@ import { LiveOption } from "@/types/option";
 import { useOptionScenario } from "@/lib/optionScenario";
 import { ChangeEvent, useEffect } from "react";
 import SliderInput from "./SliderInput";
+import { OptionArg } from "@/modules/DynamicAssessment/PageAssessment";
+import ScenarioDescription from "@/modules/DynamicAssessment/ScenarioDescription";
+import ScenarioControls from "@/modules/DynamicAssessment/ScenarioControls";
+import ScenarioQuestion from "@/modules/DynamicAssessment/ScenarioQuestion";
 
 ChartJS.register(
   CategoryScale,
@@ -80,7 +84,7 @@ export const options = (ethPrice: number): any => ({
   },
 });
 
-type OptionType = "long call" | "short call" | "long put" | "short put";
+// This assumes on the order of options from the BE being constant
 const optionIdxByType = {
   "long call": 0,
   "short call": 3,
@@ -88,27 +92,25 @@ const optionIdxByType = {
   "short put": 9,
 };
 
-const baseOption = 9;
-
 export default function ScenarioGraph({
   optionType,
+  saveAssessmentAnswer,
 }: {
-  optionType: OptionType;
+  optionType: OptionArg;
+  saveAssessmentAnswer: (val: boolean) => void;
 }) {
   const { data } = useQuery<LiveOption[]>("live-options", async () => {
     const data = await fetch("/api/options");
     return data.json();
   });
 
-  /* console.log(data); */
-
   const ethToUsd = useEthToUsd();
   const scenario = useOptionScenario();
 
   useEffect(() => {
     if (data) {
-      const option = data[optionIdxByType[optionType]];
-      console.log(option);
+      const option =
+        data[optionIdxByType[`${optionType.side} ${optionType.type}`]];
       scenario.init(option, Math.round(ethToUsd));
     }
   }, [data]);
@@ -125,76 +127,15 @@ export default function ScenarioGraph({
     ],
   };
 
-  function handleEdit(event: ChangeEvent<HTMLInputElement>) {
-    const { name, valueAsNumber } = event.currentTarget;
-
-    if (!valueAsNumber) return;
-
-    if (name === "strikePrice") {
-      scenario.setStrikePrice(valueAsNumber);
-
-      return;
-    }
-
-    if (name === "optSize") {
-      scenario.setOptSize(valueAsNumber);
-
-      return;
-    }
-
-    if (name === "ethToUsd") {
-      scenario.setEthToUsd(valueAsNumber);
-
-      return;
-    }
-  }
+  if (!scenario.option) return null;
 
   return (
-    <div className="mt-16">
-      <h2 className="mb-20">Assessment</h2>
+    <>
+      <ScenarioDescription />
       <Line options={options(scenario.ethToUsd)} data={cdata} />
       <hr />
-      <div className="my-20">
-        <SliderInput
-          name="test"
-          min={scenario.ethFloor}
-          max={scenario.ethCeil}
-        />
-      </div>
-      <div>
-        <label>
-          Strike price
-          <input
-            type="number"
-            step="any"
-            name="strikePrice"
-            defaultValue={scenario.option?.strikePrice || 0}
-            onChange={handleEdit}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Option size
-          <input
-            type="number"
-            name="optSize"
-            defaultValue={scenario.optSize}
-            onChange={handleEdit}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Eth price
-          <input
-            type="number"
-            name="ethToUsd"
-            defaultValue={scenario.ethToUsd}
-            onChange={handleEdit}
-          />
-        </label>
-      </div>
-    </div>
+      <ScenarioControls />
+      <ScenarioQuestion saveAssessmentAnswer={saveAssessmentAnswer} />
+    </>
   );
 }

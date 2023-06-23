@@ -1,7 +1,6 @@
 import { QueryProvider } from "@/lib/queryProvider";
-import "@/styles/globals.css";
 import { Inter, Yeseva_One } from "next/font/google";
-import { QueryProvider } from "@/lib/queryProvider";
+import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 

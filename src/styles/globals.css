@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   p {
     @apply text-24 leading-40 mb-8;
   }

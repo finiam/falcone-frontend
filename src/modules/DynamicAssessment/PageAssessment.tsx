@@ -1,17 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  UserInputQuestion,
-  UserSelectQuestion,
-  getAssessmentScore,
-  getInputQuestionAnswer,
-  getQuestions,
-} from "./utils";
+import { UserSelectQuestion, getAssessmentScore, getQuestions } from "./utils";
 import SelectQuestion from "./SelectQuestion";
 import InputQuestion from "./InputQuestion";
-import { InputQuestion as InputQuestionType } from "@/data/assessmentData";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
+import ScenarioGraph from "@/components/ScenarioGraph";
 
 export type OptionArg = { side: "long" | "short"; type: "call" | "put" };
 
@@ -48,7 +42,40 @@ export default function PageAssessment({
     setCurrentQuestionIdx(0);
   };
 
-  const saveAnswer = (answer: string) => {
+  const saveSelectAnswer = (answer: string) => {
+    const isCorrect =
+      (questions[currentQuestionIdx] as UserSelectQuestion).data
+        .correctAnswer === answer;
+
+    setQuestions((prev) =>
+      prev.map((question) =>
+        question.id === questions[currentQuestionIdx].id
+          ? {
+              ...question,
+              correct: isCorrect,
+              status: "answered",
+              userAnswer: answer,
+            }
+          : question
+      )
+    );
+  };
+
+  const saveAssessmentAnswer = (correct: boolean) => {
+    setQuestions((prev) =>
+      prev.map((question) =>
+        question.id === "scenario"
+          ? {
+              ...question,
+              correct,
+              status: "answered",
+            }
+          : question
+      )
+    );
+  };
+
+  /* const saveAnswer = (answer: string) => {
     let isCorrect = false;
     if (questions[currentQuestionIdx].type === "select") {
       isCorrect =
@@ -75,7 +102,7 @@ export default function PageAssessment({
           : question
       )
     );
-  };
+  }; */
 
   const nextStep = () => {
     if (isLast) {
@@ -113,28 +140,39 @@ export default function PageAssessment({
   ) : (
     <>
       <h2>Assessment</h2>
-      <div className="flex flex-col gap-8 assessment">
+      <div className="flex flex-col gap-8">
         {questions[currentQuestionIdx].type === "select" ? (
-          <SelectQuestion
-            question={questions[currentQuestionIdx] as UserSelectQuestion}
-            saveAnswer={saveAnswer}
-          />
+          <div className="assessment">
+            <SelectQuestion
+              question={questions[currentQuestionIdx] as UserSelectQuestion}
+              saveAnswer={saveSelectAnswer}
+            />
+          </div>
         ) : (
-          <InputQuestion
-            question={questions[currentQuestionIdx] as UserInputQuestion}
-            saveAnswer={saveAnswer}
-            ethInUsd={ethInUsd}
+          <ScenarioGraph
+            optionType={option}
+            saveAssessmentAnswer={saveAssessmentAnswer}
           />
         )}
-        <button
-          type="button"
-          className="disabled:text-light-gray"
-          onClick={nextStep}
-          disabled={questions[currentQuestionIdx].status === "unanswered"}
-        >
-          {isLast ? "SEE SCORE" : "NEXT"}
-        </button>
+        <div className="assessment">
+          <button
+            type="button"
+            className="disabled:text-light-gray"
+            onClick={nextStep}
+            disabled={questions[currentQuestionIdx].status === "unanswered"}
+          >
+            {isLast ? "SEE SCORE" : "NEXT"}
+          </button>
+        </div>
       </div>
     </>
   );
 }
+
+/* 
+<InputQuestion
+            question={questions[currentQuestionIdx] as UserInputQuestion}
+            saveAnswer={saveAnswer}
+            ethInUsd={ethInUsd}
+          />
+*/

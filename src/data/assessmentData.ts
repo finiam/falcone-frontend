@@ -4,26 +4,25 @@ export type SelectQuestion = {
   options: { id: string; value: string }[];
 };
 
-export type InputQuestionArgs = {
+/* export type InputQuestionArgs = {
   ethPrice: number;
   strikePriceOffset?: number;
   profit?: number;
   closingPriceOffset: number;
   premium: number;
-};
+}; */
 
-export type InputQuestion = {
+/* export type InputQuestion = {
   inputType: "profit" | "strike" | "loss";
   strikePriceOffset?: number;
   profit?: number;
   closingPriceOffset: number;
   premium: number;
   question: (args: InputQuestionArgs) => string;
-};
+}; */
 
 export type Assessment = {
   selectType: SelectQuestion[];
-  inputType: InputQuestion[];
 };
 
 export type AssessmentData = {
@@ -171,40 +170,6 @@ export const data: AssessmentData = {
           ],
         },
       ],
-      inputType: [
-        {
-          inputType: "profit",
-          strikePriceOffset: 200,
-          closingPriceOffset: 700,
-          premium: 100,
-          question: ({
-            ethPrice,
-            strikePriceOffset,
-            closingPriceOffset,
-            premium,
-          }: InputQuestionArgs) =>
-            `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option with a strike price of $${
-              ethPrice + Number(strikePriceOffset)
-            } for a premium of $${premium}. At the expiration date ETH is valued at $${
-              ethPrice + closingPriceOffset
-            } so you decide to exercise your option, what is your profit? A: $400`,
-        },
-        {
-          inputType: "strike",
-          profit: 450,
-          closingPriceOffset: 800,
-          premium: 80,
-          question: ({
-            ethPrice,
-            profit,
-            closingPriceOffset,
-            premium,
-          }: InputQuestionArgs) =>
-            `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option for a premium of $${premium}. At the expiration date ETH is valued at $${
-              ethPrice + closingPriceOffset
-            } so you decide to exercise your option with a profit of $${profit}. What was strike price? A: ETH + $270`,
-        },
-      ],
     },
     put: {
       selectType: [
@@ -349,40 +314,6 @@ export const data: AssessmentData = {
           ],
         },
       ],
-      inputType: [
-        {
-          inputType: "loss",
-          strikePriceOffset: -150,
-          closingPriceOffset: -100,
-          premium: 150,
-          question: ({
-            ethPrice,
-            strikePriceOffset,
-            closingPriceOffset,
-            premium,
-          }: InputQuestionArgs) =>
-            `You believe that the price of ETH, currently trading at $${ethPrice}, will decrease in the near future,
-           so you decide to buy a put option with a strike price of $${
-             ethPrice + Number(strikePriceOffset)
-           } for a premium of $${premium}.
-           At the expiration date, ETH is valued at $${closingPriceOffset}, so that option is out-of-the-money. What is your loss? A: $100`,
-        },
-        {
-          inputType: "strike",
-          profit: 120,
-          closingPriceOffset: -250,
-          premium: 70,
-          question: ({
-            ethPrice,
-            closingPriceOffset,
-            profit,
-            premium,
-          }: InputQuestionArgs) =>
-            `You believe that the price of ETH, currently trading at $${ethPrice}, will decrease in the near future so you buy a put a call option for a premium of $${premium}. At the expiration date ETH is valued at $${
-              ethPrice + closingPriceOffset
-            } so you decide to exercise your option with a profit of $${profit}. What was strike price? A: ETH - $100 `,
-        },
-      ],
     },
   },
   short: {
@@ -525,25 +456,6 @@ export const data: AssessmentData = {
           ],
         },
       ],
-      inputType: [
-        {
-          inputType: "profit",
-          strikePriceOffset: -50,
-          closingPriceOffset: -100,
-          premium: 100,
-          question: ({
-            ethPrice,
-            strikePriceOffset,
-            closingPriceOffset,
-            premium,
-          }: InputQuestionArgs) =>
-            `You believe that the price of ETH, currently trading at $${ethPrice}, will remain relatively stable in the near future, so you decide to sell a call option with a strike price of $${
-              ethPrice + Number(strikePriceOffset)
-            } for a premium of $${premium}. At the expiration date, ETH is valued at $${
-              ethPrice + closingPriceOffset
-            }. What is your profit? A: $100`,
-        },
-      ],
     },
     put: {
       selectType: [
@@ -683,25 +595,7 @@ export const data: AssessmentData = {
           ],
         },
       ],
-      inputType: [
-        {
-          inputType: "profit",
-          strikePriceOffset: 50,
-          closingPriceOffset: 100,
-          premium: 120,
-          question: ({
-            ethPrice,
-            strikePriceOffset,
-            closingPriceOffset,
-            premium,
-          }: InputQuestionArgs) =>
-            `You believe that the price of ETH, currently trading at $${ethPrice}, will remain stable or increase in the near future, so you decide to sell a put option with a strike price of $${
-              ethPrice + Number(strikePriceOffset)
-            } for a premium of $${premium}. At the expiration date, ETH is valued at $${
-              ethPrice + closingPriceOffset
-            }. What is your profit? A: 120`,
-        },
-      ],
     },
   },
 };
+console.log(data);

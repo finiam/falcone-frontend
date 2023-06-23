@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { InputQuestion, SelectQuestion, data } from "@/data/assessmentData";
+import { SelectQuestion, data } from "@/data/assessmentData";
 import { OptionArg } from "./PageAssessment";
 
 const N_SELECT_TYPE_QUESTIONS = 2;
@@ -15,20 +15,20 @@ export type UserQuestion<T> = {
 };
 
 export type UserSelectQuestion = UserQuestion<SelectQuestion>;
-export type UserInputQuestion = UserQuestion<InputQuestion>;
+/* export type UserInputQuestion = UserQuestion<InputQuestion>; */
 
 export const getQuestions = (
   side: string,
   type: string
-): (UserInputQuestion | UserSelectQuestion)[] => {
+): UserSelectQuestion[] => {
   const selectTypeQuestions = _.sampleSize(
     data[side][type].selectType,
     N_SELECT_TYPE_QUESTIONS
   );
-  const inputTypeQuestions = _.sampleSize(
+  /* const inputTypeQuestions = _.sampleSize(
     data[side][type].inputType,
     N_INPUT_TYPE_QUESTIONS
-  );
+  ); */
 
   return [
     ...selectTypeQuestions.map((item, idx) => ({
@@ -37,17 +37,22 @@ export const getQuestions = (
       type: "select",
       status: "unanswered",
     })),
-    ...inputTypeQuestions.map((item, idx) => ({
+    /* ...inputTypeQuestions.map((item, idx) => ({
       id: (N_SELECT_TYPE_QUESTIONS + idx).toString(),
       data: item,
       type: "input",
       status: "unanswered",
-    })),
-  ] as (UserInputQuestion | UserSelectQuestion)[];
+    })), */
+    {
+      id: "scenario",
+      type: "scenario",
+      status: "unanswered",
+    },
+  ] as UserSelectQuestion[];
 };
 
 export const getAssessmentScore = (
-  questions: UserQuestion<InputQuestion | SelectQuestion>[]
+  questions: UserQuestion<SelectQuestion>[]
 ) => {
   const red = questions.reduce(
     (acc, { correct }) => (correct ? acc + 1 : acc),
@@ -56,7 +61,8 @@ export const getAssessmentScore = (
   return red;
 };
 
-export const getInputQuestionAnswer = (
+//TODO kill
+/* export const getInputQuestionAnswer = (
   option: OptionArg,
   {
     closingPriceOffset,
@@ -90,3 +96,4 @@ export const getInputQuestionAnswer = (
 
   return 0;
 };
+ */

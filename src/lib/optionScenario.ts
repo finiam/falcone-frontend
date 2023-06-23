@@ -2,6 +2,7 @@ import { LiveOption } from "@/types/option";
 import { create } from "zustand";
 
 type OptionScenario = {
+  originalOption: LiveOption;
   option: LiveOption;
   ethFloor: number;
   ethCeil: number;
@@ -34,7 +35,7 @@ function genEthPriceStops(ethPrice: number) {
   return stops;
 }
 
-function genResultForPoint(
+export function genResultForPoint(
   point: number,
   option: LiveOption,
   optSize: number,
@@ -85,6 +86,7 @@ function genResultForPoint(
 
 const useOptionScenario = create<OptionScenario>((set, get) => ({
   option: undefined as unknown as LiveOption,
+  originalOption: undefined as unknown as LiveOption,
   ethFloor: 0,
   ethCeil: 0,
   optSize: 1,
@@ -97,6 +99,7 @@ const useOptionScenario = create<OptionScenario>((set, get) => ({
 
     set(() => ({
       option,
+      originalOption: option,
       optSize: 1,
       stops,
       ethToUsd,
@@ -109,6 +112,7 @@ const useOptionScenario = create<OptionScenario>((set, get) => ({
 
   regenLine() {
     const { stops, option, ethToUsd, optSize } = get();
+    let minimum = 0;
 
     const line = stops.map((price) =>
       genResultForPoint(price, option, optSize, ethToUsd)
@@ -117,6 +121,7 @@ const useOptionScenario = create<OptionScenario>((set, get) => ({
     set((store) => ({
       ...store,
       line,
+      minimumEthForProfit: minimum,
     }));
   },
 

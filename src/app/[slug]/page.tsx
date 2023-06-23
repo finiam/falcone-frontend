@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       />
       <PageAssessment
         option={{
-          side: params.slug === "buying" ? "long" : "short",
+          side: params.slug.includes("buying") ? "long" : "short",
           type: "call",
         }}
       />
