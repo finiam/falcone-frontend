@@ -17,7 +17,7 @@ export default function SelectQuestion({
 
   return (
     <>
-      <p className="mb-0">{question.data.question}</p>
+      <p className="mb-4">{question.data.question}</p>
       <div className="flex flex-col gap-6">
         {question.data.options.map(({ id, value }) => (
           <button

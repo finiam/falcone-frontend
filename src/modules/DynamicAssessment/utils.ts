@@ -15,7 +15,6 @@ export type UserQuestion<T> = {
 };
 
 export type UserSelectQuestion = UserQuestion<SelectQuestion>;
-/* export type UserInputQuestion = UserQuestion<InputQuestion>; */
 
 export const getQuestions = (
   side: string,
@@ -25,10 +24,6 @@ export const getQuestions = (
     data[side][type].selectType,
     N_SELECT_TYPE_QUESTIONS
   );
-  /* const inputTypeQuestions = _.sampleSize(
-    data[side][type].inputType,
-    N_INPUT_TYPE_QUESTIONS
-  ); */
 
   return [
     ...selectTypeQuestions.map((item, idx) => ({
@@ -37,12 +32,6 @@ export const getQuestions = (
       type: "select",
       status: "unanswered",
     })),
-    /* ...inputTypeQuestions.map((item, idx) => ({
-      id: (N_SELECT_TYPE_QUESTIONS + idx).toString(),
-      data: item,
-      type: "input",
-      status: "unanswered",
-    })), */
     {
       id: "scenario",
       type: "scenario",
@@ -60,40 +49,3 @@ export const getAssessmentScore = (
   );
   return red;
 };
-
-//TODO kill
-/* export const getInputQuestionAnswer = (
-  option: OptionArg,
-  {
-    closingPriceOffset,
-    strikePriceOffset,
-    profit,
-    inputType,
-    premium,
-  }: InputQuestion,
-  ethInUsd: number
-): number => {
-  if (option.side === "long") {
-    if (inputType === "loss") return premium;
-
-    if (option.type === "call") {
-      if (inputType === "profit") {
-        return closingPriceOffset - (strikePriceOffset || 0) - premium;
-      } else if (inputType === "strike") {
-        return closingPriceOffset + ethInUsd - (profit || 0) - premium;
-      }
-    } else if (option.type === "put") {
-      if (inputType === "profit") {
-        return (strikePriceOffset || 0) - closingPriceOffset - premium;
-      } else if (inputType === "strike") {
-        return (profit || 0) + closingPriceOffset + ethInUsd + premium;
-      }
-    }
-  } else if (option.side === "short") {
-    if (inputType === "profit") return premium;
-    // TODO: calculate answer for other question types
-  }
-
-  return 0;
-};
- */

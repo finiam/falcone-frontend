@@ -15,8 +15,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { LiveOption } from "@/types/option";
 import { useOptionScenario } from "@/lib/optionScenario";
-import { ChangeEvent, useEffect } from "react";
-import SliderInput from "./SliderInput";
+import { useEffect } from "react";
 import { OptionArg } from "@/modules/DynamicAssessment/PageAssessment";
 import ScenarioDescription from "@/modules/DynamicAssessment/ScenarioDescription";
 import ScenarioControls from "@/modules/DynamicAssessment/ScenarioControls";
@@ -127,7 +126,12 @@ export default function ScenarioGraph({
     ],
   };
 
-  if (!scenario.option) return null;
+  if (!scenario.option)
+    return (
+      <div className="text-center">
+        <p className="text-16 text-blue opacity-50 my-10">Loading options...</p>
+      </div>
+    );
 
   return (
     <>

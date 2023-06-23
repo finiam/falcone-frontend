@@ -1,6 +1,5 @@
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import { useOptionScenario } from "@/lib/optionScenario";
-import { LiveOption } from "@/types/option";
 
 export default function ScenarioDescription() {
   const ethToUsd = useEthToUsd();

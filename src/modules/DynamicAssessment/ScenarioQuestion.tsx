@@ -8,8 +8,8 @@ const Result = ({ correct }: { correct: boolean }) => {
     : "bg-light-red border-red";
 
   return (
-    <div className={`rounded-md border ${colorClass} p-4`}>
-      {correct ? "Correct! Buy this option" : "Incorrect"}
+    <div className={`rounded-md text-center border ${colorClass} p-4`}>
+      {correct ? "Correct!" : "Incorrect"}
     </div>
   );
 };

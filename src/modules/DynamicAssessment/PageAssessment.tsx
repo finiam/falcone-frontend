@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserSelectQuestion, getAssessmentScore, getQuestions } from "./utils";
 import SelectQuestion from "./SelectQuestion";
-import InputQuestion from "./InputQuestion";
-import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import ScenarioGraph from "@/components/ScenarioGraph";
 
 export type OptionArg = { side: "long" | "short"; type: "call" | "put" };
@@ -24,12 +22,6 @@ export default function PageAssessment({
   const [score, setScore] = useState(0);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
-  const ethToUsd = useEthToUsd();
-
-  const ethInUsd = useMemo(
-    () => (ethToUsd ? Math.round(ethToUsd) : 0),
-    [ethToUsd]
-  );
 
   useEffect(() => {
     setRender(true);
@@ -75,35 +67,6 @@ export default function PageAssessment({
     );
   };
 
-  /* const saveAnswer = (answer: string) => {
-    let isCorrect = false;
-    if (questions[currentQuestionIdx].type === "select") {
-      isCorrect =
-        (questions[currentQuestionIdx] as UserSelectQuestion).data
-          .correctAnswer === answer;
-    } else {
-      isCorrect =
-        getInputQuestionAnswer(
-          option,
-          questions[currentQuestionIdx].data as InputQuestionType,
-          ethInUsd
-        ).toString() === answer;
-    }
-
-    setQuestions((prev) =>
-      prev.map((question) =>
-        question.id === questions[currentQuestionIdx].id
-          ? {
-              ...question,
-              correct: isCorrect,
-              status: "answered",
-              userAnswer: answer,
-            }
-          : question
-      )
-    );
-  }; */
-
   const nextStep = () => {
     if (isLast) {
       const score = getAssessmentScore(questions);
@@ -121,16 +84,22 @@ export default function PageAssessment({
   if (!render) return null;
 
   return isComplete ? (
-    <div className="assessment flex flex-col gap-4 items-center mt-12 mb-8 text-center">
-      <p className="flex flex-col gap-2">
+    <div className="assessment flex flex-col gap-2 items-center mt-12 mb-8 text-center">
+      <p className="flex flex-col gap-2 mb-1">
         <span className="text-20">Your score</span>
         {score}/{questions.length}
         <span>{allCorrect ? "🥳" : "😔📚"}</span>
       </p>
       {allCorrect ? (
-        <button type="button" onClick={() => console.log("display options")}>
-          Display options
-        </button>
+        <>
+          <p className="text-16 mb-1">
+            Excellent! You answered all the answers correctly. You can go ahead
+            and buy this option if you want
+          </p>
+          <button type="button" onClick={() => console.log("display options")}>
+            Buy option
+          </button>
+        </>
       ) : (
         <button type="button" onClick={reset}>
           Try Again
@@ -154,10 +123,10 @@ export default function PageAssessment({
             saveAssessmentAnswer={saveAssessmentAnswer}
           />
         )}
-        <div className="assessment">
+        <div className="assessment flex justify-center">
           <button
             type="button"
-            className="disabled:text-light-gray"
+            className="disabled:text-light-gray "
             onClick={nextStep}
             disabled={questions[currentQuestionIdx].status === "unanswered"}
           >
@@ -168,11 +137,3 @@ export default function PageAssessment({
     </>
   );
 }
-
-/* 
-<InputQuestion
-            question={questions[currentQuestionIdx] as UserInputQuestion}
-            saveAnswer={saveAnswer}
-            ethInUsd={ethInUsd}
-          />
-*/

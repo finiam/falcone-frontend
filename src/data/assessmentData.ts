@@ -4,23 +4,6 @@ export type SelectQuestion = {
   options: { id: string; value: string }[];
 };
 
-/* export type InputQuestionArgs = {
-  ethPrice: number;
-  strikePriceOffset?: number;
-  profit?: number;
-  closingPriceOffset: number;
-  premium: number;
-}; */
-
-/* export type InputQuestion = {
-  inputType: "profit" | "strike" | "loss";
-  strikePriceOffset?: number;
-  profit?: number;
-  closingPriceOffset: number;
-  premium: number;
-  question: (args: InputQuestionArgs) => string;
-}; */
-
 export type Assessment = {
   selectType: SelectQuestion[];
 };
@@ -598,4 +581,3 @@ export const data: AssessmentData = {
     },
   },
 };
-console.log(data);
