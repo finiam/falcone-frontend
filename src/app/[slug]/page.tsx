@@ -8,7 +8,6 @@ import ConceptsExampleWrapper, {
 } from "@/modules/Concepts/ConceptsExample";
 import FooterNav from "@/modules/Concepts/FooterNav";
 import PageOptions from "@/modules/Options/PageOptions";
-import { OptionArg, OptionSide, OptionType } from "@/types/option";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -18,15 +17,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (!data) {
     return <p>Page not found</p>;
   }
-
-  const displayOptions = [
-    "buying-call",
-    "buying-put",
-    "selling-call",
-    "selling-put",
-  ].includes(params.slug);
-
-  const [side, type] = displayOptions ? params.slug.split("-") : [];
 
   return (
     <>
@@ -41,19 +31,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsBox: ConceptsBox,
           ConceptsExampleWrapper: ConceptsExampleWrapper,
           ConceptsExample: ConceptsExample,
+          PageOptions: (option) => (
+            <PageOptions rawData={rawOptionsData} option={option} />
+          ),
         }}
       />
-      {displayOptions && (
-        <PageOptions
-          rawData={rawOptionsData}
-          option={
-            {
-              side: side === "buying" ? OptionSide.Long : OptionSide.Short,
-              type: type === "call" ? OptionType.Call : OptionType.Put,
-            } as OptionArg
-          }
-        />
-      )}
       <FooterNav previousRoute={data.previous} nextRoute={data.next} />
     </>
   );
