@@ -8,15 +8,10 @@ import SlippageInput from "@/components/SlippageInput";
 import { useEffect, useState } from "react";
 
 export default function PageOptions({ option }: { option: OptionArg }) {
-  const [assessmentComplete, setAssessmentComplete] = useState(false);
   const [data, setData] = useState<LiveOption[]>([]);
   const [fetching, setFetching] = useState(false);
 
-  const markAssessmentAsComplete = () => {
-    // TODO: update local storage
-  };
-
-  const displayOptions = () => setAssessmentComplete(true);
+  // TODO: update local storage
 
   useEffect(() => {
     setFetching(true);
@@ -32,7 +27,7 @@ export default function PageOptions({ option }: { option: OptionArg }) {
   }, []);
 
   return (
-    <PageAssessment optionType={optionArgs} filteredOptions={data}>
+    <PageAssessment optionType={option} filteredOptions={data}>
       <div className="w-full ">
         <div className="flex justify-between mt-16 mb-8">
           <h2>Available options</h2>

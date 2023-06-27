@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsBox: ConceptsBox,
           ConceptsExampleWrapper: ConceptsExampleWrapper,
           ConceptsExample: ConceptsExample,
-          PageOptions: (option) => (
+          PageOptions: ({ option }) => (
             <PageOptions option={getOptionArgs(option)} />
           ),
         }}
