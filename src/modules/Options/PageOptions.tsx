@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import PageAssessment from "../DynamicAssessment/PageAssessment";
 import { filterOptions, parseLiveOptions } from "@/lib/option";
 import OptionsList from "@/components/OptionsList";
 import { LiveOption, OptionArg } from "@/types/option";
 import SlippageInput from "@/components/SlippageInput";
+import { useEffect, useState } from "react";
 
 export default function PageOptions({ option }: { option: OptionArg }) {
-  // TODO: get status from local storage
-  const [assessmentComplete, setAssessmentComplete] = useState(false);
   const [data, setData] = useState<LiveOption[]>([]);
   const [fetching, setFetching] = useState(false);
 
-  const markAssessmentAsComplete = () => {
-    // TODO: update local storage
-  };
-
-  const displayOptions = () => setAssessmentComplete(true);
+  // TODO: update local storage
 
   useEffect(() => {
     setFetching(true);
@@ -32,27 +26,19 @@ export default function PageOptions({ option }: { option: OptionArg }) {
       });
   }, []);
 
-  if (!assessmentComplete) {
-    return (
-      <PageAssessment
-        option={option}
-        displayOptions={displayOptions}
-        completeAssessment={markAssessmentAsComplete}
-      />
-    );
-  }
-
   return (
-    <div className="w-full ">
-      <div className="flex justify-between mt-16 mb-8">
-        <h2>Available options</h2>
-        <div className="mr-16">
-          <SlippageInput />
+    <PageAssessment optionType={option} filteredOptions={data}>
+      <div className="w-full ">
+        <div className="flex justify-between mt-16 mb-8">
+          <h2>Available options</h2>
+          <div className="mr-16">
+            <SlippageInput />
+          </div>
+        </div>
+        <div>
+          <OptionsList options={data} fetching={fetching} />
         </div>
       </div>
-      <div>
-        <OptionsList options={data} fetching={fetching} />
-      </div>
-    </div>
+    </PageAssessment>
   );
 }

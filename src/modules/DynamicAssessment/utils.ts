@@ -9,7 +9,7 @@ const N_INPUT_TYPE_QUESTIONS = 1;
 export type UserQuestion<T> = {
   id: string;
   data: T;
-  type: "select" | "input";
+  type: "select" | "input" | "scenario";
   status: "unanswered" | "answered";
   correct?: boolean;
   userAnswer?: string;
@@ -49,6 +49,11 @@ export const getQuestions = (
       type: "input",
       status: "unanswered",
     })),
+    {
+      id: "scenario",
+      type: "scenario",
+      status: "unanswered",
+    },
   ] as (UserInputQuestion | UserSelectQuestion)[];
 };
 
