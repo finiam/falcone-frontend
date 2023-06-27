@@ -1,5 +1,5 @@
 import { getAllPaths, getFileForRoute, sluggify } from "@/content/getData";
-import { getRawAvailableOptions } from "@/lib/api";
+import { getOptionArgs } from "@/lib/option";
 import ConceptsBoxWrapper, {
   ConceptsBox,
 } from "@/modules/Concepts/ConceptsBox";
@@ -12,7 +12,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const data = await getFileForRoute(params.slug);
-  const { data: rawOptionsData } = await getRawAvailableOptions();
 
   if (!data) {
     return <p>Page not found</p>;
@@ -32,7 +31,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           ConceptsExampleWrapper: ConceptsExampleWrapper,
           ConceptsExample: ConceptsExample,
           PageOptions: (option) => (
-            <PageOptions rawData={rawOptionsData} option={option} />
+            <PageOptions option={getOptionArgs(option)} />
           ),
         }}
       />

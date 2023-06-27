@@ -8,21 +8,15 @@ import SlippageInput from "./SlippageInput";
 import { parseLiveOptions } from "@/lib/option";
 
 type OptionsListProps = {
-  data?: LiveOption[];
-  rawData?: string[];
+  options: LiveOption[];
+  fetching: boolean;
 };
 
-export default function OptionsList({ data, rawData }: OptionsListProps) {
-  const [options, setOptions] = useState<LiveOption[] | undefined>(data);
+export default function OptionsList({ options, fetching }: OptionsListProps) {
   const [selectedOption, setSelectedOption] = useState<{
     index: number;
     data: LiveOption;
   } | null>();
-
-  // useMemo causes hydration errors
-  useEffect(() => {
-    if (!data && rawData) setOptions(parseLiveOptions(rawData));
-  }, [data]);
 
   const hideDetails = () => setSelectedOption(null);
 
@@ -35,7 +29,7 @@ export default function OptionsList({ data, rawData }: OptionsListProps) {
           <span className="w-1/4">Maturity</span>
           <span className="w-1/4">Premium</span>
         </div>
-        {options ? (
+        {!fetching ? (
           options.length > 0 ? (
             options.map((option, idx) => (
               <div
@@ -64,7 +58,6 @@ export default function OptionsList({ data, rawData }: OptionsListProps) {
                   <OptionDetails
                     hideDetails={hideDetails}
                     option={selectedOption.data}
-                    index={selectedOption.index}
                   />
                 )}
               </div>

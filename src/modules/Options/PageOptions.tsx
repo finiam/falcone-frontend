@@ -1,29 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PageAssessment from "../DynamicAssessment/PageAssessment";
 import { filterOptions, parseLiveOptions } from "@/lib/option";
 import OptionsList from "@/components/OptionsList";
-import { OptionArg } from "@/types/option";
+import { LiveOption, OptionArg } from "@/types/option";
 import SlippageInput from "@/components/SlippageInput";
 
-export default function PageOptions({
-  option,
-  rawData,
-}: {
-  option: OptionArg;
-  rawData: any;
-}) {
+export default function PageOptions({ option }: { option: OptionArg }) {
   // TODO: get status from local storage
   const [assessmentComplete, setAssessmentComplete] = useState(false);
-
-  const data = filterOptions(parseLiveOptions(rawData), option);
+  const [data, setData] = useState<LiveOption[]>([]);
+  const [fetching, setFetching] = useState(false);
 
   const markAssessmentAsComplete = () => {
     // TODO: update local storage
   };
 
   const displayOptions = () => setAssessmentComplete(true);
+
+  useEffect(() => {
+    setFetching(true);
+
+    fetch("/api")
+      .then((res) => res.json())
+      .then(({ data: { data } }) => {
+        data.length && setData(filterOptions(parseLiveOptions(data), option));
+      })
+      .finally(() => {
+        setFetching(false);
+      });
+  }, []);
 
   if (!assessmentComplete) {
     return (
@@ -44,7 +51,7 @@ export default function PageOptions({
         </div>
       </div>
       <div>
-        <OptionsList data={data} />
+        <OptionsList options={data} fetching={fetching} />
       </div>
     </div>
   );
