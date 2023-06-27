@@ -122,3 +122,16 @@ export function filterOptions(
     ({ optionSide, optionType }) => optionSide === side && optionType === type
   );
 }
+
+export function getOptionArgs({
+  type,
+  side,
+}: {
+  type: "call" | "put";
+  side: "long" | "short";
+}) {
+  return {
+    type: type == "call" ? OptionType.Call : OptionType.Put,
+    side: side == "long" ? OptionSide.Long : OptionSide.Short,
+  };
+}
