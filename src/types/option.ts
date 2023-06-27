@@ -10,6 +10,11 @@ export enum OptionType {
   "Put" = 1,
 }
 
+export type OptionArg = {
+  side: OptionSide;
+  type: OptionType;
+};
+
 export type RawOption = {
   optionSide: BN;
   optionType: BN;

@@ -1,6 +1,8 @@
 import {
   BaseOption,
   LiveOption,
+  OptionSide,
+  OptionType,
   OptionWithPosition,
   RawOption,
 } from "@/types/option";
@@ -106,3 +108,17 @@ export function parseOptionsWithPositions(raw: string[]): OptionWithPosition[] {
   );
 }
 
+export function filterOptions(
+  options: LiveOption[],
+  {
+    type,
+    side,
+  }: {
+    type: OptionType;
+    side: OptionSide;
+  }
+) {
+  return options.filter(
+    ({ optionSide, optionType }) => optionSide === side && optionType === type
+  );
+}

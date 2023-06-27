@@ -12,16 +12,17 @@ export default function SlippageInput() {
   };
 
   return (
-    <div className="w-fit">
-      <p>Slippage (%)</p>
+    <div className="flex items-center w-fit gap-2">
+      <span>Slippage</span>
       <input
         value={slippage || ""}
         onChange={handleChange}
-        className="bg-slate-800 py-1 px-2 w-24"
+        className="px-1 w-12 border border-light-blue rounded-sm outline-light-gray"
         min={1}
         max={25}
         required
       />
+      <span>%</span>
     </div>
   );
 }

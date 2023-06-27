@@ -48,7 +48,7 @@ export default function ClosePosition({
   const { slippage } = useSlippage();
   const [size, setSize] = useState(option.positionSize);
 
-  const { premia, isLoading: loadingPremia } = useGetPremia({
+  const { premia } = useGetPremia({
     option,
     size,
     isClosing: true,
@@ -115,9 +115,9 @@ export default function ClosePosition({
       </label>
       <button
         type="button"
-        disabled={loadingPremia}
+        disabled={!displayPremia}
         onClick={execute}
-        className=" block underline"
+        className="block underline"
       >
         Ok
       </button>

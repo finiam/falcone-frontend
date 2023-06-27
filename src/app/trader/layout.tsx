@@ -1,5 +1,3 @@
-import { StarknetProvider } from "@/lib/starknetProvider";
-import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 
 export const metadata = {
@@ -13,9 +11,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <StarknetProvider>
+    <>
       <Header />
       {children}
-    </StarknetProvider>
+    </>
   );
 }

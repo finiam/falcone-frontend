@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { Inter, Yeseva_One } from "next/font/google";
 import { QueryProvider } from "@/lib/queryProvider";
+import { StarknetProvider } from "@/lib/starknetProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -23,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <QueryProvider>
-        <body
-          className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}
-        >
-          {children}
-        </body>
+        <StarknetProvider>
+          <body
+            className={`${inter.variable} ${yeseva_one.variable} font-inter text-black bg-offwhite`}
+          >
+            {children}
+          </body>
+        </StarknetProvider>
       </QueryProvider>
     </html>
   );

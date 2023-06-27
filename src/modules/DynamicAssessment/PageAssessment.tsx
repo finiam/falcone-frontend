@@ -12,15 +12,18 @@ import SelectQuestion from "./SelectQuestion";
 import InputQuestion from "./InputQuestion";
 import { InputQuestion as InputQuestionType } from "@/data/assessmentData";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
-
-export type OptionArg = { side: "long" | "short"; type: "call" | "put" };
+import PageOptions from "../Options/PageOptions";
+import { OptionArg } from "@/types/option";
 
 export default function PageAssessment({
-  option = { side: "long", type: "call" },
+  option,
+  displayOptions,
+  completeAssessment,
 }: {
   option: OptionArg;
+  displayOptions: () => void;
+  completeAssessment: () => void;
 }) {
-  // TODO: get status from localStorage
   const [isComplete, setIsComplete] = useState(false);
   const [questions, setQuestions] = useState(
     getQuestions(option.side, option.type)
@@ -83,8 +86,9 @@ export default function PageAssessment({
       setScore(score);
 
       if (allCorrect) {
-        // TODO: update local storage
+        completeAssessment();
       }
+
       setIsComplete(true);
     } else {
       setCurrentQuestionIdx((prevIdx) => (prevIdx + 1) % questions.length);
@@ -101,7 +105,7 @@ export default function PageAssessment({
         <span>{allCorrect ? "🥳" : "😔📚"}</span>
       </p>
       {allCorrect ? (
-        <button type="button" onClick={() => console.log("display options")}>
+        <button type="button" onClick={displayOptions}>
           Display options
         </button>
       ) : (
@@ -128,7 +132,7 @@ export default function PageAssessment({
         )}
         <button
           type="button"
-          className="disabled:text-light-gray"
+          className="mx-auto disabled:text-light-gray"
           onClick={nextStep}
           disabled={questions[currentQuestionIdx].status === "unanswered"}
         >
