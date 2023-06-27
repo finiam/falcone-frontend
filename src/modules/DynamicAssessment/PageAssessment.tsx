@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import {
   UserInputQuestion,
   UserSelectQuestion,
@@ -16,24 +16,25 @@ import { LiveOption, OptionArg } from "@/types/option";
 import ScenarioGraph from "./ScenarioGraph";
 
 export default function PageAssessment({
-  option,
-  displayOptions,
+  optionType,
   filteredOptions,
+  children,
 }: {
-  option: OptionArg;
-  displayOptions: () => void;
+  optionType: OptionArg;
   filteredOptions: LiveOption[];
+  children: ReactNode;
 }) {
   const [isComplete, setIsComplete] = useState(false);
   const [questions, setQuestions] = useState(
-    getQuestions(option.side, option.type)
+    getQuestions(optionType.side, optionType.type)
   );
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [render, setRender] = useState(false);
+  const ethToUsd = useEthToUsd();
+
   const score = getAssessmentScore(questions);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
-  const ethToUsd = useEthToUsd();
 
   const ethInUsd = useMemo(
     () => (ethToUsd ? Math.round(ethToUsd) : 0),
@@ -44,10 +45,8 @@ export default function PageAssessment({
     setRender(true);
   }, []);
 
-  console.log(questions);
-
   const reset = () => {
-    setQuestions(getQuestions(option.side, option.type));
+    setQuestions(getQuestions(optionType.side, optionType.type));
     setIsComplete(false);
     setCurrentQuestionIdx(0);
   };
@@ -61,7 +60,7 @@ export default function PageAssessment({
     } else {
       isCorrect =
         getInputQuestionAnswer(
-          option,
+          optionType,
           questions[currentQuestionIdx].data as InputQuestionType,
           ethInUsd
         ).toString() === answer;
@@ -105,7 +104,6 @@ export default function PageAssessment({
       case "scenario":
         return (
           <ScenarioGraph
-            optionType={option}
             option={filteredOptions?.[0]}
             saveAssessmentAnswer={saveAssessmentAnswer}
             ethToUsd={ethInUsd}
@@ -133,15 +131,19 @@ export default function PageAssessment({
 
   return isComplete ? (
     <div className="assessment flex flex-col gap-4 items-center mt-12 mb-8 text-center">
-      <p className="flex flex-col gap-2">
+      <p className="flex flex-col gap-2 mb-0">
         <span className="text-20">Your score</span>
         {score}/{questions.length}
         <span>{allCorrect ? "🥳" : "😔📚"}</span>
       </p>
       {score === questions.length ? (
-        <button type="button" onClick={displayOptions}>
-          Display options
-        </button>
+        <>
+          <p className="text-16 text-center">
+            Well done! You know your stuff. You can go ahead and buy some real
+            options.
+          </p>
+          {children}
+        </>
       ) : (
         <button type="button" onClick={reset}>
           Try Again
@@ -153,14 +155,17 @@ export default function PageAssessment({
       <h2>Assessment</h2>
       <div className="flex flex-col gap-8 assessment">
         <QuestionComponent />
-        <button
-          type="button"
-          className="mx-auto disabled:text-light-gray"
-          onClick={nextStep}
-          disabled={questions[currentQuestionIdx].status === "unanswered"}
-        >
-          {isLast ? "SEE SCORE" : "NEXT"}
-        </button>
+
+        {!isLast && (
+          <button
+            type="button"
+            className="mx-auto disabled:text-light-gray"
+            onClick={nextStep}
+            disabled={questions[currentQuestionIdx].status === "unanswered"}
+          >
+            NEXT
+          </button>
+        )}
       </div>
     </>
   );

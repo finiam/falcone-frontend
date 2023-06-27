@@ -84,12 +84,10 @@ export const options = (ethPrice: number): any => ({
 });
 
 export default function ScenarioGraph({
-  optionType,
   saveAssessmentAnswer,
   option,
   ethToUsd,
 }: {
-  optionType: OptionArg;
   saveAssessmentAnswer: (val: boolean) => void;
   option: LiveOption;
   ethToUsd: number;

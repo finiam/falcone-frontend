@@ -45,11 +45,13 @@ export default function InputQuestion({
         </form>
       ) : (
         <p
-          className={`w-fit mx-auto text-20 ${
+          className={`w-fit text-20 ${
             question.correct ? "text-green" : "text-red"
           }`}
         >
-          {question.correct ? "Good Job!" : "Wrong"}
+          {question.correct
+            ? "Good Job!"
+            : "Incorrect. Don't worry, you can try again soon."}
         </p>
       )}
     </>

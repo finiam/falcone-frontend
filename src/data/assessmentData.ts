@@ -187,7 +187,7 @@ export const data: AssessmentData = {
               ethPrice + Number(strikePriceOffset)
             } for a premium of $${premium}. At the expiration date ETH is valued at $${
               ethPrice + closingPriceOffset
-            } so you decide to exercise your option, what is your profit? A: $400`,
+            } so you decide to exercise your option, what is your profit?`,
         },
         {
           inputType: "strike",
@@ -202,7 +202,7 @@ export const data: AssessmentData = {
           }: InputQuestionArgs) =>
             `You believe that the price of ETH, currently trading at $${ethPrice}, will increase in the near future so you buy a call option for a premium of $${premium}. At the expiration date ETH is valued at $${
               ethPrice + closingPriceOffset
-            } so you decide to exercise your option with a profit of $${profit}. What was strike price? A: ETH + $270`,
+            } so you decide to exercise your option with a profit of $${profit}. What was strike price?`,
         },
       ],
     },
@@ -367,7 +367,7 @@ export const data: AssessmentData = {
            } for a premium of $${premium}.
            At the expiration date, ETH is valued at $${
              ethPrice + closingPriceOffset
-           }, so that option is out-of-the-money. What is your loss? A: $150`,
+           }, so that option is out-of-the-money. What is your loss?`,
         },
         {
           inputType: "strike",
@@ -382,7 +382,7 @@ export const data: AssessmentData = {
           }: InputQuestionArgs) =>
             `You believe that the price of ETH, currently trading at $${ethPrice}, will decrease in the near future so you buy a put option for a premium of $${premium}. At the expiration date ETH is valued at $${
               ethPrice + closingPriceOffset
-            } so you decide to exercise your option with a profit of $${profit}. What was strike price? A: ETH - $60 `,
+            } so you decide to exercise your option with a profit of $${profit}. What was strike price?`,
         },
       ],
     },
@@ -543,7 +543,7 @@ export const data: AssessmentData = {
               ethPrice + Number(strikePriceOffset)
             } for a premium of $${premium}. At the expiration date, ETH is valued at $${
               ethPrice + closingPriceOffset
-            }. What is your profit? A: $100`,
+            }. What is your profit?`,
         },
       ],
     },
@@ -701,7 +701,7 @@ export const data: AssessmentData = {
               ethPrice + Number(strikePriceOffset)
             } for a premium of $${premium}. At the expiration date, ETH is valued at $${
               ethPrice + closingPriceOffset
-            }. What is your profit? A: 120`,
+            }. What is your profit?`,
         },
       ],
     },

@@ -1,18 +1,7 @@
-import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
+"use client";
+
 import { genResultForPoint, useOptionScenario } from "@/lib/stores/useScenario";
-import { FormEvent, useState } from "react";
-
-const Result = ({ correct }: { correct: boolean }) => {
-  const colorClass = correct
-    ? "bg-light-green border-green"
-    : "bg-light-red border-red";
-
-  return (
-    <div className={`rounded-md text-center border ${colorClass} p-4`}>
-      {correct ? "Correct!" : "Incorrect"}
-    </div>
-  );
-};
+import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function ScenarioQuestion({
   saveAssessmentAnswer,
@@ -22,49 +11,45 @@ export default function ScenarioQuestion({
   ethToUsd: number;
 }) {
   const option = useOptionScenario((state) => state.originalOption);
+  const [input, setInput] = useState<string>();
 
-  const [status, setStatus] = useState<"correct" | "incorrect" | "idle">(
-    "idle"
-  );
+  const handleChange = (ev: ChangeEvent<HTMLInputElement>) =>
+    setInput(ev.target.value);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
-    const answer = data.get("answer") as string;
-    const result = genResultForPoint(Number(answer), option, 1, ethToUsd);
+    const result = genResultForPoint(Number(input), option, 1, ethToUsd);
 
-    setStatus(result > 0 ? "correct" : "incorrect");
     saveAssessmentAnswer(result > 0);
   }
 
   return (
     <section className="flex flex-col mt-8 gap-2">
-      <p className="text-20 mb-0">
+      <p className="text-20">
         At what price does ETH need to be trading, in order for you to make a
         profit?
       </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex justify-between px-4 py-2 rounded-md border enabled:shadow-sm disabled:bg-offwhite bg-white border-light-gray"
-      >
-        <label className="text-16 flex gap-2 items-center flex-1">
+      <form onSubmit={handleSubmit} className="w-fit mx-auto flex gap-4">
+        <label htmlFor="answer" className="text-16 self-center">
           At {option.isCall ? "least" : "most"}
-          <input
-            type="number"
-            name="answer"
-            placeholder="Enter your answer here"
-            className="text-16 p-1 pl-2 rounded-sm appearance-none focus:outline-none flex-1"
-          />
         </label>
+        <input
+          id="answer"
+          type="number"
+          name="answer"
+          placeholder="Enter your answer here"
+          className="rounded-md border border-light-gray px-4 disabled:bg-white mr-4"
+          onChange={handleChange}
+        />
         <button
           type="submit"
           className="text-16 uppercase opacity-70 tracking-wider"
+          disabled={!input}
         >
           Submit
         </button>
       </form>
-      {status !== "idle" && <Result correct={status === "correct"} />}
     </section>
   );
 }
