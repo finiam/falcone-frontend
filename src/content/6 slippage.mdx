@@ -1,0 +1,20 @@
+---
+title: Slippage
+section: Slippage
+---
+
+### Slippage
+
+Slippage refers to the difference between the expected price of a trade and the actual executed price. It is a common phenomenon in decentralized exchanges and automated market makers (AMM), like Carmine.
+
+There are two main factors that contribute to slippage when interacting with an AMM:
+
+#### Liquidity
+
+_Liquidity refers to the depth of the market and the availability of buy and sell orders for a particular asset._ Higher liquidity typically leads to lower slippage, as there are more assets available to trade at close the expected price. Conversely, low liquidity can result in higher slippage, as the market may not have sufficient depth to fulfill large orders without impacting the price significantly.
+
+#### Volatility
+
+Volatility refers to the rapid and significant price fluctuations of an asset. Higher volatility can increase the likelihood of slippage because prices can move quickly between the time a trade is initiated and executed, resulting in slippage.
+
+To make sure that the user does not receive bad (worse than expected) price, Carmine uses a slippage parameter that protects the user. The user will provide a price that he/she is willing to trade at and maximum deviation from that price (slippage). If the final price is outside of this deviation then the trade does not happen.

@@ -1,0 +1,40 @@
+---
+title: Liquidity Pools
+section: Liquidity Pools
+---
+
+### Liquidity Pools
+
+Understanding liquidity pools is essential when interacting with options AMMs like Carmine Finance. By providing liquidity to the pools, users contribute to the efficient functioning of the market and earn rewards for their participation.
+
+In essence, liquidity providers (LPs) sell options to users or buy options from users, and thus assume the counter-position to the user's options trades. They allow users to trade options without relying on traditional order books, as prices are determined algorithmically based on the available liquidity. The liquidity pool is made up of both unlocked capital, which can be withdrawn by LPs or used to write new options, and locked capital, which serves as collateral for short options.
+
+Each asset has two distinct liquidity pools: one comprising the base tokens and the other the quote tokens. For instance, in an ETH/USDC pairing, ETH is the base, and USDC is the quote. Liquidity providers can choose to participate in one or multiple of these pools based on their market perspective.
+
+LPs face risk during instances of sudden spikes in implied option volatility (e.g., market shocks), where arbitrageurs could trade against the pool. This risk is mitigated by establishing per-trade limits, maximum pool size, and careful monitoring of the pool's exposure and consequently adjustment of pricing parameters. Ultimately, liquidity pool contributors are betting that fee revenues will more than compensate for potential losses during periods of swift implied option volatility fluctuations.
+
+You can enter and exit the pools instantly at any time as long there's enough available unlocked capital in the pool.
+
+Let's give a concrete example of what actually happens when you trade at Carmine:
+
+#### User buys call option
+
+A user buys 1 Call options on ETH/USDC with strike 3500 USDC and current price 3000 USDC with option premia 30 USDC with maturity in 1 month.
+
+At the start the user pays to the pool equivalent to 1 \* 30 USDC in ETH, which is 30/3000 ETH = 0.01 ETH for the call options. The pool locks in 1 ETH.
+
+At maturity there are two possibilities:
+
+- Current price is above the strike, let's say 3700 USDC. The options is exercised in the money. The user get equivalent to 1 \* (3700 - 3500) USDC = 200 USDC in ETH, which is 200/3700 ~ 0.054 ETH. The rest of the locked capital 1-0.054 = 0.946 is returned back to the pool. The user profited 0.054 ETH from the option.
+- Current price is below the strike, lets say 3300 USDC. The current price is not above strike price so the buyer gets nothing and all the locked capital is returned to the pool.
+
+#### User sells put option
+
+User sells 1 Put option on ETH/USDC with strike price 2600 USDC and current price is 3000 USDC with option premia 40 USDC with maturity in 1 month.
+
+At the start the user receives 1 \* 40 USDC = 40 USDC as premia from the pool and locks in 2600 USDC.
+
+At maturity there are two possibilities:
+
+- Current price is above the strike, lets say 2800 USDC. Which means that the buyer (pool) does not receive anything and the seller (the user) get back its locked capital of 1 ETH.
+- Current price is below the strike, lets say 2500 USDC. The option is exercised in the money so the the buyer (pool) receives 1 \* (2600 - 2500) USDC = 100 USDC and the seller (user) gets its locked capital without the 100 USDC back, for a total value of 2500 USDC. The user lost 100 USDC from the option.
