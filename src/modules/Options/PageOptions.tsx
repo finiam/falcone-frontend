@@ -35,9 +35,9 @@ export default function PageOptions({ option }: { option: OptionArg }) {
   if (!assessmentComplete) {
     return (
       <PageAssessment
-        option={option}
+        option={optionArgs}
         displayOptions={displayOptions}
-        completeAssessment={markAssessmentAsComplete}
+        filteredOptions={data}
       />
     );
   }

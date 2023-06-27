@@ -2,7 +2,6 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 import { UserInputQuestion } from "./utils";
-import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 
 export default function InputQuestion({
   question,
@@ -31,21 +30,26 @@ export default function InputQuestion({
           ...question.data,
         })}
       </p>
-      <form className="w-fit mx-auto flex gap-8" onSubmit={handleSubmit}>
-        <input
-          disabled={question.correct}
-          className="rounded-md border border-light-gray px-4 disabled:bg-white"
-          onChange={handleChange}
-          type="number"
-          step="0.001"
-        />
-        <button type="submit" disabled={!input || question.correct}>
-          Submit
-        </button>
-      </form>
-      {question.status === "answered" && (
-        <p className="w-fit mx-auto text-20">
-          {question.correct ? "Good Job!" : "Try Again"}
+      {question.status !== "answered" ? (
+        <form className="w-fit mx-auto flex gap-8" onSubmit={handleSubmit}>
+          <input
+            disabled={question.correct}
+            className="rounded-md border border-light-gray px-4 disabled:bg-white"
+            onChange={handleChange}
+            type="number"
+            step="0.001"
+          />
+          <button type="submit" disabled={!input || question.correct}>
+            Submit
+          </button>
+        </form>
+      ) : (
+        <p
+          className={`w-fit mx-auto text-20 ${
+            question.correct ? "text-green" : "text-red"
+          }`}
+        >
+          {question.correct ? "Good Job!" : "Wrong"}
         </p>
       )}
     </>

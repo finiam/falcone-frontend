@@ -14,6 +14,7 @@ export async function getEthToUsd() {
 export function useEthToUsd() {
   const { data: currency } = useQuery("ethInUsd", getEthToUsd, {
     refetchInterval: 60 * 60 * 1000, // 1h
+    refetchOnWindowFocus: false,
   });
 
   return currency as number;

@@ -7,6 +7,12 @@
     @apply text-24 leading-40 mb-8;
   }
 
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   .concepts-article h2,
   .concepts-article h6 {
     @apply text-20 font-500 leading-24 uppercase opacity-50 mb-3 mt-16;
@@ -43,10 +49,8 @@
   .assessment button[data-incorrect="true"] {
     @apply bg-light-red border-red;
   }
-  
+
   .assessment button[data-correct="true"] {
     @apply bg-light-green border-green;
   }
-    
-  
 }

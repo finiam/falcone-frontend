@@ -15,6 +15,11 @@ export type OptionArg = {
   type: OptionType;
 };
 
+export type OptionTextArg = {
+  side: "long" | "short";
+  type: "call" | "put";
+};
+
 export type RawOption = {
   optionSide: BN;
   optionType: BN;

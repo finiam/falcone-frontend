@@ -12,17 +12,17 @@ import SelectQuestion from "./SelectQuestion";
 import InputQuestion from "./InputQuestion";
 import { InputQuestion as InputQuestionType } from "@/data/assessmentData";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
-import PageOptions from "../Options/PageOptions";
-import { OptionArg } from "@/types/option";
+import { LiveOption, OptionArg } from "@/types/option";
+import ScenarioGraph from "./ScenarioGraph";
 
 export default function PageAssessment({
   option,
   displayOptions,
-  completeAssessment,
+  filteredOptions,
 }: {
   option: OptionArg;
   displayOptions: () => void;
-  completeAssessment: () => void;
+  filteredOptions: LiveOption[];
 }) {
   const [isComplete, setIsComplete] = useState(false);
   const [questions, setQuestions] = useState(
@@ -30,7 +30,7 @@ export default function PageAssessment({
   );
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [render, setRender] = useState(false);
-  const [score, setScore] = useState(0);
+  const score = getAssessmentScore(questions);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
   const ethToUsd = useEthToUsd();
@@ -44,8 +44,9 @@ export default function PageAssessment({
     setRender(true);
   }, []);
 
+  console.log(questions);
+
   const reset = () => {
-    setScore(0);
     setQuestions(getQuestions(option.side, option.type));
     setIsComplete(false);
     setCurrentQuestionIdx(0);
@@ -80,18 +81,51 @@ export default function PageAssessment({
     );
   };
 
+  const saveAssessmentAnswer = (correct: boolean) => {
+    const res = questions.map((question) =>
+      question.id === "scenario"
+        ? {
+            ...question,
+            correct,
+            status: "answered",
+          }
+        : question
+    ) as typeof questions;
+
+    setQuestions(res);
+    setIsComplete(true);
+  };
+
   const nextStep = () => {
-    if (isLast) {
-      const score = getAssessmentScore(questions);
-      setScore(score);
+    setCurrentQuestionIdx((prevIdx) => (prevIdx + 1) % questions.length);
+  };
 
-      if (allCorrect) {
-        completeAssessment();
-      }
-
-      setIsComplete(true);
-    } else {
-      setCurrentQuestionIdx((prevIdx) => (prevIdx + 1) % questions.length);
+  const QuestionComponent = () => {
+    switch (questions[currentQuestionIdx].type) {
+      case "scenario":
+        return (
+          <ScenarioGraph
+            optionType={option}
+            option={filteredOptions?.[0]}
+            saveAssessmentAnswer={saveAssessmentAnswer}
+            ethToUsd={ethInUsd}
+          />
+        );
+      case "input":
+        return (
+          <InputQuestion
+            question={questions[currentQuestionIdx] as UserInputQuestion}
+            saveAnswer={saveAnswer}
+            ethInUsd={ethInUsd}
+          />
+        );
+      case "select":
+        return (
+          <SelectQuestion
+            question={questions[currentQuestionIdx] as UserSelectQuestion}
+            saveAnswer={saveAnswer}
+          />
+        );
     }
   };
 
@@ -104,7 +138,7 @@ export default function PageAssessment({
         {score}/{questions.length}
         <span>{allCorrect ? "🥳" : "😔📚"}</span>
       </p>
-      {allCorrect ? (
+      {score === questions.length ? (
         <button type="button" onClick={displayOptions}>
           Display options
         </button>
@@ -118,18 +152,7 @@ export default function PageAssessment({
     <>
       <h2>Assessment</h2>
       <div className="flex flex-col gap-8 assessment">
-        {questions[currentQuestionIdx].type === "select" ? (
-          <SelectQuestion
-            question={questions[currentQuestionIdx] as UserSelectQuestion}
-            saveAnswer={saveAnswer}
-          />
-        ) : (
-          <InputQuestion
-            question={questions[currentQuestionIdx] as UserInputQuestion}
-            saveAnswer={saveAnswer}
-            ethInUsd={ethInUsd}
-          />
-        )}
+        <QuestionComponent />
         <button
           type="button"
           className="mx-auto disabled:text-light-gray"
