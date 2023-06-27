@@ -31,7 +31,7 @@ export default function FooterNav({
   nextRoute?: FileData | null;
 }) {
   return (
-    <nav className="flex justify-between border-t border-[#BFC9CE] mt-16 py-6">
+    <nav className="flex justify-between border-t border-[#BFC9CE] mt-24 py-6">
       {previousRoute && (
         <div>
           <span className="uppercase text-blue opacity-50 text-20 font-500 mb-3 block text-right pr-2">

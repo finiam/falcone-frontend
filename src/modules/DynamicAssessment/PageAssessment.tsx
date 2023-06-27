@@ -15,6 +15,8 @@ import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import { LiveOption, OptionArg } from "@/types/option";
 import ScenarioGraph from "./ScenarioGraph";
 
+const LOCAL_STORAGE_KEY_BASE = "falcone";
+
 export default function PageAssessment({
   optionType,
   filteredOptions,
@@ -32,6 +34,7 @@ export default function PageAssessment({
   const [render, setRender] = useState(false);
   const ethToUsd = useEthToUsd();
 
+  const optionLocalStorageKey = `${LOCAL_STORAGE_KEY_BASE}_${optionType.side}_${optionType.type}`;
   const score = getAssessmentScore(questions);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
@@ -49,6 +52,7 @@ export default function PageAssessment({
     setQuestions(getQuestions(optionType.side, optionType.type));
     setIsComplete(false);
     setCurrentQuestionIdx(0);
+    localStorage.removeItem(optionLocalStorageKey);
   };
 
   const saveAnswer = (answer: string) => {
@@ -98,6 +102,26 @@ export default function PageAssessment({
   const nextStep = () => {
     setCurrentQuestionIdx((prevIdx) => (prevIdx + 1) % questions.length);
   };
+
+  useEffect(() => {
+    const local = localStorage.getItem(optionLocalStorageKey);
+
+    if (!local) return;
+
+    setIsComplete(true);
+    setQuestions((state) =>
+      state.map((item) => ({
+        ...item,
+        correct: true,
+      }))
+    );
+  }, []);
+
+  useEffect(() => {
+    if (allCorrect) {
+      localStorage.setItem(optionLocalStorageKey, "true");
+    }
+  }, [questions]);
 
   const QuestionComponent = () => {
     switch (questions[currentQuestionIdx].type) {
