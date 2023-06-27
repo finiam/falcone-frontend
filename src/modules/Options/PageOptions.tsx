@@ -9,7 +9,7 @@ import SlippageInput from "@/components/SlippageInput";
 
 export default function PageOptions({ option }: { option: OptionArg }) {
   // TODO: get status from local storage
-  const [assessmentComplete, setAssessmentComplete] = useState(true);
+  const [assessmentComplete, setAssessmentComplete] = useState(false);
   const [data, setData] = useState<LiveOption[]>([]);
   const [fetching, setFetching] = useState(false);
 
