@@ -9,9 +9,10 @@ import { parseLiveOptions } from "@/lib/option";
 
 type OptionsListProps = {
   options: LiveOption[];
+  fetching: boolean;
 };
 
-export default function OptionsList({ options }: OptionsListProps) {
+export default function OptionsList({ options, fetching }: OptionsListProps) {
   const [selectedOption, setSelectedOption] = useState<{
     index: number;
     data: LiveOption;
@@ -28,7 +29,7 @@ export default function OptionsList({ options }: OptionsListProps) {
           <span className="w-1/4">Maturity</span>
           <span className="w-1/4">Premium</span>
         </div>
-        {options ? (
+        {!fetching ? (
           options.length > 0 ? (
             options.map((option, idx) => (
               <div
@@ -57,7 +58,6 @@ export default function OptionsList({ options }: OptionsListProps) {
                   <OptionDetails
                     hideDetails={hideDetails}
                     option={selectedOption.data}
-                    index={selectedOption.index}
                   />
                 )}
               </div>

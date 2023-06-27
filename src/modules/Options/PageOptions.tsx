@@ -11,6 +11,7 @@ export default function PageOptions({ option }: { option: OptionArg }) {
   // TODO: get status from local storage
   const [assessmentComplete, setAssessmentComplete] = useState(true);
   const [data, setData] = useState<LiveOption[]>([]);
+  const [fetching, setFetching] = useState(false);
 
   const markAssessmentAsComplete = () => {
     // TODO: update local storage
@@ -19,10 +20,15 @@ export default function PageOptions({ option }: { option: OptionArg }) {
   const displayOptions = () => setAssessmentComplete(true);
 
   useEffect(() => {
+    setFetching(true);
+
     fetch("/api")
       .then((res) => res.json())
       .then(({ data: { data } }) => {
         data.length && setData(filterOptions(parseLiveOptions(data), option));
+      })
+      .finally(() => {
+        setFetching(false);
       });
   }, []);
 
@@ -45,7 +51,7 @@ export default function PageOptions({ option }: { option: OptionArg }) {
         </div>
       </div>
       <div>
-        <OptionsList options={data} />
+        <OptionsList options={data} fetching={fetching} />
       </div>
     </div>
   );

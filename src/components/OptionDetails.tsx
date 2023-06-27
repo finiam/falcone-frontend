@@ -15,11 +15,9 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 export default function OptionDetails({
   option,
-  index,
   hideDetails,
 }: {
   option: LiveOption;
-  index: number;
   hideDetails: () => void;
 }) {
   const [size, setSize] = useState("1");
