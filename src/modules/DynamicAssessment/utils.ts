@@ -84,19 +84,28 @@ export const getInputQuestionAnswer = (
     if (isCall(option.type)) {
       if (inputType === "profit") {
         return closingPriceOffset - (strikePriceOffset || 0) - premium;
-      } else if (inputType === "strike") {
+      }
+
+      if (inputType === "strike") {
         return closingPriceOffset + ethInUsd - (profit || 0) - premium;
       }
-    } else {
+    }
+
+    if (!isCall(option.type)) {
       if (inputType === "profit") {
         return (strikePriceOffset || 0) - closingPriceOffset - premium;
-      } else if (inputType === "strike") {
+      }
+
+      if (inputType === "strike") {
         return (profit || 0) + closingPriceOffset + ethInUsd + premium;
       }
     }
-  } else {
-    if (inputType === "profit") return premium;
-    // TODO: calculate answer for other question types
+  }
+
+  if (!isLong(option.side)) {
+    if (inputType === "profit") {
+      return premium;
+    }
   }
 
   return 0;

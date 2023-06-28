@@ -1,0 +1,52 @@
+---
+title: Puts
+section: Selling
+---
+
+## Puts
+
+### Selling a Put (Short Put)
+
+When you sell a put option, you take on the obligation to buy the underlying asset from the option buyer at the strike price if they choose to exercise their right. You expose yourself to downside risk. If the price of the underlying asset decreases significantly, you still would need to purchase the asset at the strike price, even if its market value is lower.
+
+<ConceptsBoxWrapper>
+  <ConceptsBox title="Profit" color="green">
+    If the price of Ethereum remains above the strike price, the option will
+    expire worthless (out of the money). You get to keep the premium received
+    upfront, which becomes your profit.
+  </ConceptsBox>
+  <ConceptsBox title="Loss" color="red">
+    If the price of Ethereum drops below the strike price before the option's
+    expiration, the buyer may exercise the option, resulting in a loss
+    proportional to the price decrease.
+  </ConceptsBox>
+</ConceptsBoxWrapper>
+
+###### Example
+
+You believe that the price of Ethereum, currently trading at $2,800, will not go down in the near future, so you go Short on a Puts.
+
+You decide to sell a put option on Ethereum with a strike price of $2,600 and an expiration date of one month. The premium for the call option is $100.
+
+<ConceptsExampleWrapper>
+  <ConceptsExample
+    type="In-the-money"
+    header="Price of Ethereum stays at $2,800"
+  >
+    - Premium received: $100
+    
+    **Total Profit: $100**
+  </ConceptsExample>
+  <ConceptsExample
+    type="Out-of-the-money"
+    header="Price of Ethereum goes to $2,450"
+  >
+    - Strike Price of Call Option: $2,600
+    - Premium received: $100
+
+    **Total Loss: $2,450 - $2,600 + $100 = - $50**
+
+  </ConceptsExample>
+</ConceptsExampleWrapper>
+
+<PageOptions option={{ side: "short", type: "call" }} />

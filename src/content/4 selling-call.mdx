@@ -1,0 +1,52 @@
+---
+title: Calls
+section: Selling
+---
+
+## Calls
+
+### Selling a Call (Short Call)
+
+When you sell a call option, you take on the obligation to sell the underlying asset to the option buyer at the strike price, if they choose to exercise their right. You expose yourself to unlimited upside risk. If the price of the underlying asset rises significantly, the option buyer may exercise their right to buy the asset from you, meaning your position would be liquidated in order to deliver the asset to the buyer.
+
+<ConceptsBoxWrapper>
+  <ConceptsBox title="Profit" color="green">
+    If the price of Ethereum remains below the strike price, the option will
+    expire worthless (out of the money). You get to keep the premium received
+    upfront, which becomes your profit.
+  </ConceptsBox>
+  <ConceptsBox title="Loss" color="red">
+    If the price of Ethereum rises above the strike price before the option's
+    expiration, the buyer may exercise the option, resulting in a loss
+    proportional to the price increase.
+  </ConceptsBox>
+</ConceptsBoxWrapper>
+
+###### Example
+
+You believe that the price of Ethereum, currently trading at $2,800, will not increase in the near future, so you go Short on a Call.
+
+You decide to sell a call option on Ethereum with a strike price of $3,000 and an expiration date of one month. The premium for the call option is $100.
+
+<ConceptsExampleWrapper>
+  <ConceptsExample
+    type="In-the-money"
+    header="Price of Ethereum stays at $2,800"
+  >
+    - Premium received: $100
+    
+    **Total Profit: $100**
+  </ConceptsExample>
+  <ConceptsExample
+    type="Out-of-the-money"
+    header="Price of Ethereum goes to $3,200"
+  >
+    - Strike Price of Call Option: $3,000 
+    - Premium received: $150
+
+    **Total Loss: $3,000 - $3,200 + $100 = - $100**
+
+  </ConceptsExample>
+</ConceptsExampleWrapper>
+
+<PageOptions option={{ side: "short", type: "call" }} />
