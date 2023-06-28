@@ -12,6 +12,8 @@ const yeseva_one = Yeseva_One({
   variable: "--font-yeseva-one",
 });
 
+const BASE_URL = process.env.DEPLOY_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
   title: "Falcone",
   description:
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "/falcone_social.png",
+        url: `${BASE_URL}/falcone_social.png`,
         width: 843,
         height: 441,
         alt: "Falcone",
