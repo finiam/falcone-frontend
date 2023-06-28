@@ -9,10 +9,6 @@ export default async function HomePage() {
   const data = await getFileForRoute("intro");
   const paths = getAllPaths();
 
-  if (!data) {
-    return <p>Page not found</p>;
-  }
-
   return (
     <>
       <ConceptsLayout

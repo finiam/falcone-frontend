@@ -8,13 +8,35 @@ import ConceptsExampleWrapper, {
 } from "@/modules/Concepts/ConceptsExample";
 import FooterNav from "@/modules/Concepts/FooterNav";
 import PageOptions from "@/modules/Options/PageOptions";
+import { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { notFound } from "next/navigation";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+type Params = { slug: string };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const routeData = await getFileForRoute(params.slug);
+
+  if (routeData) {
+    return {
+      title: `Falcone - ${routeData?.data.title}`,
+    };
+  }
+
+  return {
+    title: `404 - Falcone`,
+  };
+}
+
+export default async function Page({ params }: { params: Params }) {
   const data = await getFileForRoute(params.slug);
 
   if (!data) {
-    return <p>Page not found</p>;
+    notFound();
   }
 
   return (
