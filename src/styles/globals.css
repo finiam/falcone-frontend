@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
   p {
     @apply text-24 leading-40 mb-8;
   }
