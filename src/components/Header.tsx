@@ -5,18 +5,13 @@ import Wallet from "./Wallet";
 
 export default function Header() {
   return (
-    <header className="flex px-24 py-4 gap-8">
-      <Link href="/trader" className="font-bold underline">
-        Carmine
-      </Link>
-
+    <header className="flex gap-4 items-center justify-end relative z-1">
       <nav>
-        <Link href="/trader/positions" className="font-bold">
-          Positions
+        <Link href="/dashboard" className="hover:text-gray-700 drop-shadow-xl">
+          Dashboard
         </Link>
       </nav>
-
-      <div className="ml-auto">
+      <div className="w-36">
         <Wallet />
       </div>
     </header>
