@@ -12,29 +12,6 @@ const yeseva_one = Yeseva_One({
   variable: "--font-yeseva-one",
 });
 
-const BASE_URL = process.env.DEPLOY_URL || "http://localhost:3000";
-
-export const metadata: Metadata = {
-  title: "Falcone",
-  description:
-    "Your educational resource that will guide you in your onboarding to options and Carmine Finance.",
-
-  openGraph: {
-    images: [
-      {
-        url: `${BASE_URL}/falcone_social.png`,
-        width: 843,
-        height: 441,
-        alt: "Falcone",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-    url: "https://falcone.finiam.com",
-    siteName: "Falcone",
-  },
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -54,3 +31,37 @@ export default function RootLayout({
     </html>
   );
 }
+
+const BASE_URL = process.env.DEPLOY_URL || "http://localhost:3000";
+
+export const metadata: Metadata = {
+  title: "Falcone",
+  description:
+    "Your educational resource that will guide you in your onboarding to options and Carmine Finance.",
+
+  openGraph: {
+    title: "Falcone",
+    description:
+      "Your educational resource that will guide you in your onboarding to options and Carmine Finance.",
+    images: [
+      {
+        url: `${BASE_URL}/falcone_social.png`,
+        width: 843,
+        height: 441,
+        alt: "Falcone",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+    url: "https://falcone.finiam.com",
+    siteName: "Falcone",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Falcone",
+    description:
+      "Your educational resource that will guide you in your onboarding to options and Carmine Finance.",
+    images: [`${BASE_URL}/falcone_social.png`],
+  },
+};
