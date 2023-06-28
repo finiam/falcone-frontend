@@ -1,14 +1,14 @@
 import { TESTNET_MAIN_CONTRACT_ADDRESS } from "@/lib/addresses";
-import AmmAbi from "@/lib/abi/amm_abi.json";
-import { getTradeCalldata } from "@/lib/computations";
-import { ETH_DIGITS } from "@/lib/constants";
-import { useGetPremia } from "@/lib/hooks/useGetPremia";
-import { useSlippage } from "@/lib/stores/useSlippage";
-import { longInteger, shortInteger } from "@/lib/units";
+import { shortInteger } from "@/lib/units";
 import { OptionWithPosition } from "@/types/option";
 import { useAccount } from "@starknet-react/core";
-import { useState } from "react";
+import AmmAbi from "@/lib/abi/amm_abi.json";
+import { getTradeCalldata } from "@/lib/computations";
+import { useGetPremia } from "@/lib/hooks/useGetPremia";
+import { ChangeEvent, useState } from "react";
+import { useSlippage } from "@/lib/stores/useSlippage";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
+import { ETH_DIGITS } from "@/lib/constants";
 
 function premiaToDisplayValue({
   premia,
@@ -39,10 +39,12 @@ function premiaToDisplayValue({
   throw Error('Could not get "premiaToDisplayValue"');
 }
 
-export default function ClosePosition({
+export default function PositionDetails({
   option,
+  hideDetails,
 }: {
   option: OptionWithPosition;
+  hideDetails?: () => void;
 }) {
   const { account } = useAccount();
   const { slippage } = useSlippage();
@@ -56,7 +58,11 @@ export default function ClosePosition({
   const ethInUsd = useEthToUsd();
 
   if (!premia) {
-    return <p>loading...</p>;
+    return (
+      <div className="w-full rounded-xl bg-light-blue py-8 px-12 flex justify-center">
+        <span>loading...</span>
+      </div>
+    );
   }
 
   const displayPremia = premiaToDisplayValue({
@@ -92,35 +98,56 @@ export default function ClosePosition({
     });
   }
 
-  return (
-    <div className="mb-8">
-      <p className="font-bold">Close Position</p>
-      <div>
-        <p>Total received: {displayPremia}</p>
-        <p>
-          With {slippage}% slippage limit: {displayPremiaWithSlippage}
-        </p>
-      </div>
+  const handleInputChange = (ev: ChangeEvent<HTMLInputElement>) =>
+    setSize(ev.target.valueAsNumber);
 
-      <label>
-        Amount
-        <input
-          type="number"
-          className="bg-slate-800 py-1 px-2 w-20 ml-2"
-          min="0"
-          max={option.positionSize}
-          defaultValue={option.positionSize}
-          onChange={(e) => setSize(e.target.valueAsNumber)}
-        />
-      </label>
-      <button
-        type="button"
-        disabled={!displayPremia}
-        onClick={execute}
-        className="block underline"
-      >
-        Ok
-      </button>
+  return (
+    <div className="w-full rounded-xl bg-light-blue py-6 px-16 relative">
+      <div className="absolute top-2 right-2">
+        <button
+          type="button"
+          onClick={hideDetails}
+          className="py-1 px-2 leading-1 border-none bg-transparent enabled:shadow-none text-gray-500 hover:text-blue"
+        >
+          &times;
+        </button>
+      </div>
+      <form onSubmit={execute} className="flex gap-8 items-end justify-between">
+        <div className="flex gap-2 items-center">
+          <div>
+            <p className="text-18 font-500 mb-2">Close Position</p>
+            <div className="flex flex-col">
+              <span>Amount</span>
+              <input
+                value={size || ""}
+                onChange={handleInputChange}
+                className="px-1 w-16 border border-light-blue rounded-sm outline-light-gray"
+                type="number"
+                min="0"
+                step="0.001"
+                max={option.positionSize}
+                required
+              />
+              <span className="text-12">
+                (max. {option.positionSize.toFixed(3)})
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 mb-2">
+          <span>Total received: {displayPremia}</span>
+          <span>
+            With {slippage}% slippage limit: {displayPremiaWithSlippage}
+          </span>
+        </div>
+        <button
+          type="submit"
+          className="mx-24 self-center mt-4 enabled:bg-white"
+          disabled={!displayPremia}
+        >
+          Confirm
+        </button>
+      </form>
     </div>
   );
 }

@@ -7,8 +7,9 @@ import { parseOptionsWithPositions } from "@/lib/option";
 import { useMemo, useState } from "react";
 import { OptionWithPosition } from "@/types/option";
 import { getSideName, getTypeName, isCall } from "@/lib/units";
-import ClosePosition from "./ClosePosition";
 import { getTradeCalldata } from "@/lib/computations";
+import SlippageInput from "./SlippageInput";
+import PositionDetails from "./PositionDetails";
 
 type SplitPositions = {
   live: OptionWithPosition[];
@@ -25,11 +26,15 @@ function PositionsList({
   select,
   type: { status, action },
   fetching,
+  selectedIdx,
+  closeDetails,
 }: {
   options: OptionWithPosition[];
   select: (val: OptionWithPosition) => void;
   type: { status: "expired" | "live"; action: string };
   fetching: boolean;
+  selectedIdx?: string;
+  closeDetails?: () => void;
 }) {
   if (fetching) return null;
 
@@ -43,30 +48,44 @@ function PositionsList({
         <span className="w-1/5">Size</span>
         <span className="w-1/5">Value</span>
       </div>
-      {options?.map((option) => (
-        <div
-          className="flex gap-4 items-center py-6 border-b border-light-gray last-of-type:border-none"
-          key={option.id}
-        >
-          <div className="w-1/5">
-            <span className="capitalize">
-              {getSideName(option.optionSide)} {getTypeName(option.optionType)}
-            </span>
-            , strike ${option.strikePrice}
+      {options?.map((option) => {
+        const isSelected = status === "live" && selectedIdx === option.id;
+        return (
+          <div
+            className="flex flex-col gap-4 py-6 border-b border-light-gray last-of-type:border-none"
+            key={option.id}
+          >
+            <div className="flex gap-4 items-center ">
+              <div className="w-1/5">
+                <span className="capitalize">
+                  {getSideName(option.optionSide)}{" "}
+                  {getTypeName(option.optionType)}
+                </span>
+                , strike ${option.strikePrice}
+              </div>
+              <div className="w-1/5">
+                {new Date(option.maturity).toLocaleDateString()}
+              </div>
+              <div className="w-1/5">{option.positionSize.toFixed(3)}</div>
+              <div className="w-1/5">
+                {isCall(option.optionType) ? "ETH" : "USD"}{" "}
+                {option.positionValue.toFixed(4)}
+              </div>
+              <button
+                type="button"
+                onClick={() => select(option)}
+                hidden={isSelected}
+                disabled={isSelected}
+              >
+                {action}
+              </button>
+            </div>
+            {selectedIdx && isSelected && (
+              <PositionDetails hideDetails={closeDetails} option={option} />
+            )}
           </div>
-          <div className="w-1/5">
-            {new Date(option.maturity).toLocaleDateString()}
-          </div>
-          <div className="w-1/5">{option.positionSize.toFixed(3)}</div>
-          <div className="w-1/5">
-            {isCall(option.optionType) ? "ETH" : "USD"}{" "}
-            {option.positionValue.toFixed(4)}
-          </div>
-          <button type="button" onClick={() => select(option)}>
-            {action}
-          </button>
-        </div>
-      ))}
+        );
+      })}
     </div>
   ) : (
     <EmptySection />
@@ -119,23 +138,35 @@ export default function PositionsTable() {
     account?.execute([args], [AmmAbi]);
   }
 
+  const closeDetails = () => setSelected(undefined);
+
   return (
     <div className="flex flex-col gap-8 mt-8">
-      {selected && <ClosePosition option={selected} />}
-
       {isLoading && "Fetching..."}
 
       <section>
-        <h2 className="text-24 font-500 mb-4">Live options</h2>
+        <h2 className="text-24 font-500">Live options</h2>
+        <div className="flex justify-between items-center mb-4">
+          <span>
+            These options have not matured yet. You can close your position or
+            wait for them to mature.
+          </span>
+          {!isLoading && <SlippageInput />}
+        </div>
         <PositionsList
           fetching={isLoading}
           options={split?.live || []}
           select={setSelected}
           type={{ status: "live", action: "Close" }}
+          selectedIdx={selected?.id}
+          closeDetails={closeDetails}
         />
       </section>
       <section>
-        <h2 className="text-24 font-500 mb-4">Expired in the money</h2>
+        <h2 className="text-24 font-500">Expired in the money</h2>
+        <span className="block mb-4">
+          These options expired in the money. Get your funds by settling them.
+        </span>
         <PositionsList
           fetching={isLoading}
           options={split?.expiredInMoney || []}
@@ -144,7 +175,10 @@ export default function PositionsTable() {
         />
       </section>
       <section>
-        <h2 className="text-24 font-500 mb-4">Expired out of the money</h2>
+        <h2 className="text-24 font-500">Expired out of the money</h2>
+        <span className="block mb-4">
+          These options expired out of the money.
+        </span>
         <PositionsList
           fetching={isLoading}
           options={split?.expiredOutMoney || []}
