@@ -11,6 +11,7 @@ export default function Wallet() {
   if (isConnected) {
     return (
       <DropdownMenu
+        key="disconnect"
         dropdownContent={
           <button
             type="button"
@@ -28,6 +29,7 @@ export default function Wallet() {
 
   return (
     <DropdownMenu
+      key="connect"
       dropdownContent={
         <div>
           {connectors.map((connector) => (
