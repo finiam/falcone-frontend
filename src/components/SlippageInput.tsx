@@ -15,12 +15,13 @@ export default function SlippageInput() {
     <div className="flex items-center w-fit gap-2">
       <span>Slippage</span>
       <input
+        type="number"
+        step="0.001"
         value={slippage || ""}
         onChange={handleChange}
         className="px-1 w-12 border border-light-blue rounded-sm outline-light-gray"
         min={1}
         max={25}
-        required
       />
       <span>%</span>
     </div>

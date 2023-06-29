@@ -137,13 +137,14 @@ export default function PositionDetails({
         <div className="flex flex-col gap-4 mb-2">
           <span>Total received: {displayPremia}</span>
           <span>
-            With {slippage}% slippage limit: {displayPremiaWithSlippage}
+            With {slippage}% slippage limit:{" "}
+            {slippage ? displayPremiaWithSlippage : "-"}
           </span>
         </div>
         <button
           type="submit"
           className="mx-24 self-center mt-4 enabled:bg-white"
-          disabled={!displayPremia}
+          disabled={!displayPremia || !slippage}
         >
           Confirm
         </button>
