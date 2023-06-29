@@ -11,7 +11,7 @@ import AmmAbi from "@/lib/abi/amm_abi.json";
 import LpAbi from "@/lib/abi/lptoken_abi.json";
 import { getAmountToApprove, getTradeCalldata } from "@/lib/computations";
 import { useGetPremia } from "@/lib/hooks/useGetPremia";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState, MouseEvent } from "react";
 
 export default function OptionDetails({
   option,
@@ -90,16 +90,17 @@ export default function OptionDetails({
     if (premia?.total) setLoadingPremia(false);
   }, [premia?.total]);
 
-  useEffect(() => {
-    console.log(loadingPremia);
-  }, [loadingPremia]);
+  const close = (ev: MouseEvent<HTMLButtonElement>) => {
+    ev.stopPropagation();
+    hideDetails();
+  };
 
   return (
     <div className="w-full rounded-xl bg-light-blue py-8 px-12 relative">
       <div className="absolute top-2 right-2">
         <button
           type="button"
-          onClick={hideDetails}
+          onClick={close}
           className="py-1 px-2 leading-1 border-none bg-transparent enabled:shadow-none text-gray-500 hover:text-blue"
         >
           &times;
@@ -126,7 +127,7 @@ export default function OptionDetails({
 
         <button
           type="submit"
-          className="mx-12"
+          className="mx-12 enabled:bg-white"
           disabled={!isConnected || !premia?.total || loadingPremia}
         >
           {isConnected

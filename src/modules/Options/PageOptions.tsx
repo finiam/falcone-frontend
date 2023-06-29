@@ -11,8 +11,6 @@ export default function PageOptions({ option }: { option: OptionArg }) {
   const [data, setData] = useState<LiveOption[]>([]);
   const [fetching, setFetching] = useState(false);
 
-  // TODO: update local storage
-
   useEffect(() => {
     setFetching(true);
 
