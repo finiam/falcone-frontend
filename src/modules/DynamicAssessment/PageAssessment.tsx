@@ -35,7 +35,7 @@ export default function PageAssessment({
   const ethToUsd = useEthToUsd();
 
   const optionLocalStorageKey = `${LOCAL_STORAGE_KEY_BASE}_${optionType.side}_${optionType.type}`;
-  const score = 4 || getAssessmentScore(questions);
+  const score = getAssessmentScore(questions);
   const allCorrect = score === questions.length;
   const isLast = questions[currentQuestionIdx].id === questions.slice(-1)[0].id;
 
