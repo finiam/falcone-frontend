@@ -63,10 +63,10 @@ export default function OptionsList({ options, fetching }: OptionsListProps) {
               </div>
             ))
           ) : (
-            <p>No options available</p>
+            <p className="my-5">No options available</p>
           )
         ) : (
-          <p>fetching...</p>
+          <p className="my-5">fetching...</p>
         )}
       </section>
     </div>

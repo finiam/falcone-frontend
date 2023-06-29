@@ -48,7 +48,7 @@ export function useGetPremia({
   });
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || !slippage) return;
 
     const totalPremia = (data as any)?.total_premia_including_fees.toString(10);
 
@@ -69,7 +69,7 @@ export function useGetPremia({
       total: convertedPremia,
       withSlippage,
     });
-  }, [data]);
+  }, [data, slippage]);
 
   return { premia };
 }

@@ -7,42 +7,88 @@ import { parseOptionsWithPositions } from "@/lib/option";
 import { useMemo, useState } from "react";
 import { OptionWithPosition } from "@/types/option";
 import { getSideName, getTypeName, isCall } from "@/lib/units";
-import ClosePosition from "./ClosePosition";
 import { getTradeCalldata } from "@/lib/computations";
+import SlippageInput from "./SlippageInput";
+import PositionDetails from "./PositionDetails";
 
-type SplitPositons = {
+type SplitPositions = {
   live: OptionWithPosition[];
   expiredInMoney: OptionWithPosition[];
   expiredOutMoney: OptionWithPosition[];
 };
 
-function PositionsSection({
-  option,
+function EmptySection() {
+  return <div className="mt-2">None</div>;
+}
+
+function PositionsList({
+  options,
   select,
-  action,
+  type: { status, action },
+  fetching,
+  selectedIdx,
+  closeDetails,
 }: {
-  option: OptionWithPosition;
+  options: OptionWithPosition[];
   select: (val: OptionWithPosition) => void;
-  action: string;
+  type: { status: "expired" | "live"; action: string };
+  fetching: boolean;
+  selectedIdx?: string;
+  closeDetails?: () => void;
 }) {
-  return (
-    <div className="flex gap-8 mb-8">
-      <div className="w-1/4">
-        {getSideName(option.optionSide)} {getTypeName(option.optionType)},
-        strike {option.strikePrice}
+  if (fetching) return null;
+
+  return options.length > 0 ? (
+    <div className="border border-light-gray rounded-lg pt-6 px-6">
+      <div className="flex gap-4 font-600">
+        <span className="w-1/5">Option</span>
+        <span className="w-1/5">
+          {status === "expired" ? "Expired at" : "Maturity"}
+        </span>
+        <span className="w-1/5">Size</span>
+        <span className="w-1/5">Value</span>
       </div>
-      <div className="w-1/4">
-        {new Date(option.maturity).toLocaleDateString()}
-      </div>
-      <div className="w-1/4">Size: {option.positionSize}</div>
-      <div className="w-1/4">
-        Value: {isCall(option.optionType) ? "ETH" : "USD"}{" "}
-        {option.positionValue.toFixed(4)}
-      </div>
-      <button type="button" onClick={() => select(option)}>
-        {action}
-      </button>
+      {options?.map((option) => {
+        const isSelected = status === "live" && selectedIdx === option.id;
+        return (
+          <div
+            className="flex flex-col gap-4 py-6 border-b border-light-gray last-of-type:border-none"
+            key={option.id}
+          >
+            <div className="flex gap-4 items-center ">
+              <div className="w-1/5">
+                <span className="capitalize">
+                  {getSideName(option.optionSide)}{" "}
+                  {getTypeName(option.optionType)}
+                </span>
+                , strike ${option.strikePrice}
+              </div>
+              <div className="w-1/5">
+                {new Date(option.maturity).toLocaleDateString()}
+              </div>
+              <div className="w-1/5">{option.positionSize.toFixed(3)}</div>
+              <div className="w-1/5">
+                {isCall(option.optionType) ? "ETH" : "USD"}{" "}
+                {option.positionValue.toFixed(4)}
+              </div>
+              <button
+                type="button"
+                onClick={() => select(option)}
+                hidden={isSelected}
+                disabled={isSelected}
+              >
+                {action}
+              </button>
+            </div>
+            {selectedIdx && isSelected && (
+              <PositionDetails hideDetails={closeDetails} option={option} />
+            )}
+          </div>
+        );
+      })}
     </div>
+  ) : (
+    <EmptySection />
   );
 }
 
@@ -58,12 +104,12 @@ export default function PositionsTable() {
     watch: false,
   });
 
-  const split = useMemo<SplitPositons | null>(() => {
+  const split = useMemo<SplitPositions | null>(() => {
     if (!data) return null;
 
     const options = parseOptionsWithPositions((data as any).array || []);
 
-    const res: SplitPositons = {
+    const res: SplitPositions = {
       live: [],
       expiredInMoney: [],
       expiredOutMoney: [],
@@ -92,45 +138,54 @@ export default function PositionsTable() {
     account?.execute([args], [AmmAbi]);
   }
 
-  return (
-    <section className="flex flex-col gap-2 w-full mt-8">
-      {selected && <ClosePosition option={selected} />}
+  const closeDetails = () => setSelected(undefined);
 
+  return (
+    <div className="flex flex-col gap-8 mt-8">
       {isLoading && "Fetching..."}
 
-      <h2 className="font-bold">Live options</h2>
-      {split?.live.map((option) => (
-        <PositionsSection
-          key={option.id}
-          option={option}
+      <section>
+        <h2 className="text-24 font-500">Live options</h2>
+        <div className="flex justify-between items-center mb-4">
+          <span>
+            These options have not matured yet. You can close your position or
+            wait for them to mature.
+          </span>
+          {!isLoading && <SlippageInput />}
+        </div>
+        <PositionsList
+          fetching={isLoading}
+          options={split?.live || []}
           select={setSelected}
-          action="Close"
+          type={{ status: "live", action: "Close" }}
+          selectedIdx={selected?.id}
+          closeDetails={closeDetails}
         />
-      ))}
-
-      <h2 className="font-bold">Expired in money</h2>
-      {split?.expiredInMoney.length === 0
-        ? "None"
-        : split?.expiredInMoney.map((option) => (
-            <PositionsSection
-              key={option.id}
-              option={option}
-              select={settleOption}
-              action="Settle"
-            />
-          ))}
-
-      <h2 className="font-bold">Expired out of money</h2>
-      {split?.expiredOutMoney.length === 0
-        ? "None"
-        : split?.expiredOutMoney.map((option) => (
-            <PositionsSection
-              key={option.id}
-              option={option}
-              select={settleOption}
-              action="Settle"
-            />
-          ))}
-    </section>
+      </section>
+      <section>
+        <h2 className="text-24 font-500">Expired in the money</h2>
+        <span className="block mb-4">
+          These options expired in the money. Get your funds by settling them.
+        </span>
+        <PositionsList
+          fetching={isLoading}
+          options={split?.expiredInMoney || []}
+          select={settleOption}
+          type={{ status: "expired", action: "Settle" }}
+        />
+      </section>
+      <section>
+        <h2 className="text-24 font-500">Expired out of the money</h2>
+        <span className="block mb-4">
+          These options expired out of the money.
+        </span>
+        <PositionsList
+          fetching={isLoading}
+          options={split?.expiredOutMoney || []}
+          select={settleOption}
+          type={{ status: "expired", action: "Settle" }}
+        />
+      </section>
+    </div>
   );
 }
