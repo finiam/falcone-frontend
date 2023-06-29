@@ -26,7 +26,7 @@ export default function PageAssessment({
   filteredOptions: LiveOption[];
   children: ReactNode;
 }) {
-  const [isComplete, setIsComplete] = useState(true);
+  const [isComplete, setIsComplete] = useState(false);
   const [questions, setQuestions] = useState(
     getQuestions(optionType.side, optionType.type)
   );
