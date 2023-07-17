@@ -39,7 +39,6 @@ export default function Wallet() {
               key={connector.id()}
               onClick={() => {
                 connect(connector);
-                connector.disconnect;
               }}
             >
               {connector.id()}

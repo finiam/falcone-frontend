@@ -33,8 +33,8 @@ export default function ConceptsSidebar({
               >
                 {group.section}
               </Link>
-              <ul className="pl-8 flex flex-col gap-3 mt-5">
-                {group.paths.map((path) => (
+              <ul className="pl-8 flex flex-col gap-3 mt-3">
+                {group.paths.slice(1).map((path) => (
                   <li key={path.route}>
                     <Link
                       href={path.route as string}

@@ -18,7 +18,11 @@ type SplitPositions = {
 };
 
 function EmptySection() {
-  return <div className="mt-2">None</div>;
+  return (
+    <div className="my-8">
+      <span>No options</span>
+    </div>
+  );
 }
 
 function PositionsList({
@@ -37,10 +41,9 @@ function PositionsList({
   closeDetails?: () => void;
 }) {
   if (fetching) return null;
-
-  return options.length > 0 ? (
+  return (
     <div className="border border-light-gray rounded-lg pt-6 px-6">
-      <div className="flex gap-4 font-600">
+      <div className="flex gap-4 font-600 border-b border-light-gray pb-4">
         <span className="w-1/5">Option</span>
         <span className="w-1/5">
           {status === "expired" ? "Expired at" : "Maturity"}
@@ -48,47 +51,49 @@ function PositionsList({
         <span className="w-1/5">Size</span>
         <span className="w-1/5">Value</span>
       </div>
-      {options?.map((option) => {
-        const isSelected = status === "live" && selectedIdx === option.id;
-        return (
-          <div
-            className="flex flex-col gap-4 py-6 border-b border-light-gray last-of-type:border-none"
-            key={option.id}
-          >
-            <div className="flex gap-4 items-center ">
-              <div className="w-1/5">
-                <span className="capitalize">
-                  {getSideName(option.optionSide)}{" "}
-                  {getTypeName(option.optionType)}
-                </span>
-                , strike ${option.strikePrice}
+      {options.length > 0 ? (
+        options?.map((option) => {
+          const isSelected = status === "live" && selectedIdx === option.id;
+          return (
+            <div
+              className="flex flex-col gap-4 py-6 border-b border-light-gray last-of-type:border-none"
+              key={option.id}
+            >
+              <div className="flex gap-4 items-center ">
+                <div className="w-1/5">
+                  <span className="capitalize">
+                    {getSideName(option.optionSide)}{" "}
+                    {getTypeName(option.optionType)}
+                  </span>
+                  , strike ${option.strikePrice}
+                </div>
+                <div className="w-1/5">
+                  {new Date(option.maturity).toLocaleDateString()}
+                </div>
+                <div className="w-1/5">{option.positionSize.toFixed(3)}</div>
+                <div className="w-1/5">
+                  {isCall(option.optionType) ? "ETH" : "USD"}{" "}
+                  {option.positionValue.toFixed(4)}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => select(option)}
+                  hidden={isSelected}
+                  disabled={isSelected}
+                >
+                  {action}
+                </button>
               </div>
-              <div className="w-1/5">
-                {new Date(option.maturity).toLocaleDateString()}
-              </div>
-              <div className="w-1/5">{option.positionSize.toFixed(3)}</div>
-              <div className="w-1/5">
-                {isCall(option.optionType) ? "ETH" : "USD"}{" "}
-                {option.positionValue.toFixed(4)}
-              </div>
-              <button
-                type="button"
-                onClick={() => select(option)}
-                hidden={isSelected}
-                disabled={isSelected}
-              >
-                {action}
-              </button>
+              {selectedIdx && isSelected && (
+                <PositionDetails hideDetails={closeDetails} option={option} />
+              )}
             </div>
-            {selectedIdx && isSelected && (
-              <PositionDetails hideDetails={closeDetails} option={option} />
-            )}
-          </div>
-        );
-      })}
+          );
+        })
+      ) : (
+        <EmptySection />
+      )}
     </div>
-  ) : (
-    <EmptySection />
   );
 }
 
@@ -151,7 +156,7 @@ export default function PositionsTable() {
             These options have not matured yet. You can close your position or
             wait for them to mature.
           </span>
-          {!isLoading && <SlippageInput />}
+          {!isLoading && (split?.live?.length || 0) > 0 && <SlippageInput />}
         </div>
         <PositionsList
           fetching={isLoading}
