@@ -9,7 +9,9 @@ export default function PositionsPage() {
 
   return (
     <>
-      <Header />
+      <div className="lg:ml-[340px] max-w-[941px]">
+        <Header />
+      </div>
       <main className="flex min-h-screen flex-col items-center justify-between pt-2 pb-12 px-24">
         <div className="w-full">
           <h1 className="text-32 font-500 mb-10">Dashboard</h1>

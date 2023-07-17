@@ -18,6 +18,10 @@
     margin: 0;
   }
 
+  .concepts-article {
+    max-width: 941px;
+  }
+
   .concepts-article h2,
   .concepts-article h6 {
     @apply text-20 font-500 leading-24 uppercase opacity-50 mb-3 mt-16;
@@ -41,6 +45,22 @@
 
   .concepts-box p {
     @apply text-20 leading-32 mb-0;
+  }
+  
+  .pool-example p {
+    @apply tracking-tight text-20 mb-2;
+  }
+
+  .pool-example h4 {
+    @apply text-24 mb-4;
+  }
+
+  .example-scenario p {
+    @apply tracking-tight text-18 leading-32 mb-0;
+  }
+
+  .concepts-box a {
+    @apply font-500;
   }
 
   .concepts-example p {

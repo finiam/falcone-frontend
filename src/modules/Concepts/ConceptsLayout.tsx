@@ -8,11 +8,9 @@ export default function ConceptsLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="flex gap-[106px]">
+    <div className="lg:grid grid-cols-[234px,_1fr] gap-[106px]">
       <aside className="hidden lg:block w-[234px]">{sidebar}</aside>
-      <main className="max-w-full w-[941px] px-4 lg:px-0 pb-20">
-        {children}
-      </main>
+      <main className="px-4 lg:px-0 pb-20">{children}</main>
     </div>
   );
 }

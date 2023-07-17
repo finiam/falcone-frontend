@@ -7,6 +7,8 @@ import ConceptsExampleWrapper, {
   ConceptsExample,
 } from "@/modules/Concepts/ConceptsExample";
 import FooterNav from "@/modules/Concepts/FooterNav";
+import LiquidityPoolExample from "@/modules/Concepts/LiquidityPoolExample";
+import ScenarioCard from "@/modules/Concepts/ScenarioCard";
 import PageOptions from "@/modules/Options/PageOptions";
 import { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -55,6 +57,8 @@ export default async function Page({ params }: { params: Params }) {
           PageOptions: ({ option }) => (
             <PageOptions option={getOptionArgs(option)} />
           ),
+          LiquidityPoolExample: LiquidityPoolExample,
+          ScenarioCard: ScenarioCard,
         }}
       />
       <FooterNav previousRoute={data.previous} nextRoute={data.next} />
