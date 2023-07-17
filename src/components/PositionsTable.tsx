@@ -156,7 +156,7 @@ export default function PositionsTable() {
             These options have not matured yet. You can close your position or
             wait for them to mature.
           </span>
-          {!isLoading && <SlippageInput />}
+          {!isLoading && (split?.live?.length || 0) > 0 && <SlippageInput />}
         </div>
         <PositionsList
           fetching={isLoading}
