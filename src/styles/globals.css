@@ -18,6 +18,10 @@
     margin: 0;
   }
 
+  article.concepts-article {
+    max-width: 941px;
+  }
+
   .concepts-article h2,
   .concepts-article h6 {
     @apply text-20 font-500 leading-24 uppercase opacity-50 mb-3 mt-16;
