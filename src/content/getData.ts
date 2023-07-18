@@ -13,19 +13,6 @@ export function sluggify(str = "") {
   return str.replaceAll(/\s/g, "-").toLowerCase();
 }
 
-function getSectionsFromContent(content: string) {
-  const h2Match = /\n#{2} ([\s\S]*?)\n/gm;
-
-  return content.match(h2Match)?.map((item) => {
-    const title = item.replace("##", "").trim();
-
-    return {
-      title,
-      slug: sluggify(title),
-    };
-  });
-}
-
 function getDirPath(filePath = "") {
   return path.join(process.cwd(), `src/content/${filePath}`);
 }
@@ -79,7 +66,7 @@ export function getAllPaths() {
         const filePath = getDirPath(item);
         const file = readFileSync(filePath, "utf-8");
 
-        const { data, content } = matter(file);
+        const { data } = matter(file);
         const route = getRouteFromFileName(item);
 
         return {
