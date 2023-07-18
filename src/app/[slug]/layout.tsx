@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <ConceptsLayout sidebar={<ConceptsSidebar paths={paths} />}>
-      <article className="concepts-article">
+      <article className="concepts-article mt-8 lg:m-0">
         <Header />
         {children}
       </article>

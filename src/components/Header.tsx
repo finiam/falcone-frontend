@@ -5,7 +5,7 @@ import Wallet from "./Wallet";
 
 export default function Header() {
   return (
-    <header className="flex gap-4 items-center justify-end relative z-1 pt-10">
+    <header className="gap-4 items-center justify-end relative z-1 pt-10 hidden lg:flex">
       <nav className="flex gap-4 items-center">
         <Link href="/" className="hover:text-gray-700 drop-shadow-xl">
           Home

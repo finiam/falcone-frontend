@@ -28,6 +28,15 @@ module.exports = {
       borderRadius: {
         sm: "4px",
       },
+      lineHeight: {
+        1: 1,
+        24: "24.2px",
+        32: "32px",
+        40: "40px",
+        55: "55px",
+        80: "80px",
+        100: "100px",
+      },
     },
     fontFamily: {
       inter: ["var(--font-inter)"],
@@ -49,15 +58,6 @@ module.exports = {
       400: 400,
       500: 500,
       600: 600,
-    },
-    lineHeight: {
-      1: 1,
-      24: "24.2px",
-      32: "32px",
-      40: "40px",
-      55: "55px",
-      80: "80px",
-      100: "100px",
     },
   },
   plugins: [],

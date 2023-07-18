@@ -12,7 +12,7 @@ export default function ConceptsBoxWrapper({
 }: {
   children: ReactNode;
 }) {
-  return <aside className="flex flex-cols lg:flex-row gap-20 p-5 pb-8 bg-light-blue">{children}</aside>;
+  return <aside className="flex lg:flex-row gap-8 lg:gap-20 p-5 pb-8 bg-light-blue flex-col">{children}</aside>;
 }
 
 export function ConceptsBox({

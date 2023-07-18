@@ -175,7 +175,7 @@ export default function PageAssessment({
       )}
     </div>
   ) : (
-    <>
+    <section className="hidden lg:block mt-16">
       <h2>Assessment</h2>
       <div className="flex flex-col gap-8 assessment">
         <QuestionComponent />
@@ -191,6 +191,6 @@ export default function PageAssessment({
           </button>
         )}
       </div>
-    </>
+    </section>
   );
 }

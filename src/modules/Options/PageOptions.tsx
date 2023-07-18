@@ -25,18 +25,20 @@ export default function PageOptions({ option }: { option: OptionArg }) {
   }, []);
 
   return (
-    <PageAssessment optionType={option} filteredOptions={data}>
-      <div className="w-full ">
-        <div className="flex justify-between mt-16 mb-8">
-          <h2>Available options</h2>
-          <div className="mr-16">
-            <SlippageInput />
+    
+      <PageAssessment optionType={option} filteredOptions={data}>
+        <div className="w-full ">
+          <div className="flex justify-between mt-16 mb-8">
+            <h2>Available options</h2>
+            <div className="mr-16">
+              <SlippageInput />
+            </div>
+          </div>
+          <div>
+            <OptionsList options={data} fetching={fetching} />
           </div>
         </div>
-        <div>
-          <OptionsList options={data} fetching={fetching} />
-        </div>
-      </div>
-    </PageAssessment>
+      </PageAssessment>
+
   );
 }

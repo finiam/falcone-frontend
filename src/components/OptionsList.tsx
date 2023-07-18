@@ -1,11 +1,10 @@
 "use client";
 
 import { getSideName, getTypeName } from "@/lib/units";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import OptionDetails from "./OptionDetails";
 import { LiveOption } from "@/types/option";
-import SlippageInput from "./SlippageInput";
-import { parseLiveOptions } from "@/lib/option";
+import Loader from "./icons/Loader";
 
 type OptionsListProps = {
   options: LiveOption[];
@@ -66,7 +65,10 @@ export default function OptionsList({ options, fetching }: OptionsListProps) {
             <p className="my-5">No options available</p>
           )
         ) : (
-          <p className="my-5">fetching...</p>
+          <div className="my-5 flex gap-4 items-center">
+            <Loader />
+            <p className="text-sm m-0">fetching...</p>
+          </div>
         )}
       </section>
     </div>

@@ -23,7 +23,7 @@ export default async function HomePage() {
           </figure>
         }
       >
-        <article className="flex flex-col gap-12 pt-5 max-w-[941px]">
+        <article className="flex flex-col lg:gap-12 gap-6 pt-5 max-w-[941px]">
           <Greeting />
           <div className="concepts-article">
             {/* @ts-expect-error Server Component */}

@@ -10,6 +10,7 @@ const ArrowIcon = ({ rotate }: { rotate?: boolean }) => (
     viewBox="0 0 29 19"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="hidden lg:block"
     style={{
       rotate: `${rotate ? "180deg" : "none"}`,
     }}

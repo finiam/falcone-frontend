@@ -10,6 +10,7 @@ import { getSideName, getTypeName, isCall } from "@/lib/units";
 import { getTradeCalldata } from "@/lib/computations";
 import SlippageInput from "./SlippageInput";
 import PositionDetails from "./PositionDetails";
+import Loader from "./icons/Loader";
 
 type SplitPositions = {
   live: OptionWithPosition[];
@@ -140,14 +141,21 @@ export default function PositionsTable() {
       calldata: getTradeCalldata(option.raw, option.positionSize),
     };
 
-    account?.execute([args], [AmmAbi]);
+    account?.execute([args], [AmmAbi]).catch((e) => {
+      throw Error("Trade open rejected or failed");
+    });
   }
 
   const closeDetails = () => setSelected(undefined);
 
   return (
     <div className="flex flex-col gap-8 mt-8">
-      {isLoading && "Fetching..."}
+      {isLoading && (
+        <div className="my-5 flex gap-4 items-center">
+          <Loader />
+          <p className="text-sm m-0">fetching...</p>
+        </div>
+      )}
 
       <section>
         <h2 className="text-24 font-500">Live options</h2>
