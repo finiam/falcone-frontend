@@ -22,7 +22,7 @@ export default function ConceptsTable({
                 {path.section}
               </Link>
               <ul className="flex flex-col gap-6">
-                {path.paths?.map((item) => (
+                {path.paths?.slice(1).map((item) => (
                   <li key={`${item.route}`}>
                     <Link
                       href={`/${item.route}`}
