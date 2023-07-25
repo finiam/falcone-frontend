@@ -8,6 +8,8 @@ export default function ConceptsTable({
 }) {
   const pathsWithoutIntro = paths.slice(1);
 
+  console.log("pathsWithoutIntro", pathsWithoutIntro[1].paths);
+
   return (
     <section className="bg-light-blue p-5 pb-6 flex flex-col gap-8">
       <h2 className="text-32 lg:text-48 font-yeseva text-blue">Fundamentals</h2>
@@ -22,7 +24,7 @@ export default function ConceptsTable({
                 {path.section}
               </Link>
               <ul className="flex flex-col gap-6">
-                {path.paths?.map((item) => (
+                {path.paths?.slice(1).map((item) => (
                   <li key={`${item.route}`}>
                     <Link
                       href={`/${item.route}`}
