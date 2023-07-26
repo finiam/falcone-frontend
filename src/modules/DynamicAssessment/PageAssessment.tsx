@@ -14,6 +14,7 @@ import { InputQuestion as InputQuestionType } from "@/data/assessmentData";
 import { useEthToUsd } from "@/lib/hooks/useEthToUsd";
 import { LiveOption, OptionArg } from "@/types/option";
 import ScenarioGraph from "./ScenarioGraph";
+import { getFallbackOption } from "@/data/fallbackOptions";
 
 const LOCAL_STORAGE_KEY_BASE = "falcone";
 
@@ -128,7 +129,7 @@ export default function PageAssessment({
       case "scenario":
         return (
           <ScenarioGraph
-            option={filteredOptions?.[0]}
+            option={filteredOptions?.[0] || getFallbackOption(optionType)}
             saveAssessmentAnswer={saveAssessmentAnswer}
             ethToUsd={ethInUsd}
           />
