@@ -502,7 +502,7 @@ export const data: AssessmentData = {
         {
           question:
             "What happens if the underlying asset's price is above the strike price of a call option at expiration for the seller?",
-          correctAnswer: "1",
+          correctAnswer: "2",
           options: [
             {
               id: "1",
