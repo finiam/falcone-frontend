@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const BASE_URL = "https://api.carmine.finance/api/v1/testnet";
+const BASE_URL = "https://api.carmine-dev.eu/api/v1/testnet";
 
 export async function GET() {
   const res = await fetch(`${BASE_URL}/live-options`, {

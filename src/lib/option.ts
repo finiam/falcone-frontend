@@ -25,7 +25,7 @@ function createBNChunks(raw: string[], size: number) {
 
   for (let i = 0; i < raw.length / size; i++) {
     const idx = i * size;
-    const chunk = raw.slice(idx, idx + size).map((val) => new BN(val));
+    const chunk = raw.slice(idx, idx + size).map((val) => new BN(val, 16));
     out.push(chunk);
   }
 
@@ -66,7 +66,9 @@ function parseBaseOption(rawOption: RawOption): BaseOption {
 }
 
 export function parseLiveOptions(raw: string[]): LiveOption[] {
-  return createBNChunks(raw, 7).map((chunk) => {
+  const slicedRaw = raw.map((v) => v.slice(2));
+
+  return createBNChunks(slicedRaw, 7).map((chunk) => {
     const rawData = parseRawOption(chunk);
     const base = parseBaseOption(rawData);
     const { premiumBase, premiumDecimal } = getPremium(
