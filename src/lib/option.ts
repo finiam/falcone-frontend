@@ -15,7 +15,6 @@ import {
   getType,
   isCall,
   isLong,
-  longInteger,
   math64x61toDecimal,
   shortInteger,
 } from "./units";
