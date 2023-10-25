@@ -11,9 +11,9 @@ In essence, liquidity providers (LPs) sell options to users or buy options from 
 
 Each asset has two distinct liquidity pools: one comprising the base tokens and the other the quote tokens. For instance, in an ETH/USDC pairing, ETH is the base, and USDC is the quote. Liquidity providers can choose to participate in one or multiple of these pools based on their market perspective.
 
-LPs face risk during instances of sudden spikes in implied option volatility (e.g., market shocks), where arbitrageurs could trade against the pool. This risk is mitigated by establishing per-trade limits, maximum pool size, and careful monitoring of the pool's exposure and consequently adjustment of pricing parameters. Ultimately, liquidity pool contributors are betting that fee revenues will more than compensate for potential losses during periods of swift implied option volatility fluctuations.
+LPs face risk during instances of sudden spikes in volatility (e.g., market shocks), where arbitrageurs could trade against the pool. This risk is mitigated by establishing per-trade limits, maximum pool size, and careful monitoring of the pool's exposure and consequently adjustment of pricing parameters. Ultimately, liquidity pool contributors are betting that fee revenues will more than compensate for potential losses during periods of swift volatility fluctuations.
 
-You can enter and exit the pools instantly at any time as long there's enough available unlocked capital in the pool.
+You can enter and exit the pools instantly at any time as long there's enough available unlocked capital in the pool. If there is not enough available unlocked capital you just wait for liquidity pool's positions to expire which unlocks the locked capital.
 
 Let's give a concrete example of what actually happens when you trade at Carmine:
 

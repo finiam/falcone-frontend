@@ -11,10 +11,10 @@ There are two main factors that contribute to slippage when interacting with an 
 
 #### Liquidity
 
-_Liquidity refers to the depth of the market and the availability of buy and sell orders for a particular asset._ Higher liquidity typically leads to lower slippage, as there are more assets available to trade at close the expected price. Conversely, low liquidity can result in higher slippage, as the market may not have sufficient depth to fulfill large orders without impacting the price significantly.
+Liquidity refers to the size of the market and the availability of buy and sell orders for a particular asset. Higher liquidity typically leads to lower slippage, as there are more assets available to trade. Conversely, low liquidity can result in higher slippage, as the market may not have sufficient amounts of assets to fulfill large orders without impacting the price significantly.
 
 #### Volatility
 
-Volatility is the degree of variation of a trading price series over time. Higher volatility refers to the rapid and significant price fluctuations of an asset, which can increase the likelihood of slippage because prices can move quickly between the time a trade is initiated and executed.
+Volatility is the degree of variation of a trading price over time. Higher volatility refers to the possibility of significant price movement of an asset, which can increase the likelihood of slippage because prices can move quickly between the time a trade is initiated and executed.
 
 To make sure that the user does not receive bad (worse than expected) price, Carmine uses a slippage parameter that protects the user. The user will provide a price that he/she is willing to trade at and maximum deviation from that price (slippage). If the final price is outside of this deviation then the trade does not happen.
