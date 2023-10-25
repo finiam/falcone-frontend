@@ -120,20 +120,18 @@ export default function OptionDetails({
               required
             />
           </div>
-          <span>
-            Premium: {loadingPremia ? "..." : premia?.total.toFixed(4)}
-          </span>
+          <span>Premium: {premia?.total.toFixed(4) || "..."}</span>
         </div>
 
         <button
           type="submit"
-          className="mx-12 enabled:bg-white"
+          className="mx-12 enabled:bg-white w-40 text-left"
           disabled={!isConnected || !premia?.total || loadingPremia}
         >
           {isConnected
-            ? `${option.isLong ? "Buy" : "Sell"} for ${premia?.total?.toFixed(
-                5
-              )}`
+            ? `${option.isLong ? "Buy" : "Sell"} for ${
+                premia?.total?.toFixed(5) || "..."
+              }`
             : "Connect to buy options"}
         </button>
       </form>

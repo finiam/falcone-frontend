@@ -65,7 +65,7 @@ export default function OptionsList({ options, fetching }: OptionsListProps) {
             <p className="my-5">No options available</p>
           )
         ) : (
-          <div className="my-5 flex gap-4 items-center">
+          <div className="my-5 flex gap-4 items-center justify-center">
             <Loader />
             <p className="text-sm m-0">fetching...</p>
           </div>

@@ -3,8 +3,8 @@ import BN from "bn.js";
 import {
   BASE_MATH_64_61,
   ETH_DIGITS,
-  PRECISSION_BASE_VALUE,
-  PRECISSION_DIGITS,
+  PRECISION_BASE_VALUE,
+  PRECISION_DIGITS,
   USD_DIGITS,
 } from "./constants";
 import { uint256 } from "starknet";
@@ -49,10 +49,10 @@ export function shortInteger(str: string, digits: number) {
 
 export function math64x61toDecimal(n: string) {
   const long = new BN(n)
-    .mul(PRECISSION_BASE_VALUE)
+    .mul(PRECISION_BASE_VALUE)
     .div(BASE_MATH_64_61)
     .toString(10);
-  return shortInteger(long, PRECISSION_DIGITS);
+  return shortInteger(long, PRECISION_DIGITS);
 }
 
 export function math64x61ToInt(n: string, digits: number) {
